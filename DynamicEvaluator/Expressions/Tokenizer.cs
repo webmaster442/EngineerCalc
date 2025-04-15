@@ -98,9 +98,9 @@ internal abstract class Tokenizer
         }
     }
 
-    public static IReadOnlyList<Token> Tokenize(string input, Func<string, int> functionArgumentCountGetter)
+    public static TokenCollection Tokenize(string input, Func<string, int> functionArgumentCountGetter)
     {
-        List<Token> tokens = new List<Token>();
+        TokenCollection tokens = new();
         int index = 0;
         int newIndex = 0;
         while (index < input.Length)
