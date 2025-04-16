@@ -179,6 +179,25 @@ public class ExpressionTests
         });
     }
 
+    [TestCase("'foo'", "foo")]
+    [TestCase("'foo'+'foo'", "foofoo")]
+    [TestCase("\"foo\"", "foo")]
+    [TestCase("\"foo\"+\"foo\"", "foofoo")]
+    public void EnsureThat_Evaluate_Works_Strings(string expression, string expected)
+    {
+        IExpression parsed = _expressionFactory.Create(expression);
+        Variables variables = new()
+        {
+            { "foo", "foo" },
+        };
+        dynamic result = parsed.Evaluate(variables);
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.TypeOf<string>());
+            Assert.That(result, Is.EqualTo(expected));
+        });
+    }
+
     [TestCase("22/11", 2, 1)]
     [TestCase("(1/2)*2+(4*3)", 13, 1)]
     [TestCase("x/y", 5, 1)]

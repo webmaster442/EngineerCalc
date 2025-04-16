@@ -43,14 +43,15 @@ internal abstract class Tokenizer
             return new Token(tokenValue, TokenType.Constant, typeof(long));
     }
 
-    private static Token HandleStringLiteral(string input, int start, out int newIndex)
+    private static Token HandleStringLiteral(string input, int start, char matcher, out int newIndex)
     {
         StringBuilder sb = new StringBuilder();
         int index = start + 1;
         while (index < input.Length)
         {
-            if (input[index] == '"')
+            if (input[index] == matcher)
             {
+                index++;
                 break;
             }
             else
@@ -120,7 +121,13 @@ internal abstract class Tokenizer
             }
             else if (input[index] == '"')
             {
-                Token stringLiteral = HandleStringLiteral(input, index, out newIndex);
+                Token stringLiteral = HandleStringLiteral(input, index, '"', out newIndex);
+                tokens.Add(stringLiteral);
+                index = newIndex;
+            }
+            else if (input[index] == '\'')
+            {
+                Token stringLiteral = HandleStringLiteral(input, index, '\'', out newIndex);
                 tokens.Add(stringLiteral);
                 index = newIndex;
             }
