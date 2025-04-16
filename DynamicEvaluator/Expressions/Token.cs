@@ -12,4 +12,7 @@ internal readonly struct Token
     public object? Data { get; }
     public string Value { get; }
     public TokenType Type { get; }
+
+    public override string ToString()
+        => $"{Value} | {Type} | {Data}";
 }

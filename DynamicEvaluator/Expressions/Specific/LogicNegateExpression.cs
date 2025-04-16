@@ -20,7 +20,7 @@ internal sealed class LogicNegateExpression : UnaryExpression
         return new LogicNegateExpression(newChild);
     }
 
-    protected override dynamic Evalulate(dynamic value)
+    protected override dynamic Evaluate(dynamic value)
         => ~value;
 
     protected override string Render(bool emitLatex)

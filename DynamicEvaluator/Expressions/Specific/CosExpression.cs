@@ -23,7 +23,7 @@ internal sealed class CosExpression : UnaryExpression
         return new CosExpression(newChild);
     }
 
-    protected override dynamic Evalulate(dynamic value)
+    protected override dynamic Evaluate(dynamic value)
         => Functions.Cos(value);
 
     protected override string Render(bool emitLatex)

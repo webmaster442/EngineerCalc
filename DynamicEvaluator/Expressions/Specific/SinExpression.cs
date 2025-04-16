@@ -23,7 +23,7 @@ internal sealed class SinExpression : UnaryExpression
         return new SinExpression(newChild);
     }
 
-    protected override dynamic Evalulate(dynamic value)
+    protected override dynamic Evaluate(dynamic value)
         => Functions.Sin(value);
 
     protected override string Render(bool emitLatex)

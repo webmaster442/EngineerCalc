@@ -64,7 +64,7 @@ internal abstract class Tokenizer
     }
 
     private static bool IsIdentifier(char c)
-        => c == '_' || c == '-' || ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z');
+        => c == '_' || ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z');
 
     private static Token HandleIdentifier(string input, int start, Func<string, int> functionArgumentCountGetter, out int newIndex)
     {
@@ -129,7 +129,7 @@ internal abstract class Tokenizer
             }
             else
             {
-                if (input[index] < ' ')
+                if (input[index] <= ' ')
                 {
                     ++index;
                     continue;

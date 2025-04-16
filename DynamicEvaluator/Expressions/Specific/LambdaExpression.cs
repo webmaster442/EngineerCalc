@@ -25,7 +25,7 @@ internal sealed class LambdaExpression1 : UnaryExpression
         return new LambdaExpression1(newChild, _function, _name);
     }
 
-    protected override dynamic Evalulate(dynamic value)
+    protected override dynamic Evaluate(dynamic value)
         => _function(value);
 
     protected override string Render(bool emitLatex)

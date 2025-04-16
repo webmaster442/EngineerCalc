@@ -16,10 +16,11 @@ internal abstract class UnaryExpression : IExpression
 
     public dynamic Evaluate(IReadOnlyDictionary<string, dynamic> variables)
     {
-        return Evaluate(Child.Evaluate(variables));
+        dynamic child = Child.Evaluate(variables);
+        return Evaluate(child);
     }
 
-    protected abstract dynamic Evalulate(dynamic value);
+    protected abstract dynamic Evaluate(dynamic value);
 
     protected abstract string Render(bool emitLatex);
 

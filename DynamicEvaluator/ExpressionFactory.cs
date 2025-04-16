@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Resources;
 using System.Text;
 
 using DynamicEvaluator.Expressions;
@@ -6,7 +7,7 @@ using DynamicEvaluator.Expressions.Specific;
 
 namespace DynamicEvaluator;
 
-internal class ExpressionFactory
+public sealed class ExpressionFactory
 {
     private readonly TokenSet FirstMultExp;
     private readonly TokenSet FirstExpExp;
@@ -82,11 +83,53 @@ internal class ExpressionFactory
                         throw new InvalidOperationException($"Expcted as plus, minus, or. Got: {opType}");
                 }
             }
+
+            return exp;
         }
         throw new InvalidOperationException("Invalid expression");
     }
 
-    private IExpression ParseMultExpression(TokenCollection tokens)
+    private IExpression? ParseMultExpression(TokenCollection tokens)
+    {
+        if (tokens.Check(FirstExpExp))
+        {
+            var exp = ParseExpExpression(tokens);
+
+            while (tokens.Check(new TokenSet(TokenType.Multiply, TokenType.Divide, TokenType.And)))
+            {
+                var opType = tokens.CurrentToken.Type;
+                tokens.Eat(opType);
+                if (!tokens.Check(FirstExpExp))
+                {
+                    throw new InvalidOperationException("Expected expression after * or /");
+                }
+                var right = ParseExpExpression(tokens);
+
+                switch (opType)
+                {
+                    case TokenType.Multiply:
+                        exp = new MultiplyExpression(exp, right);
+                        break;
+
+                    case TokenType.Divide:
+                        exp = new DivideExpression(exp, right);
+                        break;
+
+                    case TokenType.And:
+                        exp = new AndExpression(exp, right);
+                        break;
+
+                    default:
+                        throw new InvalidOperationException($"Expected * or /, got: {opType}");
+                }
+            }
+
+            return exp;
+        }
+        throw new InvalidOperationException("Invalid expression");
+    }
+
+    private IExpression ParseExpExpression(TokenCollection tokens)
     {
         if (tokens.Check(FirstUnaryExp))
         {
@@ -98,7 +141,7 @@ internal class ExpressionFactory
                 tokens.Eat(opType);
                 if (!tokens.Check(FirstUnaryExp))
                 {
-                    throw new InvalidOperationException("Expected an expression after exponent");
+                    throw new InvalidOperationException("Expected expression after exponent");
                 }
                 var right = ParseUnaryExpression(tokens);
 
@@ -109,7 +152,7 @@ internal class ExpressionFactory
                         break;
 
                     default:
-                        throw new InvalidOperationException($"Expecte an exponent. Got: {opType}");
+                        throw new InvalidOperationException($"Expected ^ got: {opType}");
                 }
             }
 

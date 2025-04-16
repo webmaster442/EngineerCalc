@@ -20,12 +20,13 @@ internal sealed class NegateExpression : UnaryExpression
         return new NegateExpression(newChild);
     }
 
-    protected override dynamic Evalulate(dynamic value)
+    protected override dynamic Evaluate(dynamic value)
         => -value;
+
     protected override string Render(bool emitLatex)
     {
         return emitLatex ?
             $"- {{ {Child} }}"
-            : $"({Child})";
+            : $"- ({Child})";
     }
 }
