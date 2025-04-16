@@ -27,6 +27,6 @@ internal sealed class NegateExpression : UnaryExpression
     {
         return emitLatex ?
             $"- {{ {Child} }}"
-            : $"- ({Child})";
+            : $"(-{Child})";
     }
 }
