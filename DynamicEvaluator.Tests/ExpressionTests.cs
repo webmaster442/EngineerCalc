@@ -39,7 +39,7 @@ public class ExpressionTests
     //Logarithms
     [TestCase("ln(x)", "(1 / x)")]
     [TestCase("Log(x, e)", "(1 / x)")]
-    [TestCase("Log(x, 4)", "(0.72134752044448171348 * (1 / x))")]
+    [TestCase("Log(x, 4)", "(0.7213475204444817 * (1 / x))")]
     public void EnsureThat_Differentiate_Works(string expression, string expected)
     {
 
@@ -96,6 +96,9 @@ public class ExpressionTests
     [TestCase("tan(x)", 1.5574077246549023d)]
     [TestCase("tan(y)", -2.1850398632615189d)]
     [TestCase("ctg(x)", 0.64209261593433065d)]
+    [TestCase("ln(e)", 1)]
+    [TestCase("ln(100)", 4.6051701859880913680359829093687)]
+    [TestCase("log(1024,2)", 10)]
     public void EnsureThat_Evaluate_Works_Doubles(string expression, double expected)
     {
         IExpression parsed = _expressionFactory.Create(expression);

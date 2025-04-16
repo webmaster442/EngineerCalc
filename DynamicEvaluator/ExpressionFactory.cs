@@ -257,7 +257,7 @@ public sealed class ExpressionFactory
     private IExpression ParseFunction(TokenCollection tokens)
     {
         var opType = tokens.CurrentToken.Type;
-        var function = tokens.CurrentToken.Value;
+        var function = tokens.CurrentToken.Value.ToLower();
         int count = _functionTable.GetParameterCount(function);
 
         if (count == -1)

@@ -42,12 +42,13 @@ internal class FunctionTable
             "sin" => new SinExpression(parameters[0]),
             "tan" => new TanExpression(parameters[0]),
             "ctg" => new CtgExpression(parameters[0]),
+            "ln" => new LnExpression(parameters[0]),
+            "log" => new LogExpression(parameters[0], parameters[1]),
             _ => throw new InvalidOperationException("Function not implemented")
         };
     }
 
-
-    private void HasCount<T>(IReadOnlyList<T> list, int count)
+    private static void HasCount<T>(IReadOnlyList<T> list, int count)
     {
         if (list.Count != count)
             throw new InvalidOperationException($"Expected {count} arguments, got {list.Count}");
