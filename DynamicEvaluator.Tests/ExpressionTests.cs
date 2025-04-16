@@ -90,6 +90,28 @@ public class ExpressionTests
         });
     }
 
+    [TestCase("sin(0)", 0d)]
+    [TestCase("cos(0)", 1d)]
+    [TestCase("tan(0)", 0d)]
+    [TestCase("tan(x)", 1.5574077246549023d)]
+    [TestCase("tan(y)", -2.1850398632615189d)]
+    [TestCase("ctg(x)", 0.64209261593433065d)]
+    public void EnsureThat_Evaluate_Works_Doubles(string expression, double expected)
+    {
+        IExpression parsed = _expressionFactory.Create(expression);
+        Dictionary<string, dynamic> variables = new()
+        {
+            { "x", 1d },
+            { "y", 2d },
+        };
+        dynamic result = parsed.Evaluate(variables);
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.TypeOf<double>());
+            Assert.That(result, Is.EqualTo(expected));
+        });
+    }
+
     [TestCase("22/11", 2, 1)]
     [TestCase("(1/2)*2+(4*3)", 13, 1)]
     [TestCase("x/y", 5, 1)]

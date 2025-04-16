@@ -15,7 +15,7 @@ public sealed class ExpressionFactory
     private readonly TokenSet FirstUnaryExp;
     private readonly TokenSet FirstFactorPrefix;
     private readonly TokenSet FirstFactor;
-    private readonly FunctionTable _table;
+    private readonly FunctionTable _functionTable;
 
     public ExpressionFactory()
     {
@@ -25,13 +25,13 @@ public sealed class ExpressionFactory
         FirstUnaryExp = FirstFactorPrefix + TokenType.Minus + TokenType.Not;
         FirstExpExp = new TokenSet(FirstUnaryExp);
         FirstMultExp = new TokenSet(FirstUnaryExp);
-        _table = new FunctionTable();
-        _table.FillFrom(typeof(Functions));
+        _functionTable = new FunctionTable();
+        _functionTable.FillFrom(typeof(Functions));
     }
 
     public IExpression Create(string input)
     {
-        TokenCollection tokens = Tokenizer.Tokenize(input, _table.GetParameterCount);
+        TokenCollection tokens = Tokenizer.Tokenize(input, _functionTable.GetParameterCount);
 
         if (!tokens.Next())
             throw new InvalidOperationException("Can't create an expression from an empty input");
@@ -90,7 +90,7 @@ public sealed class ExpressionFactory
         throw new InvalidOperationException("Invalid expression");
     }
 
-    private IExpression? ParseMultExpression(TokenCollection tokens)
+    private IExpression ParseMultExpression(TokenCollection tokens)
     {
         if (tokens.Check(FirstExpExp))
         {
@@ -258,7 +258,7 @@ public sealed class ExpressionFactory
     {
         var opType = tokens.CurrentToken.Type;
         var function = tokens.CurrentToken.Value;
-        int count = _table.GetParameterCount(function);
+        int count = _functionTable.GetParameterCount(function);
 
         if (count == -1)
             throw new InvalidOperationException($"Unknown function: {function}");
@@ -277,6 +277,6 @@ public sealed class ExpressionFactory
 
         tokens.Eat(TokenType.CloseParen);
 
-        return FunctionFactory.Create(function, parameters);
+        return _functionTable.Create(function, parameters);
     }
 }

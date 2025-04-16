@@ -38,6 +38,9 @@ public static class Functions
         if (value is double d)
             return Math.Sin(d);
 
+        if (value is long l)
+            return Math.Sin(l);
+        
         if (value is Complex c)
             return Complex.Sin(c);
 
@@ -49,9 +52,40 @@ public static class Functions
         if (value is double d)
             return Math.Cos(d);
 
-        if (value is Complex c)
-            return Complex.Sin(c);
+        if (value is long l)
+            return Math.Cos(l);
 
-        throw new InvalidOperationException($"Can't perform Sin function on type {value.GetType()}");
+        if (value is Complex c)
+            return Complex.Cos(c);
+
+        throw new InvalidOperationException($"Can't perform Cos function on type {value.GetType()}");
+    }
+
+    public static dynamic Tan(dynamic value)
+    {
+        if (value is double d)
+            return Math.Tan(d);
+
+        if (value is long l)
+            return Math.Tan(l);
+
+        if (value is Complex c)
+            return Complex.Tan(c);
+
+        throw new InvalidOperationException($"Can't perform Tan function on type {value.GetType()}");
+    }
+
+    public static dynamic Ctg(dynamic value)
+    {
+        if (value is double d)
+            return 1/ Math.Tan(d);
+
+        if (value is long l)
+            return 1 / Math.Tan(l);
+
+        if (value is Complex c)
+            return 1 / Complex.Tan(c);
+
+        throw new InvalidOperationException($"Can't perform Ctg function on type {value.GetType()}");
     }
 }

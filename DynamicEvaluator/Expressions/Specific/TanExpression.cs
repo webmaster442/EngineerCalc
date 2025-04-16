@@ -1,15 +1,14 @@
-﻿
-namespace DynamicEvaluator.Expressions.Specific;
+﻿namespace DynamicEvaluator.Expressions.Specific;
 
-internal sealed class SinExpression : UnaryExpression
+internal sealed class TanExpression : UnaryExpression
 {
-    public SinExpression(IExpression child) : base(child)
+    public TanExpression(IExpression child) : base(child)
     {
     }
 
     public override IExpression Differentiate(string byVariable)
     {
-        return new MultiplyExpression(new CosExpression(Child), Child.Differentiate(byVariable));
+        return new MultiplyExpression(new ExponentExpression(new CosExpression(Child), new ConstantExpression(-2)), Child.Differentiate(byVariable));
     }
 
     public override IExpression Simplify()
@@ -20,16 +19,16 @@ internal sealed class SinExpression : UnaryExpression
             // child is constant
             return new ConstantExpression(Evaluate(childConst.Value));
         }
-        return new SinExpression(newChild);
+        return new TanExpression(newChild);
     }
 
     protected override dynamic Evaluate(dynamic value)
-        => Functions.Sin(value);
+        => Functions.Tan(value);
 
     protected override string Render(bool emitLatex)
     {
         return emitLatex
-            ? $"{{ sin({Child}) }}"
-            : $"sin({Child})";
+            ? $"{{ tan({Child}) }}"
+            : $"tan({Child})";
     }
 }
