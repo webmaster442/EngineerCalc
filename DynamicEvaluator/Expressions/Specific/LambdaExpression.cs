@@ -1,37 +1,45 @@
-﻿namespace DynamicEvaluator.Expressions.Specific;
+﻿using System.Reflection;
 
-internal sealed class LambdaExpression1 : UnaryExpression
+namespace DynamicEvaluator.Expressions.Specific;
+
+internal sealed class LambdaExpression : IExpression
 {
-    private readonly Func<dynamic, dynamic> _function;
-    private readonly string _name;
+    private readonly MethodInfo _method;
+    private readonly IExpression[] _parameters;
+    private readonly int _parameterCount;
 
-    public LambdaExpression1(IExpression child, Func<dynamic, dynamic> function, string name) : base(child)
+    public LambdaExpression(MethodInfo method, IExpression[] parameters)
     {
-        _function = function;
-        _name = name;
+        _method = method;
+        _parameters = parameters;
+        _parameterCount = _method.GetParameters().Length;
     }
 
-    public override IExpression Differentiate(string byVariable)
-        => throw new InvalidOperationException($"Can't differentiate an expression with the function {_name}");
+    public IExpression Differentiate(string byVariable)
+        => throw new InvalidOperationException($"Expression with {_method.Name} can't be differentiated");
 
-    public override IExpression Simplify()
+    public dynamic Evaluate(IReadOnlyDictionary<string, dynamic> variables)
     {
-        var newChild = Child.Simplify();
-        if (newChild is ConstantExpression childConst)
+        dynamic[] args = new dynamic[_parameterCount];
+        for (int i = 0; i < args.Length; i++)
         {
-            // child is constant
-            return new ConstantExpression(Evaluate(childConst.Value));
+            args[i] = _parameters[i].Evaluate(variables);
         }
-        return new LambdaExpression1(newChild, _function, _name);
+        return _method.Invoke(null, args) ?? throw new InvalidOperationException($"Method invoke failed: {_method.Name}");
     }
 
-    protected override dynamic Evaluate(dynamic value)
-        => _function(value);
+    public IExpression Simplify()
+        => new LambdaExpression(_method, _parameters);
 
-    protected override string Render(bool emitLatex)
+    public string ToLatex()
     {
-        return emitLatex
-            ? $"{{ {_name}({Child}) }}"
-            : $"{_name}({Child})";
+        var subs = string.Join(',', _parameters.Select(x => x.ToLatex()));
+        return $"{{ {_method.Name}({subs}) }}";
+    }
+
+    public override string ToString()
+    {
+        var subs = string.Join(',', _parameters.Select(x => x.ToString()));
+        return $"{_method.Name}({subs})";
     }
 }
