@@ -1,5 +1,4 @@
-﻿
-namespace DynamicEvaluator.Expressions.Specific;
+﻿namespace DynamicEvaluator.Expressions.Specific;
 
 internal sealed class CosExpression : UnaryExpression
 {
@@ -9,7 +8,7 @@ internal sealed class CosExpression : UnaryExpression
 
     public override IExpression Differentiate(string byVariable)
     {
-        return new MultiplyExpression(new NegateExpression(new SinExpression(Child)), Child?.Differentiate(byVariable));
+        return new MultiplyExpression(new NegateExpression(new SinExpression(Child)), Child.Differentiate(byVariable));
     }
 
     public override IExpression Simplify()

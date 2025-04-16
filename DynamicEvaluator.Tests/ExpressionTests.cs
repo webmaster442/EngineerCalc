@@ -1,4 +1,6 @@
-﻿namespace DynamicEvaluator.Tests;
+﻿using DynamicEvaluator.Types;
+
+namespace DynamicEvaluator.Tests;
 
 public class ExpressionTests
 {
@@ -72,8 +74,6 @@ public class ExpressionTests
     [TestCase("1\r\n+1", 2)]
     [TestCase("1+-2", -1)]
     [TestCase("x+y", 3)]
-    [TestCase("22/11", 2)]
-    [TestCase("(1/2)*2+(4*3)", 13)]
     public void EnsureThat_Evaluate_Works_Integers(string expression, long expected)
     {
         IExpression parsed = _expressionFactory.Create(expression);
@@ -87,6 +87,27 @@ public class ExpressionTests
         {
             Assert.That(result, Is.TypeOf<long>());
             Assert.That(result, Is.EqualTo(expected));
+        });
+    }
+
+    [TestCase("22/11", 2, 1)]
+    [TestCase("(1/2)*2+(4*3)", 13, 1)]
+    [TestCase("x/y", 5, 1)]
+    [TestCase("(1/2)*(3/4)", 3, 8)]
+    public void EnsureThat_Evaluate_Works_Fractions(string expression, long numerator, long denominator)
+    {
+        IExpression parsed = _expressionFactory.Create(expression);
+        Dictionary<string, dynamic> variables = new()
+        {
+            { "x", 10L },
+            { "y", 2L },
+        };
+        dynamic result = parsed.Evaluate(variables);
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.TypeOf<Fraction>());
+            Assert.That(result.Numerator, Is.EqualTo(numerator));
+            Assert.That(result.Denominator, Is.EqualTo(denominator));
         });
     }
 }

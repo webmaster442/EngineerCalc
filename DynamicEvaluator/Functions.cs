@@ -9,6 +9,9 @@ public static class Functions
         if (value is double d)
             return Math.Log(d);
 
+        if (value is long l)
+            return Math.Log(l);
+
         if (value is Complex c)
             return Complex.Log(c);
 

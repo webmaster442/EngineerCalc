@@ -1,9 +1,16 @@
 ﻿using System.Globalization;
 
-namespace DynamicEvaluator.Expressions;
+namespace DynamicEvaluator.Types;
 
 internal sealed class TypeFactory
 {
+    internal static dynamic CreateFraction(dynamic value1, dynamic value2)
+    {
+        long l1 = (long)value1;
+        long l2 = (long)value2;
+        return new Fraction(l1, l2);
+    }
+
     internal static dynamic CreateType(string value, object? data)
     {
         if (data is not Type type)

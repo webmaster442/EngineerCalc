@@ -1,4 +1,5 @@
-﻿
+﻿using System.Globalization;
+
 namespace DynamicEvaluator.Expressions.Specific;
 
 internal sealed class ConstantExpression : IExpression
@@ -20,8 +21,8 @@ internal sealed class ConstantExpression : IExpression
         => new ConstantExpression(Value);
 
     public string ToLatex()
-        => $"{{ {Value} }}";
+        => $"{{ {Value.ToString(CultureInfo.InvariantCulture)} }}";
 
     public override string ToString()
-        => Value.ToString();
+        => Value.ToString(CultureInfo.InvariantCulture);
 }

@@ -1,4 +1,6 @@
-﻿namespace DynamicEvaluator.Expressions.Specific;
+﻿using DynamicEvaluator.Types;
+
+namespace DynamicEvaluator.Expressions.Specific;
 
 internal sealed class DivideExpression : BinaryExpression
 {
@@ -75,7 +77,13 @@ internal sealed class DivideExpression : BinaryExpression
     }
 
     protected override dynamic Evaluate(dynamic value1, dynamic value2)
-        => value1 / value2;
+    {
+        if (TypeHelper.IsLong(value1) && TypeHelper.IsLong(value2))
+        {
+            return TypeFactory.CreateFraction(value1, value2);
+        }
+        return value1 / value2;
+    }
 
     protected override string Render(bool emitLatex)
     {
