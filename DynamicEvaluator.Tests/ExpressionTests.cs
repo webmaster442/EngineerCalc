@@ -139,6 +139,7 @@ public class ExpressionTests
     [TestCase("1+-2", -1)]
     [TestCase("x+y", 3)]
     [TestCase("fromhex('ff')", 255)]
+    [TestCase("1_000+100", "1100")]
     public void EnsureThat_Evaluate_Works_Integers(string expression, long expected)
     {
         IExpression parsed = _expressionFactory.Create(expression);
@@ -164,6 +165,7 @@ public class ExpressionTests
     [TestCase("ln(e)", 1)]
     [TestCase("ln(100)", 4.6051701859880913680359829093687)]
     [TestCase("log(1024,2)", 10)]
+    [TestCase("1_0+1.1", 11.1)]
     public void EnsureThat_Evaluate_Works_Doubles(string expression, double expected)
     {
         IExpression parsed = _expressionFactory.Create(expression);

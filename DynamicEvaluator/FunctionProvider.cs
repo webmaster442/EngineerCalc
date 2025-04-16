@@ -7,10 +7,12 @@ namespace DynamicEvaluator;
 internal sealed class FunctionProvider
 {
     private readonly Dictionary<string, (MethodInfo method, int paramCount)> _table;
+    private readonly string[] _doumentations;
 
     public FunctionProvider()
     {
         _table = new Dictionary<string, (MethodInfo method, int paramCount)>(StringComparer.OrdinalIgnoreCase);
+        _doumentations = typeof(Functions).Assembly.GetManifestResourceNames();
     }
 
     public void FillFrom(Type type)
@@ -63,4 +65,26 @@ internal sealed class FunctionProvider
         if (list.Count != count)
             throw new InvalidOperationException($"Expected {count} arguments, got {list.Count}");
     }
+
+    internal IEnumerable<string> GetFunctionNames()
+        => _table.Keys;
+
+    internal string GetDocumentation(string function)
+    {
+        var selector = $".{function}.md";
+        var fullName = _doumentations.Where(x => x.EndsWith(function, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+        
+        if (string.IsNullOrEmpty(fullName))
+            return string.Empty;
+
+        using var manifestStream = typeof(Functions).Assembly.GetManifestResourceStream(fullName);
+        if (manifestStream != null)
+        {
+            using var reader = new StreamReader(manifestStream);
+            return reader.ReadToEnd();
+        }
+
+        return string.Empty;
+    }
+
 }

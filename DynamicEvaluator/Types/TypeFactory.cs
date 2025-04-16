@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Tracing;
 using System.Globalization;
 using System.Reflection;
 
@@ -67,10 +66,16 @@ internal sealed class TypeFactory
             return value;
 
         if (type == typeof(double))
-            return double.Parse(value, CultureInfo.InvariantCulture);
+        {
+            string cleaned = value.Replace("_", "");
+            return double.Parse(cleaned, CultureInfo.InvariantCulture);
+        }
 
         if (type == typeof(long))
-            return long.Parse(value, CultureInfo.InvariantCulture);
+        {
+            string cleaned = value.Replace("_", "");
+            return long.Parse(cleaned, CultureInfo.InvariantCulture);
+        }
 
         if (type == typeof(bool))
             return bool.Parse(value);

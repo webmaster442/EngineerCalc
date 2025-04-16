@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-using System.Resources;
-using System.Text;
+﻿using System.Text;
 
 using DynamicEvaluator.Expressions;
 using DynamicEvaluator.Expressions.Specific;
@@ -28,6 +26,12 @@ public sealed class ExpressionFactory
         _functionTable = new FunctionProvider();
         _functionTable.FillFrom(typeof(Functions));
     }
+
+    public IEnumerable<string> KnownFunctions
+        => _functionTable.GetFunctionNames();
+
+    public string GetFuncionDocumentation(string function)
+        => _functionTable.GetDocumentation(function);
 
     public IExpression Create(string input)
     {

@@ -6,4 +6,28 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Docs\cos.md" />
+    <None Remove="Docs\ctg.md" />
+    <None Remove="Docs\frombin.md" />
+    <None Remove="Docs\fromhex.md" />
+    <None Remove="Docs\ln.md" />
+    <None Remove="Docs\log.md" />
+    <None Remove="Docs\root.md" />
+    <None Remove="Docs\sin.md" />
+    <None Remove="Docs\tan.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Docs\cos.md" />
+    <EmbeddedResource Include="Docs\ctg.md" />
+    <EmbeddedResource Include="Docs\frombin.md" />
+    <EmbeddedResource Include="Docs\fromhex.md" />
+    <EmbeddedResource Include="Docs\ln.md" />
+    <EmbeddedResource Include="Docs\log.md" />
+    <EmbeddedResource Include="Docs\root.md" />
+    <EmbeddedResource Include="Docs\sin.md" />
+    <EmbeddedResource Include="Docs\tan.md" />
+  </ItemGroup>
+
 </Project>
