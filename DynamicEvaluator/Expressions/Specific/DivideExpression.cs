@@ -33,7 +33,7 @@ internal sealed class DivideExpression : BinaryExpression
             {
                 throw new DivideByZeroException();
             }
-            return new ConstantExpression(leftConst.Value / rightConst.Value);
+            return new ConstantExpression(Evaluate(leftConst.Value, rightConst.Value));
         }
         if (leftConst?.Value == 0)
         {

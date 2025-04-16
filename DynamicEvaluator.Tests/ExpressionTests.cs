@@ -35,7 +35,7 @@ public class ExpressionTests
     [TestCase("tan(x)", "(cos(x) ^ -2)")]
     [TestCase("ctg(x)", "(-(sin(x) ^ -2))")]
     //Root
-    [TestCase("root(x,2)", "(0.5 * (x ^ -0.5))")]
+    [TestCase("root(x,2)", "(1 / 2 * (x ^ -1 / 2))")]
     //Logarithms
     [TestCase("ln(x)", "(1 / x)")]
     [TestCase("Log(x, e)", "(1 / x)")]
@@ -77,7 +77,7 @@ public class ExpressionTests
     public void EnsureThat_Evaluate_Works_Integers(string expression, long expected)
     {
         IExpression parsed = _expressionFactory.Create(expression);
-        Dictionary<string, dynamic> variables = new()
+        Variables variables = new()
         {
             { "x", 1L },
             { "y", 2L },
@@ -102,7 +102,7 @@ public class ExpressionTests
     public void EnsureThat_Evaluate_Works_Doubles(string expression, double expected)
     {
         IExpression parsed = _expressionFactory.Create(expression);
-        Dictionary<string, dynamic> variables = new()
+        Variables variables = new()
         {
             { "x", 1d },
             { "y", 2d },
@@ -122,7 +122,7 @@ public class ExpressionTests
     public void EnsureThat_Evaluate_Works_Fractions(string expression, long numerator, long denominator)
     {
         IExpression parsed = _expressionFactory.Create(expression);
-        Dictionary<string, dynamic> variables = new()
+        Variables variables = new()
         {
             { "x", 10L },
             { "y", 2L },

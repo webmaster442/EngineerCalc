@@ -94,4 +94,7 @@ public static class Functions
 
         throw new InvalidOperationException($"Can't perform Pow function on type {value1.GetType()} and {value2.GetType()}");
     }
+
+    public static dynamic Root(dynamic value1, dynamic value2)
+        => Pow(value1, 1 / value2);
 }

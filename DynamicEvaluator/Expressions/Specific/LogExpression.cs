@@ -8,8 +8,8 @@ internal sealed class LogExpression : BinaryExpression
 
     public override IExpression Differentiate(string byVariable)
     {
-        return new MultiplyExpression(new DivideExpression(new ConstantExpression(1), new LnExpression(Right)),
-                                      new DivideExpression(new ConstantExpression(1), Left));
+        return new MultiplyExpression(new DivideExpression(new ConstantExpression(1L), new LnExpression(Right)),
+                                      new DivideExpression(new ConstantExpression(1L), Left));
     }
 
     public override IExpression Simplify()

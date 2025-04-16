@@ -33,7 +33,7 @@ internal sealed class MultiplyExpression : BinaryExpression
             if (leftConst.Value == 0)
             {
                 // 0 * y
-                return new ConstantExpression(0);
+                return new ConstantExpression(0L);
             }
             if (leftConst.Value == 1)
             {
@@ -56,7 +56,7 @@ internal sealed class MultiplyExpression : BinaryExpression
             if (rightConst.Value == 0)
             {
                 // x * 0
-                return new ConstantExpression(0);
+                return new ConstantExpression(0L);
             }
             if (rightConst.Value == 1)
             {

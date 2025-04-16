@@ -12,9 +12,9 @@ internal sealed class ConstantExpression : IExpression
     public dynamic Value { get; }
 
     public IExpression Differentiate(string byVariable)
-        => new ConstantExpression(0);
+        => new ConstantExpression(0L);
 
-    public dynamic Evaluate(IReadOnlyDictionary<string, dynamic> variables) 
+    public dynamic Evaluate(Variables variables) 
         => Value;
 
     public IExpression Simplify()

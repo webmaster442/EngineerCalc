@@ -14,7 +14,7 @@ internal abstract class UnaryExpression : IExpression
 
     public abstract IExpression Simplify();
 
-    public dynamic Evaluate(IReadOnlyDictionary<string, dynamic> variables)
+    public dynamic Evaluate(Variables variables)
     {
         dynamic child = Child.Evaluate(variables);
         return Evaluate(child);

@@ -1,8 +1,8 @@
 ﻿namespace DynamicEvaluator.Expressions.Specific;
 
-internal sealed class ExponentExpression : BinaryExpression
+internal sealed class RootExpression : BinaryExpression
 {
-    public ExponentExpression(IExpression left, IExpression right) : base(left, right)
+    public RootExpression(IExpression left, IExpression right) : base(left, right)
     {
     }
 
@@ -12,20 +12,14 @@ internal sealed class ExponentExpression : BinaryExpression
         {
             // f(x) = g(x)^n
             // f'(x) = n * g'(x) * g(x)^(n-1)
-            return
-                new MultiplyExpression(new MultiplyExpression(Right, Left.Differentiate(byVariable)),
-                                       new ExponentExpression(Left, new SubtractExpression(Right, new ConstantExpression(1L))));
-        }
-        var simple = Left?.Simplify();
-        if (simple is ConstantExpression constant)
-        {
-            // f(x) = a^g(x)
-            // f'(x) = (ln a) * g'(x) * a^g(x)
-            var a = constant.Value;
-            return new MultiplyExpression(new MultiplyExpression(new ConstantExpression(Functions.Ln(a)), Right.Differentiate(byVariable)), new ExponentExpression(simple, Right));
-        }
 
-        throw new InvalidOperationException("Expression can't be differentiated due to exponent");
+            var newRight = new DivideExpression(new ConstantExpression(1L), Right);
+
+            return
+                new MultiplyExpression(new MultiplyExpression(newRight, Left.Differentiate(byVariable)),
+                                       new ExponentExpression(Left, new SubtractExpression(newRight, new ConstantExpression(1))));
+        }
+        throw new InvalidOperationException("Can't differentiate function");
     }
 
     public override IExpression Simplify()
@@ -60,16 +54,16 @@ internal sealed class ExponentExpression : BinaryExpression
             return new ConstantExpression(0L);
         }
         // x ^ y;  no simplification
-        return new ExponentExpression(newLeft, newRight);
+        return new ExponentExpression(newLeft, new DivideExpression(new ConstantExpression(1), newRight));
     }
 
     protected override dynamic Evaluate(dynamic value1, dynamic value2)
-        => Functions.Pow(value1, value2);
+        => Functions.Root(value1, value2);
 
     protected override string Render(bool emitLatex)
     {
         return emitLatex
-            ? $"{{ {Left} ^ {Right} }}"
-            : $"({Left} ^ {Right})";
+            ? $"{{ root({Left}, {Right}) }}"
+            : $"root({Left}, {Right})";
     }
 }

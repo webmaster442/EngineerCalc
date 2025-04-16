@@ -18,7 +18,7 @@ internal sealed class LambdaExpression : IExpression
     public IExpression Differentiate(string byVariable)
         => throw new InvalidOperationException($"Expression with {_method.Name} can't be differentiated");
 
-    public dynamic Evaluate(IReadOnlyDictionary<string, dynamic> variables)
+    public dynamic Evaluate(Variables variables)
     {
         dynamic[] args = new dynamic[_parameterCount];
         for (int i = 0; i < args.Length; i++)

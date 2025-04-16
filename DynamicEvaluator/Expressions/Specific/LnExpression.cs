@@ -8,7 +8,7 @@ internal sealed class LnExpression : UnaryExpression
 
     public override IExpression Differentiate(string byVariable)
     {
-        return new DivideExpression(new ConstantExpression(1), Child);
+        return new DivideExpression(new ConstantExpression(1L), Child);
     }
 
     public override IExpression Simplify()
@@ -18,6 +18,10 @@ internal sealed class LnExpression : UnaryExpression
         {
             // child is constant
             return new ConstantExpression(Evaluate(childConst.Value));
+        }
+        else if (newChild is VariableExpression variable && variable.Identifier == "e")
+        {
+            return new ConstantExpression(1L);
         }
         return new LnExpression(newChild);
     }

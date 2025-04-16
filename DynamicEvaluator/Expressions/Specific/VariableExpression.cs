@@ -18,16 +18,16 @@ internal sealed class VariableExpression : IExpression
             // d( f(x) ) = 1 * d( x )
             // d( x ) = 1
             // f'(x) = 1
-            return new ConstantExpression(1);
+            return new ConstantExpression(1L);
         }
         // f(x) = c
         // d( f(x) ) = c * d( c )
         // d( c ) = 0
         // f'(x) = 0
-        return new ConstantExpression(0);
+        return new ConstantExpression(0L);
     }
 
-    public dynamic Evaluate(IReadOnlyDictionary<string, dynamic> variables) 
+    public dynamic Evaluate(Variables variables) 
         => variables[Identifier];
 
     public IExpression Simplify()

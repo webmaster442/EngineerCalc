@@ -44,6 +44,7 @@ internal class FunctionTable
             "ctg" => new CtgExpression(parameters[0]),
             "ln" => new LnExpression(parameters[0]),
             "log" => new LogExpression(parameters[0], parameters[1]),
+            "root" => new RootExpression(parameters[0], parameters[1]),
             _ => throw new InvalidOperationException("Function not implemented")
         };
     }

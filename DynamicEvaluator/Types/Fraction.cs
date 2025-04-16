@@ -281,12 +281,7 @@ public readonly struct Fraction :
 
         string denominator = Denominator.ToString(format, formatProvider);
 
-        StringBuilder sb = new();
-        sb.AppendLine(numerator);
-        sb.AppendLine(new string('─', Math.Max(numerator.Length, denominator.Length)));
-        sb.AppendLine(denominator);
-
-        return sb.ToString();
+        return $"{numerator} / {denominator}";
     }
 
     private void Simplify(ref long Numerator, ref long Denominator)

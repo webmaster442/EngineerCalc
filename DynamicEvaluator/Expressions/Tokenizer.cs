@@ -66,7 +66,10 @@ internal abstract class Tokenizer
     private static bool IsIdentifier(char c)
         => c == '_' || ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z');
 
-    private static Token HandleIdentifier(string input, int start, Func<string, int> functionArgumentCountGetter, out int newIndex)
+    private static Token HandleIdentifier(string input,
+                                          int start,
+                                          Func<string, int> functionArgumentCountGetter,
+                                          out int newIndex)
     {
         StringBuilder sb = new();
         int index = start;
@@ -149,7 +152,7 @@ internal abstract class Tokenizer
         {
             '|' => new Token("|", TokenType.Or),
             '&' => new Token("&", TokenType.And),
-            '!' => new Token("!", TokenType.Not),
+            '!' => new Token("~", TokenType.Not),
             '+' => new Token("+", TokenType.Plus),
             '-' => new Token("-", TokenType.Minus),
             '*' => new Token("*", TokenType.Multiply),
