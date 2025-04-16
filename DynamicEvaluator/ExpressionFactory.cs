@@ -156,7 +156,8 @@ internal class ExpressionFactory
         IExpression? exp = null;
         if (tokens.CurrentToken.Type == TokenType.Constant)
         {
-            exp = new ConstantExpression(Convert.ToDouble(tokens.CurrentToken.Value, CultureInfo.InvariantCulture));
+            dynamic value = TypeFactory.CreateType(tokens.CurrentToken.Value, tokens.CurrentToken.Data);
+            exp = new ConstantExpression(value);
             tokens.Eat(TokenType.Constant);
         }
 

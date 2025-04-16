@@ -1,4 +1,5 @@
-﻿namespace DynamicEvaluator.Expressions.Specific;
+﻿
+namespace DynamicEvaluator.Expressions.Specific;
 
 internal sealed class ConstantExpression : IExpression
 {

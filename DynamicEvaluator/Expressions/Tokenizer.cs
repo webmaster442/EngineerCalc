@@ -4,7 +4,7 @@ namespace DynamicEvaluator.Expressions;
 
 internal abstract class Tokenizer
 {
-    private static bool IsAdditionallyAllowedInANumber(char c)
+    private static bool IsFloatIngInputChar(char c)
     {
         return c == '.'
               || c == '-'
@@ -25,7 +25,7 @@ internal abstract class Tokenizer
                 ++index;
                 containsAtLeastOneDigit = true;
             }
-            else if (containsAtLeastOneDigit && IsAdditionallyAllowedInANumber(input[index]))
+            else if (containsAtLeastOneDigit && IsFloatIngInputChar(input[index]))
             {
                 sb.Append(input[index]);
                 ++index;
@@ -36,7 +36,11 @@ internal abstract class Tokenizer
             }
         }
         newIndex = index;
-        return new Token(sb.ToString(), TokenType.Constant, typeof(double));
+        string tokenValue = sb.ToString();
+        if (tokenValue.Any(IsFloatIngInputChar))
+            return new Token(tokenValue, TokenType.Constant, typeof(double));
+        else
+            return new Token(tokenValue, TokenType.Constant, typeof(long));
     }
 
     private static Token HandleStringLiteral(string input, int start, out int newIndex)
