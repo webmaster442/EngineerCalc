@@ -42,7 +42,7 @@ internal sealed class DivideExpression : BinaryExpression
             {
                 throw new DivideByZeroException();
             }
-            return new ConstantExpression(0);
+            return new ConstantExpression(0L);
         }
         else if (rightConst != null)
         {

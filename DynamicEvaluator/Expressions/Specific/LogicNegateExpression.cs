@@ -15,18 +15,36 @@ internal sealed class LogicNegateExpression : UnaryExpression
         if (newChild is ConstantExpression childConst)
         {
             // child is constant
-            return new ConstantExpression(~childConst.Value);
+            return new ConstantExpression(!childConst.Value);
         }
+        if (newChild is LogicNegateExpression negated)
+        {
+            // !!x -> x
+            return negated.Child;
+        }
+
+        // !(x & y) -> x | y
+        if (newChild is AndExpression and)
+        {
+            return new OrExpression(and.Left, and.Right);
+        }
+
+        // !(x | y) -> x & y
+        if (newChild is OrExpression or)
+        {
+            return new AndExpression(or.Left, or.Right);
+        }
+
         return new LogicNegateExpression(newChild);
     }
 
     protected override dynamic Evaluate(dynamic value)
-        => ~value;
+        => !value;
 
     protected override string Render(bool emitLatex)
     {
         return emitLatex
              ? $"{{ \\neg {Child} }}"
-             : $"(~{Child})";
+             : $"(!{Child})";
     }
 }

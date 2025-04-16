@@ -18,6 +18,13 @@ internal sealed class AndExpression : BinaryExpression
         var leftConst = newLeft as ConstantExpression;
         var rightConst = newRight as ConstantExpression;
 
+        if (newLeft is VariableExpression v1
+            && newRight is VariableExpression v2
+            && v1.Identifier == v2.Identifier)
+        {
+            return new VariableExpression(v1.Identifier);
+        }
+
         if (leftConst != null && rightConst != null)
         {
             // two constants

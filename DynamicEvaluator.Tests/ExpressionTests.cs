@@ -42,9 +42,73 @@ public class ExpressionTests
     [TestCase("Log(x, 4)", "(0.7213475204444817 * (1 / x))")]
     public void EnsureThat_Differentiate_Works(string expression, string expected)
     {
-
         IExpression derived = _expressionFactory.Create(expression).Differentiate("x").Simplify();
         Assert.That(derived.ToString(), Is.EquivalentTo(expected));
+    }
+
+    //add
+    [TestCase("1+1", "2")]
+    [TestCase("0+y", "y")]
+    [TestCase("y+0", "y")]
+    [TestCase("x + -y", "(x - y)")]
+    [TestCase("-x + -y", "((-x) - y)")]
+    [TestCase("-x + y", "(y - x)")]
+    //and
+    [TestCase("true & true", "True")]
+    [TestCase("true & false",  "False")]
+    [TestCase("false & true", "False")]
+    [TestCase("false & false", "False")]
+    [TestCase("true & x", "x")]
+    [TestCase("x & true", "x")]
+    [TestCase("false & x", "False")]
+    [TestCase("x & false", "False")]
+    [TestCase("x & x", "x")]
+    //or
+    [TestCase("true | true", "True")]
+    [TestCase("true | false", "True")]
+    [TestCase("false | true", "True")]
+    [TestCase("false | false", "False")]
+    [TestCase("true | x", "True")]
+    [TestCase("x | true", "True")]
+    [TestCase("false | x", "x")]
+    [TestCase("x | false", "x")]
+    [TestCase("x | x", "x")]
+    //constant
+    [TestCase("1", "1")]
+    [TestCase("0.5", "0.5")]
+    [TestCase("true", "True")]
+    //divide
+    [TestCase("1 / 0.1", "10")]
+    [TestCase("1/2", "1 / 2")]
+    [TestCase("1/1", "1")]
+    [TestCase("y/x", "(y / x)")]
+    [TestCase("x/1", "x")]
+    [TestCase("x/-1", "(-x)")]
+    [TestCase("-x / -y", "(x / y)")]
+    //exponent
+    [TestCase("x^0", "1")]
+    [TestCase("0.14^0", "1")]
+    [TestCase("x^1", "x")]
+    [TestCase("3^1", "3")]
+    [TestCase("0^y", "0")]
+    [TestCase("x ^ y", "(x ^ y)")]
+    //ln
+    [TestCase("ln(e)", "1")]
+    //log
+    [TestCase("log(2, 2)", "1")]
+    //negate
+    [TestCase("!true", "False")]
+    [TestCase("!false", "True")]
+    [TestCase("!x", "(!x)")]
+    [TestCase("!(!x)", "x")]
+    [TestCase("!(!true)", "True")]
+    [TestCase("!(!false)", "False")]
+    [TestCase("!(x & y)", "(x | y)")]
+    [TestCase("!(x | y)", "(x & y)")]
+    public void EnsureThat_Simplify_Works(string expression, string expected)
+    {
+        IExpression simplified = _expressionFactory.Create(expression).Simplify();
+        Assert.That(simplified.ToString(), Is.EquivalentTo(expected));
     }
 
     [TestCase("1:2")]
@@ -133,6 +197,32 @@ public class ExpressionTests
             Assert.That(result, Is.TypeOf<Fraction>());
             Assert.That(result.Numerator, Is.EqualTo(numerator));
             Assert.That(result.Denominator, Is.EqualTo(denominator));
+        });
+    }
+
+    [TestCase("false&false", false)]
+    [TestCase("false&true", false)]
+    [TestCase("true&false", false)]
+    [TestCase("true&true", true)]
+    [TestCase("false|false", false)]
+    [TestCase("false|true", true)]
+    [TestCase("true|false", true)]
+    [TestCase("true|true", true)]
+    [TestCase("!false", true)]
+    [TestCase("!true", false)]
+    [TestCase("!(!true)", true)]
+    [TestCase("!false&!false", true)]
+    [TestCase("false", false)]
+    [TestCase("true", true)]
+    public void EnsureThat_Evaluate_Works_Logics(string expression, bool expected)
+    {
+        IExpression parsed = _expressionFactory.Create(expression);
+        Variables variables = new();
+        dynamic result = parsed.Evaluate(variables);
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.TypeOf<bool>());
+            Assert.That(result, Is.EqualTo(expected));
         });
     }
 }

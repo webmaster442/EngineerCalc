@@ -18,6 +18,13 @@ internal sealed class OrExpression : BinaryExpression
         var leftConst = newLeft as ConstantExpression;
         var rightConst = newRight as ConstantExpression;
 
+        if (newLeft is VariableExpression v1
+            && newRight is VariableExpression v2
+            && v1.Identifier == v2.Identifier)
+        {
+            return new VariableExpression(v1.Identifier);
+        }
+
         if (leftConst != null && rightConst != null)
         {
             // two constants
@@ -26,9 +33,9 @@ internal sealed class OrExpression : BinaryExpression
         if (leftConst != null && newRight is VariableExpression rightVariable)
         {
             if (leftConst.Value == true)
-                return new VariableExpression(rightVariable.Identifier);
+                return new ConstantExpression(true);
             if (leftConst.Value == false)
-                return new ConstantExpression(false);
+                return new VariableExpression(rightVariable.Identifier);
         }
         if (rightConst != null && newLeft is VariableExpression leftVariable)
         {
@@ -37,7 +44,7 @@ internal sealed class OrExpression : BinaryExpression
             if (rightConst.Value == false)
                 return new VariableExpression(leftVariable.Identifier);
         }
-        return new AndExpression(newLeft, newRight);
+        return new OrExpression(newLeft, newRight);
     }
 
     protected override dynamic Evaluate(dynamic value1, dynamic value2)
@@ -47,6 +54,6 @@ internal sealed class OrExpression : BinaryExpression
     {
         return emitLatex
             ? $"{{ {Left} \\lor {Right} }}"
-            : $"({Left} & {Right})";
+            : $"({Left} | {Right})";
     }
 }

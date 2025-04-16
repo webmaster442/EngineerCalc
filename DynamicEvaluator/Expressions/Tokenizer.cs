@@ -152,7 +152,7 @@ internal abstract class Tokenizer
         {
             '|' => new Token("|", TokenType.Or),
             '&' => new Token("&", TokenType.And),
-            '!' => new Token("~", TokenType.Not),
+            '!' => new Token("!", TokenType.Not),
             '+' => new Token("+", TokenType.Plus),
             '-' => new Token("-", TokenType.Minus),
             '*' => new Token("*", TokenType.Multiply),
