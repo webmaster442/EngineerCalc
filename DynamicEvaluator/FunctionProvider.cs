@@ -1,14 +1,16 @@
-﻿using DynamicEvaluator.Expressions.Specific;
+﻿using System.Reflection;
+
+using DynamicEvaluator.Expressions.Specific;
 
 namespace DynamicEvaluator;
 
-internal class FunctionTable
+internal sealed class FunctionProvider
 {
-    private readonly Dictionary<string, int> _table;
+    private readonly Dictionary<string, (MethodInfo method, int paramCount)> _table;
 
-    public FunctionTable()
+    public FunctionProvider()
     {
-        _table = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+        _table = new Dictionary<string, (MethodInfo method, int paramCount)>(StringComparer.OrdinalIgnoreCase);
     }
 
     public void FillFrom(Type type)
@@ -16,7 +18,7 @@ internal class FunctionTable
         var methods = type.GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
         foreach (var method in methods)
         {
-            _table.Add(method.Name, method.GetParameters().Length);
+            _table.Add(method.Name, (method, method.GetParameters().Length));
         }
     }
 
@@ -25,7 +27,7 @@ internal class FunctionTable
         if (!_table.ContainsKey(name))
             return -1;
 
-        return _table[name];
+        return _table[name].paramCount;
     }
 
     public IExpression Create(string function, IReadOnlyList<IExpression> parameters)
@@ -36,6 +38,7 @@ internal class FunctionTable
 
         HasCount(parameters, paramCount);
 
+        //Special functions
         return function switch
         {
             "cos" => new CosExpression(parameters[0]),
@@ -45,8 +48,14 @@ internal class FunctionTable
             "ln" => new LnExpression(parameters[0]),
             "log" => new LogExpression(parameters[0], parameters[1]),
             "root" => new RootExpression(parameters[0], parameters[1]),
-            _ => throw new InvalidOperationException("Function not implemented")
+            _ => CreateLambda(function, parameters),
         };
+    }
+
+    private LambdaExpression CreateLambda(string function, IReadOnlyList<IExpression> parameters)
+    {
+        var (method, paramCount) = _table[function];
+        return new LambdaExpression(method, parameters);
     }
 
     private static void HasCount<T>(IReadOnlyList<T> list, int count)

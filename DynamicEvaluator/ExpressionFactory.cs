@@ -15,7 +15,7 @@ public sealed class ExpressionFactory
     private readonly TokenSet FirstUnaryExp;
     private readonly TokenSet FirstFactorPrefix;
     private readonly TokenSet FirstFactor;
-    private readonly FunctionTable _functionTable;
+    private readonly FunctionProvider _functionTable;
 
     public ExpressionFactory()
     {
@@ -25,7 +25,7 @@ public sealed class ExpressionFactory
         FirstUnaryExp = FirstFactorPrefix + TokenType.Minus + TokenType.Not;
         FirstExpExp = new TokenSet(FirstUnaryExp);
         FirstMultExp = new TokenSet(FirstUnaryExp);
-        _functionTable = new FunctionTable();
+        _functionTable = new FunctionProvider();
         _functionTable.FillFrom(typeof(Functions));
     }
 

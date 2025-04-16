@@ -5,10 +5,10 @@ namespace DynamicEvaluator.Expressions.Specific;
 internal sealed class LambdaExpression : IExpression
 {
     private readonly MethodInfo _method;
-    private readonly IExpression[] _parameters;
+    private readonly IReadOnlyList<IExpression> _parameters;
     private readonly int _parameterCount;
 
-    public LambdaExpression(MethodInfo method, IExpression[] parameters)
+    public LambdaExpression(MethodInfo method, IReadOnlyList<IExpression> parameters)
     {
         _method = method;
         _parameters = parameters;

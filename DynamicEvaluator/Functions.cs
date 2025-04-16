@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Data;
+using System.Numerics;
 
 using DynamicEvaluator.Types;
 
@@ -97,4 +98,7 @@ public static class Functions
 
     public static dynamic Root(dynamic value1, dynamic value2)
         => Pow(value1, 1 / value2);
+
+    public static long FromHex(string str)
+        => long.Parse(str, System.Globalization.NumberStyles.HexNumber);
 }

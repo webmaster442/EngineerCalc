@@ -138,6 +138,7 @@ public class ExpressionTests
     [TestCase("1\r\n+1", 2)]
     [TestCase("1+-2", -1)]
     [TestCase("x+y", 3)]
+    [TestCase("fromhex('ff')", 255)]
     public void EnsureThat_Evaluate_Works_Integers(string expression, long expected)
     {
         IExpression parsed = _expressionFactory.Create(expression);
