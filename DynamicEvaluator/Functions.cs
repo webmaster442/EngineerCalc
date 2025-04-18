@@ -1,5 +1,7 @@
 ﻿using System.Numerics;
 
+using DynamicEvaluator.Expressions.Specific;
+using DynamicEvaluator.InternalFcuntions;
 using DynamicEvaluator.Types;
 
 namespace DynamicEvaluator;
@@ -103,4 +105,10 @@ public static class Functions
 
     public static long FromBin(string str)
         => long.Parse(str, System.Globalization.NumberStyles.BinaryNumber);
+
+    public static long Lcm(long a, long b)
+        => Integers.Lcm(a, b);
+
+    public static Complex Cplx(double x, double y)
+        => new Complex(x, y);
 }
