@@ -105,6 +105,28 @@ public class ExpressionTests
     [TestCase("!(!false)", "False")]
     [TestCase("!(x & y)", "(x | y)")]
     [TestCase("!(x | y)", "(x & y)")]
+    //Multiply
+    [TestCase("0*y", "0")]
+    [TestCase("y*0", "0")]
+    [TestCase("1*y", "y")]
+    [TestCase("y*1", "y")]
+    [TestCase("-1*y", "(-y)")]
+    [TestCase("-1*-y", "y")]
+    [TestCase("y*-1", "(-y)")]
+    [TestCase("-y*-1", "y")]
+    [TestCase("-y*-x", "(x * y)")]
+    [TestCase("x*y", "(x * y)")]
+    //Subtrasct
+    [TestCase("0-y", "(-y)")]
+    [TestCase("0--y", "y")]
+    [TestCase("x-0", "x")]
+    [TestCase("x--y", "(x + y)")]
+    [TestCase("x-y", "(x - y)")]
+    //Root
+    [TestCase("root(2, 2)", "1")]
+    [TestCase("root(x, 0)", "1")]
+    [TestCase("root(x, 1)", "x")]
+    [TestCase("root(x, y)", "(x ^ (1 / y))")]
     public void EnsureThat_Simplify_Works(string expression, string expected)
     {
         IExpression simplified = _expressionFactory.Create(expression).Simplify();

@@ -4,7 +4,7 @@ namespace DynamicEvaluator.Expressions;
 
 internal abstract class Tokenizer
 {
-    private static bool IsAdditionalyAllowedInNumber(char c)
+    private static bool IsAdditionalyAllowedInNumber(char c )
         => IsFloatCharacter(c) || c == '_';
 
     private static bool IsFloatCharacter(char c)
@@ -13,6 +13,14 @@ internal abstract class Tokenizer
             || c == '-'
             || c == 'E'
             || c == 'e';
+    }
+
+    private static bool NextIsDigit(string input, int index)
+    {
+        char next = (index + 1) <= (input.Length - 1)
+            ? input[index + 1]
+            : ' ';
+        return char.IsDigit(next);
     }
 
     private static Token HandleNumber(string input, int start, out int newIndex)
@@ -28,7 +36,7 @@ internal abstract class Tokenizer
                 ++index;
                 containsAtLeastOneDigit = true;
             }
-            else if (containsAtLeastOneDigit && IsAdditionalyAllowedInNumber(input[index]))
+            else if (containsAtLeastOneDigit && IsAdditionalyAllowedInNumber(input[index]) && NextIsDigit(input, index))
             {
                 sb.Append(input[index]);
                 ++index;
