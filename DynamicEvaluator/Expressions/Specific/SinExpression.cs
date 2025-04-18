@@ -1,4 +1,5 @@
 ﻿
+
 namespace DynamicEvaluator.Expressions.Specific;
 
 internal sealed class SinExpression : UnaryExpression
@@ -20,8 +21,14 @@ internal sealed class SinExpression : UnaryExpression
             // child is constant
             return new ConstantExpression(Evaluate(childConst.Value));
         }
+        if (newChild.IsIntegerMultupleOfPi())
+        {
+            return new ConstantExpression(0L);
+        }
         return new SinExpression(newChild);
     }
+
+
 
     protected override dynamic Evaluate(dynamic value)
         => Functions.Sin(value);

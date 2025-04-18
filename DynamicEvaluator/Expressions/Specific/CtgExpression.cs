@@ -19,6 +19,10 @@ internal sealed class CtgExpression : UnaryExpression
             // child is constant
             return new ConstantExpression(Evaluate(childConst.Value));
         }
+        if (newChild.IsIntegerMultupleOfPi())
+        {
+            return new ConstantExpression(double.PositiveInfinity);
+        }
         return new CtgExpression(newChild);
     }
 

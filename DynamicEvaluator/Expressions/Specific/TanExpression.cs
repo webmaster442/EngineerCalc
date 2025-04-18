@@ -19,6 +19,10 @@ internal sealed class TanExpression : UnaryExpression
             // child is constant
             return new ConstantExpression(Evaluate(childConst.Value));
         }
+        if (newChild.IsIntegerMultupleOfPi())
+        {
+            return new ConstantExpression(0);
+        }
         return new TanExpression(newChild);
     }
 

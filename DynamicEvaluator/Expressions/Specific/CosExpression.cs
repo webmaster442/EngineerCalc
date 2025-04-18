@@ -1,4 +1,6 @@
-﻿namespace DynamicEvaluator.Expressions.Specific;
+﻿using System.Net.Http.Headers;
+
+namespace DynamicEvaluator.Expressions.Specific;
 
 internal sealed class CosExpression : UnaryExpression
 {
@@ -18,6 +20,10 @@ internal sealed class CosExpression : UnaryExpression
         {
             // child is constant
             return new ConstantExpression(Evaluate(childConst.Value));
+        }
+        if (newChild.IsIntegerMultupleOfPi())
+        {
+            return new ConstantExpression(-1L);
         }
         return new CosExpression(newChild);
     }

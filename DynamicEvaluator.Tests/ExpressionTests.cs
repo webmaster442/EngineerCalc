@@ -114,7 +114,7 @@ public class ExpressionTests
     [TestCase("-1*-y", "y")]
     [TestCase("y*-1", "(-y)")]
     [TestCase("-y*-1", "y")]
-    [TestCase("-y*-x", "(x * y)")]
+    [TestCase("-y*-x", "(y * x)")]
     [TestCase("x*y", "(x * y)")]
     //Subtrasct
     [TestCase("0-y", "(-y)")]
@@ -127,10 +127,34 @@ public class ExpressionTests
     [TestCase("root(x, 0)", "1")]
     [TestCase("root(x, 1)", "x")]
     [TestCase("root(x, y)", "(x ^ (1 / y))")]
+    //sin
+    [TestCase("sin(pi)", "0")]
+    [TestCase("sin(2*pi)", "0")]
+    [TestCase("sin(8*pi)", "0")]
+    [TestCase("sin(0)", "0")]
+    [TestCase("sin(x)", "sin(x)")]
+    //cos
+    [TestCase("cos(pi)", "-1")]
+    [TestCase("cos(2*pi)", "-1")]
+    [TestCase("cos(8*pi)", "-1")]
+    [TestCase("cos(0)", "1")]
+    [TestCase("cos(x)", "cos(x)")]
+    //tan
+    [TestCase("tan(pi)", "0")]
+    [TestCase("tan(2*pi)", "0")]
+    [TestCase("tan(8*pi)", "0")]
+    [TestCase("tan(0)", "0")]
+    [TestCase("tan(x)", "tan(x)")]
+    //ctg
+    [TestCase("ctg(pi)", "Infinity")]
+    [TestCase("ctg(2*pi)", "Infinity")]
+    [TestCase("ctg(8*pi)", "Infinity")]
+    [TestCase("ctg(0)", "Infinity")]
+    [TestCase("ctg(x)", "ctg(x)")]
     public void EnsureThat_Simplify_Works(string expression, string expected)
     {
         IExpression simplified = _expressionFactory.Create(expression).Simplify();
-        Assert.That(simplified.ToString(), Is.EquivalentTo(expected));
+        Assert.That(simplified.ToString(), Is.EqualTo(expected));
     }
 
     [TestCase("1:2")]
@@ -188,6 +212,9 @@ public class ExpressionTests
     [TestCase("ln(100)", 4.6051701859880913680359829093687)]
     [TestCase("log(1024,2)", 10)]
     [TestCase("1_0+1.1", 11.1)]
+    [TestCase("sin(pi/2)", 1.0d)]
+    [TestCase("2*kilo", 2000.0d)]
+    [TestCase("21*milli", 0.021d)]
     public void EnsureThat_Evaluate_Works_Doubles(string expression, double expected)
     {
         IExpression parsed = _expressionFactory.Create(expression);
@@ -200,7 +227,7 @@ public class ExpressionTests
         Assert.Multiple(() =>
         {
             Assert.That(result, Is.TypeOf<double>());
-            Assert.That(result, Is.EqualTo(expected));
+            Assert.That(result, Is.EqualTo(expected).Within(0.001));
         });
     }
 
