@@ -9,19 +9,5 @@
   <ItemGroup>
     <EmbeddedResource Include="Docs\*.md" />
   </ItemGroup>
-  
-  <!--<ItemGroup>
-    <EmbeddedResource Include="Docs\cos.md" />
-    <EmbeddedResource Include="Docs\cplx.md" />
-    <EmbeddedResource Include="Docs\ctg.md" />
-    <EmbeddedResource Include="Docs\frombin.md" />
-    <EmbeddedResource Include="Docs\fromhex.md" />
-    <EmbeddedResource Include="Docs\lcm.md" />
-    <EmbeddedResource Include="Docs\ln.md" />
-    <EmbeddedResource Include="Docs\log.md" />
-    <EmbeddedResource Include="Docs\root.md" />
-    <EmbeddedResource Include="Docs\sin.md" />
-    <EmbeddedResource Include="Docs\tan.md" />
-  </ItemGroup>-->
 
 </Project>

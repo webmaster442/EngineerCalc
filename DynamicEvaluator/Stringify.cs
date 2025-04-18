@@ -1,0 +1,75 @@
+﻿using System.Globalization;
+using System.Numerics;
+using System.Text.RegularExpressions;
+
+using DynamicEvaluator.Types;
+
+namespace DynamicEvaluator;
+
+public static partial class Extensions
+{
+    public static string Stringify(this object result, CultureInfo cultureInfo)
+    {
+        if (result is string str)
+            return str;
+
+        if (result is Fraction fraction)
+            return FormatFraction(fraction, cultureInfo);
+
+        if (result is Complex complex)
+            return FormatComplex(complex, cultureInfo);
+
+        if (result is IFormattable formattable)
+        {
+            if (IsInteger(formattable))
+                return formattable.ToString("N0", cultureInfo);
+
+            if (IsFloat(formattable))
+                return FormatFloat(formattable, cultureInfo);
+        }
+
+        return result.ToString() ?? "<null>";
+    }
+
+    private static string FormatFraction(Fraction fraction, CultureInfo cultureInfo)
+        => $"{{ {fraction.Numerator} \\over {fraction.Denominator} }}";
+
+    private static string FormatComplex(Complex complex, CultureInfo cultureInfo)
+    {
+        return $"""
+            Real: {FormatFloat(complex.Real, cultureInfo)} Imaginary: {FormatFloat(complex.Imaginary, cultureInfo)}
+            Phase: {FormatFloat(complex.Phase, cultureInfo)} Magnitude: {FormatFloat(complex.Magnitude, cultureInfo)}
+            """;
+    }
+
+    private static bool IsFloat(object value)
+        => value is double;
+
+    private static bool IsInteger(object value)
+        => value is long;
+
+    [GeneratedRegex("[1-9]000", RegexOptions.Singleline, 2000)]
+    private static partial Regex DigitWith3LeadingZeros();
+
+    private static int GetDigits(IFormattable formattable)
+    {
+        const int maxDigits = 20;
+        const int zeroDigitCount = 3;
+        string[] str = formattable.ToString("N25", CultureInfo.InvariantCulture).Split('.');
+        if (str.Length == 1)
+            return 0;
+
+        var match = DigitWith3LeadingZeros().Match(str[1]);
+        return match.Success ? (match.Index + zeroDigitCount) : maxDigits;
+    }
+
+    private static string FormatFloat(IFormattable formattable, CultureInfo cultureInfo)
+    {
+        int digits = GetDigits(formattable);
+
+        return formattable.ToString($"N{digits}", cultureInfo)
+            .TrimEnd('0')
+            .TrimEnd(cultureInfo.NumberFormat.NumberDecimalSeparator[0]);
+    }
+
+}
