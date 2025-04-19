@@ -8,10 +8,7 @@ internal sealed class EmbeddedServer
 
     public EmbeddedServer()
     {
-        _fileRoutes = new Dictionary<string, string>()
-        {
-            { "/", "/index.html" }
-        };
+        _fileRoutes = new Dictionary<string, string>();
         var embeddedFiles = typeof(EmbeddedServer).Assembly.GetManifestResourceNames();
         foreach (var embeddedFile in embeddedFiles)
         {
@@ -24,6 +21,9 @@ internal sealed class EmbeddedServer
     {
         foreach (var route in _fileRoutes)
         {
+            if (route.Key == "index.html")
+                webApplication.MapGet("/", (context) => Serve(context, route.Value));
+
             webApplication.MapGet(route.Key, (context) => Serve(context, route.Value));
         }
     }
