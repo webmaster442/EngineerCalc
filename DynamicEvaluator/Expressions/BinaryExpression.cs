@@ -16,7 +16,7 @@ internal abstract class BinaryExpression : IExpression
 
     public abstract IExpression Simplify();
 
-    public dynamic Evaluate(Variables variables)
+    public dynamic Evaluate(VariablesAndConstantsCollection variables)
     {
         dynamic l = Left.Evaluate(variables);
         dynamic r = Right.Evaluate(variables);

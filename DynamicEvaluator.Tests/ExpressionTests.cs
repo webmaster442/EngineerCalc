@@ -189,7 +189,7 @@ public class ExpressionTests
     public void EnsureThat_Evaluate_Works_Integers(string expression, long expected)
     {
         IExpression parsed = _expressionFactory.Create(expression);
-        Variables variables = new()
+        VariablesAndConstantsCollection variables = new()
         {
             { "x", 1L },
             { "y", 2L },
@@ -218,7 +218,7 @@ public class ExpressionTests
     public void EnsureThat_Evaluate_Works_Doubles(string expression, double expected)
     {
         IExpression parsed = _expressionFactory.Create(expression);
-        Variables variables = new()
+        VariablesAndConstantsCollection variables = new()
         {
             { "x", 1d },
             { "y", 2d },
@@ -238,7 +238,7 @@ public class ExpressionTests
     public void EnsureThat_Evaluate_Works_Strings(string expression, string expected)
     {
         IExpression parsed = _expressionFactory.Create(expression);
-        Variables variables = new()
+        VariablesAndConstantsCollection variables = new()
         {
             { "foo", "foo" },
         };
@@ -257,7 +257,7 @@ public class ExpressionTests
     public void EnsureThat_Evaluate_Works_Fractions(string expression, long numerator, long denominator)
     {
         IExpression parsed = _expressionFactory.Create(expression);
-        Variables variables = new()
+        VariablesAndConstantsCollection variables = new()
         {
             { "x", 10L },
             { "y", 2L },
@@ -288,7 +288,7 @@ public class ExpressionTests
     public void EnsureThat_Evaluate_Works_Logics(string expression, bool expected)
     {
         IExpression parsed = _expressionFactory.Create(expression);
-        Variables variables = new();
+        VariablesAndConstantsCollection variables = new();
         dynamic result = parsed.Evaluate(variables);
         Assert.Multiple(() =>
         {
@@ -302,7 +302,7 @@ public class ExpressionTests
     public void EnsureThat_FunctionOverload_Works_ForRandom(string expression, long minValue, long maxValue)
     {
         IExpression parsed = _expressionFactory.Create(expression);
-        Variables variables = new();
+        VariablesAndConstantsCollection variables = new();
         dynamic result = parsed.Evaluate(variables);
         Assert.Multiple(() =>
         {

@@ -14,7 +14,7 @@ internal sealed class ConstantExpression : IExpression
     public IExpression Differentiate(string byVariable)
         => new ConstantExpression(0L);
 
-    public dynamic Evaluate(Variables variables) 
+    public dynamic Evaluate(VariablesAndConstantsCollection variables) 
         => Value;
 
     public IExpression Simplify()

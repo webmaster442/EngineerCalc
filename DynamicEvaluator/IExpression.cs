@@ -6,7 +6,7 @@ public interface IExpression
     /// Evaluate an expression
     /// </summary>
     /// <returns>Result of expression</returns>
-    dynamic Evaluate(Variables variables);
+    dynamic Evaluate(VariablesAndConstantsCollection variables);
 
     /// <summary>
     /// Diferentiate an expression

@@ -27,7 +27,7 @@ internal sealed class VariableExpression : IExpression
         return new ConstantExpression(0L);
     }
 
-    public dynamic Evaluate(Variables variables) 
+    public dynamic Evaluate(VariablesAndConstantsCollection variables) 
         => variables[Identifier];
 
     public IExpression Simplify()

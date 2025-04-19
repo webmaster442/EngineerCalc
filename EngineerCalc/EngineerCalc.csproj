@@ -14,4 +14,8 @@
     <EmbeddedResource Include="Embedded\*.*" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DynamicEvaluator\DynamicEvaluator.csproj" />
+  </ItemGroup>
+
 </Project>

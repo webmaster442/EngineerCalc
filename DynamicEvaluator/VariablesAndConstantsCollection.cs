@@ -1,15 +1,16 @@
 ﻿using System.Collections;
-using System.Diagnostics.CodeAnalysis;
 
 namespace DynamicEvaluator;
 
-public sealed class Variables : IEnumerable<KeyValuePair<string, object>>
+public sealed class VariablesAndConstantsCollection : IEnumerable<KeyValuePair<string, object>>
 {
     private readonly Dictionary<string, dynamic> _variables;
+    private readonly Dictionary<string, dynamic> _constants;
 
-    public Variables()
+    public VariablesAndConstantsCollection()
     {
-        _variables = new Dictionary<string, dynamic>()
+        _variables = new Dictionary<string, dynamic>();
+        _constants = new Dictionary<string, dynamic>()
         {
             { "e", Math.E },
             { "pi", Math.PI },
@@ -41,27 +42,30 @@ public sealed class Variables : IEnumerable<KeyValuePair<string, object>>
 
     public void Add(string key, dynamic value)
     {
+        if (_constants.ContainsKey(key))
+            throw new InvalidOperationException($"{key} is a constant, that can't be overdefined");
+
         var keyToUse = key.ToLower();
-        _variables.Add(keyToUse, value);
+        _variables[keyToUse] = value;
     }
 
+    public void Clear()
+        => _variables.Clear();
+
     public dynamic this[string key]
-        => _variables[key];
-
-    public IEnumerable<string> Keys => _variables.Keys;
-    
-    public IEnumerable<dynamic> Values => _variables.Values;
-    
-    public int Count => _variables.Count;
-
-    public bool ContainsKey(string key)
-        => _variables.ContainsKey(key);
+    {
+        get => _constants.ContainsKey(key) ? _constants[key] : _variables[key];
+        set => Add(key, value);
+    }
 
     public IEnumerator<KeyValuePair<string, dynamic>> GetEnumerator()
-        => _variables.GetEnumerator();
+    {
+        foreach (var item in _constants)
+            yield return item;
 
-    public bool TryGetValue(string key, [MaybeNullWhen(false)] out dynamic value)
-        => _variables.TryGetValue(key, out value);
+        foreach (var item in _variables)
+            yield return item;
+    }
 
     IEnumerator IEnumerable.GetEnumerator()
     {
