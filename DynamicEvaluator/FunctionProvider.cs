@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Reflection;
+using System.Runtime.Serialization.Json;
 
 using DynamicEvaluator.Expressions.Specific;
 
@@ -6,39 +8,75 @@ namespace DynamicEvaluator;
 
 internal sealed class FunctionProvider
 {
-    private readonly Dictionary<string, (MethodInfo method, int paramCount)> _table;
-    private readonly string[] _doumentations;
+    private sealed record class FunctionEntry(MethodInfo Method, int Parameters);
+
+    private readonly Dictionary<string, List<FunctionEntry>> _functions;
+    private readonly List<string> _documentations;
 
     public FunctionProvider()
     {
-        _table = new Dictionary<string, (MethodInfo method, int paramCount)>(StringComparer.OrdinalIgnoreCase);
-        _doumentations = typeof(Functions).Assembly.GetManifestResourceNames();
+        _functions = new Dictionary<string, List<FunctionEntry>>(StringComparer.OrdinalIgnoreCase);
+        _documentations = new List<string>();
     }
 
     public void FillFrom(Type type)
     {
-        var methods = type.GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
+        var methods = type.GetMethods(BindingFlags.Public | BindingFlags.Static).OrderBy(x => x.Name);
+        var docs = typeof(Functions).Assembly.GetManifestResourceNames();
+
         foreach (var method in methods)
         {
-            _table.Add(method.Name, (method, method.GetParameters().Length));
+            if (!_functions.TryGetValue(method.Name, out List<FunctionEntry>? value))
+            {
+                value = new List<FunctionEntry>();
+                _functions.Add(method.Name, value);
+            }
+
+            value.Add(new FunctionEntry(Method: method, Parameters: method.GetParameters().Length));
         }
+
+        _documentations.AddRange(docs);
     }
 
-    public int GetParameterCount(string name)
-    {
-        if (!_table.ContainsKey(name))
-            return -1;
+    public IEnumerable<string> GetFunctionNames()
+        => _functions.Keys;
 
-        return _table[name].paramCount;
+    public bool IsFunction(string name)
+        => _functions.ContainsKey(name);
+
+    public string GetDocumentation(string function)
+    {
+        var selector = $".{function}.md";
+        var fullName = _documentations.Where(x => x.EndsWith(function, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+
+        if (string.IsNullOrEmpty(fullName))
+            return string.Empty;
+
+        using var manifestStream = typeof(Functions).Assembly.GetManifestResourceStream(fullName);
+        if (manifestStream != null)
+        {
+            using var reader = new StreamReader(manifestStream);
+            return reader.ReadToEnd();
+        }
+
+        return string.Empty;
+    }
+
+    public IEnumerable<int> GetParameterCounts(string name)
+    {
+        if (!_functions.ContainsKey(name))
+            return Enumerable.Empty<int>();
+
+        return _functions[name].Select(x => x.Parameters);
     }
 
     public IExpression Create(string function, IReadOnlyList<IExpression> parameters)
     {
-        int paramCount = GetParameterCount(function);
-        if (paramCount < 1)
+        IEnumerable<int> parameterCounts = GetParameterCounts(function);
+        if (!parameterCounts.Any())
             throw new InvalidOperationException($"Unknown function: {function}");
 
-        HasCount(parameters, paramCount);
+        ValidateParameterCount(function, parameters.Count, parameterCounts);
 
         //Special functions
         return function switch
@@ -54,37 +92,23 @@ internal sealed class FunctionProvider
         };
     }
 
+    private void ValidateParameterCount(string function, int passedParameterCount, IEnumerable<int> overloadParameterCounts)
+    {
+        bool check = overloadParameterCounts
+            .Where(x => x == passedParameterCount)
+        .Any();
+
+        if (!check)
+            throw new InvalidOperationException($"No overload of {function} found that takes {passedParameterCount} parameters");
+    }
+
     private LambdaExpression CreateLambda(string function, IReadOnlyList<IExpression> parameters)
     {
-        var (method, paramCount) = _table[function];
-        return new LambdaExpression(method, parameters);
-    }
+        var entry = _functions[function]
+            .Where(x => x.Parameters == parameters.Count)
+            .First();
 
-    private static void HasCount<T>(IReadOnlyList<T> list, int count)
-    {
-        if (list.Count != count)
-            throw new InvalidOperationException($"Expected {count} arguments, got {list.Count}");
-    }
-
-    internal IEnumerable<string> GetFunctionNames()
-        => _table.Keys;
-
-    internal string GetDocumentation(string function)
-    {
-        var selector = $".{function}.md";
-        var fullName = _doumentations.Where(x => x.EndsWith(function, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
-        
-        if (string.IsNullOrEmpty(fullName))
-            return string.Empty;
-
-        using var manifestStream = typeof(Functions).Assembly.GetManifestResourceStream(fullName);
-        if (manifestStream != null)
-        {
-            using var reader = new StreamReader(manifestStream);
-            return reader.ReadToEnd();
-        }
-
-        return string.Empty;
+        return new LambdaExpression(entry.Method, parameters);
     }
 
 }

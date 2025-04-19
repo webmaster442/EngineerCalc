@@ -80,7 +80,7 @@ internal abstract class Tokenizer
 
     private static Token HandleIdentifier(string input,
                                           int start,
-                                          Func<string, int> functionArgumentCountGetter,
+                                          Predicate<string> isFunctionCheck,
                                           out int newIndex)
     {
         StringBuilder sb = new();
@@ -109,15 +109,15 @@ internal abstract class Tokenizer
                 }
             default:
                 {
-                    int argumentCount = functionArgumentCountGetter.Invoke(identifier);
-                    if (argumentCount > -1)
-                        return new Token(identifier, TokenType.Function, argumentCount);
-                    return new Token(identifier, TokenType.Variable);
+                    bool isFunction = isFunctionCheck.Invoke(identifier);
+                    return isFunction 
+                        ? new Token(identifier, TokenType.Function) 
+                        : new Token(identifier, TokenType.Variable);
                 }
         }
     }
 
-    public static TokenCollection Tokenize(string input, Func<string, int> functionArgumentCountGetter)
+    public static TokenCollection Tokenize(string input, Predicate<string> isFunctionCheck)
     {
         TokenCollection tokens = new();
         int index = 0;
@@ -144,7 +144,7 @@ internal abstract class Tokenizer
             }
             else if (IsIdentifier(input[index]))
             {
-                Token identifier = HandleIdentifier(input, index, functionArgumentCountGetter, out newIndex);
+                Token identifier = HandleIdentifier(input, index, isFunctionCheck, out newIndex);
                 tokens.Add(identifier);
                 index = newIndex;
             }

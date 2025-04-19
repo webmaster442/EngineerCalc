@@ -296,4 +296,19 @@ public class ExpressionTests
             Assert.That(result, Is.EqualTo(expected));
         });
     }
+
+    [TestCase("random()", 0, long.MaxValue)]
+    [TestCase("random(1, 5)", 1, 5)]
+    public void EnsureThat_FunctionOverload_Works_ForRandom(string expression, long minValue, long maxValue)
+    {
+        IExpression parsed = _expressionFactory.Create(expression);
+        Variables variables = new();
+        dynamic result = parsed.Evaluate(variables);
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.TypeOf<long>());
+            Assert.That(result, Is.GreaterThanOrEqualTo(minValue));
+            Assert.That(result, Is.LessThan(maxValue));
+        });
+    }
 }

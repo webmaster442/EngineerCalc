@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Net.Http.Headers;
+using System.Numerics;
 
 using DynamicEvaluator.Expressions.Specific;
 using DynamicEvaluator.InternalFcuntions;
@@ -111,4 +112,10 @@ public static class Functions
 
     public static Complex Cplx(double x, double y)
         => new Complex(x, y);
+
+    public static long Random()
+        => System.Random.Shared.NextInt64();
+
+    public static long Random(long minimum, long maximum)
+        => System.Random.Shared.NextInt64(minimum, maximum);
 }

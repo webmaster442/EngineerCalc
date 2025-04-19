@@ -35,7 +35,7 @@ public sealed class ExpressionFactory
 
     public IExpression Create(string input)
     {
-        TokenCollection tokens = Tokenizer.Tokenize(input, _functionTable.GetParameterCount);
+        TokenCollection tokens = Tokenizer.Tokenize(input, _functionTable.IsFunction);
 
         if (!tokens.Next())
             throw new InvalidOperationException("Can't create an expression from an empty input");
@@ -262,23 +262,23 @@ public sealed class ExpressionFactory
     {
         var opType = tokens.CurrentToken.Type;
         var function = tokens.CurrentToken.Value.ToLower();
-        int count = _functionTable.GetParameterCount(function);
+        IEnumerable<int> overloads = _functionTable.GetParameterCounts(function);
 
-        if (count == -1)
+        if (!overloads.Any())
             throw new InvalidOperationException($"Unknown function: {function}");
 
         tokens.Eat(opType);
         tokens.Eat(TokenType.OpenParen);
 
         List<IExpression> parameters = new();
-        for (int i = 0; i < count; i++)
+
+        while (tokens.CurrentToken.Type != TokenType.CloseParen)
         {
             parameters.Add(ParseAddExpression(tokens));
 
-            if (i! < count - 1)
+            if (tokens.CurrentToken.Type != TokenType.CloseParen)
                 tokens.Eat(TokenType.ArgumentDivider);
         }
-
         tokens.Eat(TokenType.CloseParen);
 
         return _functionTable.Create(function, parameters);
