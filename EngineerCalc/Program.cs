@@ -1,4 +1,7 @@
+using System.Web;
+
 using EngineerCalc;
+using EngineerCalc.Calculator;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +11,7 @@ builder.Services.AddOpenApi();
 
 WebApplication app = builder.Build();
 EmbeddedServer embeddedServer = new();
+Calculator calculator = new Calculator();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -18,5 +22,15 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 embeddedServer.MapEmbeddedFilesAsRoutes(app);
+
+app.MapGet("/evaluate", (HttpRequest request) =>
+{
+    var expression = HttpUtility.HtmlEncode(request.Query["e"]) ?? string.Empty;
+    string id = StateIdFactroy.Create(request.HttpContext.Connection.RemoteIpAddress,
+                                    request.Scheme,
+                                    request.Headers.UserAgent);
+    
+    return calculator.Process(expression, id);
+});
 
 app.Run();
