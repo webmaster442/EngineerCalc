@@ -18,13 +18,15 @@ public sealed class Calculator
         _expressionFactory = new ExpressionFactory();
     }
 
-    public Task<string> Process(string input, string session)
+    public Task<(string response, bool ok)> Process(string input, string stateId)
     {
         return Task.Run(() =>
         {
-            if (_memoryCache.TryGetValue(session, out State? state))
+            bool ok = true;
+
+            if (_memoryCache.TryGetValue(stateId, out State? state))
             {
-                _memoryCache.Remove(session);
+                _memoryCache.Remove(stateId);
             }
             else
             {
@@ -42,19 +44,20 @@ public sealed class Calculator
                 else
                 {
                     IExpression expression = _expressionFactory.Create(input);
-                    var result = expression.Simplify().Evaluate(state!.Variables);
-                    htmlBuilder.AddResult(input, result.Stringify(state.Culture));
+                    object result = expression.Simplify().Evaluate(state!.Variables);
+                    htmlBuilder.AddResult(result.Stringify(state.Culture));
                 }
             }
             catch (Exception ex)
             {
+                ok = false;
                 htmlBuilder
                     .Reset()
-                    .Exception(input, ex);
+                    .Exception(ex);
             }
 
-            _memoryCache.Set(session, state, TimeSpan.FromMinutes(15));
-            return htmlBuilder.ToString();
+            _memoryCache.Set(stateId, state, TimeSpan.FromMinutes(15));
+            return (htmlBuilder.ToString(), ok);
         });
     }
 

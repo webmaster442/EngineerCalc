@@ -1,16 +1,18 @@
-﻿using System.Buffers.Text;
-using System.Net;
+﻿using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 
 using Microsoft.Extensions.Primitives;
 
-namespace EngineerCalc;
+namespace EngineerCalc.Calculator;
 
 public class StateIdFactroy
 {
-    internal static string Create(IPAddress remoteIpAddress, string scheme, StringValues userAgent)
+    internal static string Create(IPAddress? remoteIpAddress, string scheme, StringValues userAgent)
     {
+        if (remoteIpAddress == null)
+            remoteIpAddress = new IPAddress([1, 1, 1, 1]);
+
         using MemoryStream pool = new MemoryStream(128);
         pool.Write(remoteIpAddress.GetAddressBytes());
         pool.Write(Encoding.UTF8.GetBytes(scheme));

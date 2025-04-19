@@ -2,6 +2,15 @@
 
 namespace EngineerCalc.Calculator;
 
+internal static class Extensions
+{
+    public static StringBuilder BeginElement(this StringBuilder sb, string element, string @class)
+        => sb.Append($"<div class=\"{@class}\">");
+
+    public static StringBuilder EndElement(this StringBuilder sb, string element)
+        => sb.Append($"</{element}>");
+}
+
 internal sealed class HtmlBuilder
 {
     private readonly StringBuilder _builder = new StringBuilder(1024);
@@ -12,33 +21,24 @@ internal sealed class HtmlBuilder
         return this;
     }
 
-    private void WrapInResponse(Action action)
+    public HtmlBuilder Exception(Exception ex)
     {
-        _builder.Append("<div class=\"response\">");
-        action.Invoke();
-        _builder.Append("</div>");
-    }
-
-    public HtmlBuilder Exception(string input, Exception ex)
-    {
-        WrapInResponse(() =>
-        {
-            _builder
-                .Append($"<p class=\"echo\">{input}</p>")
-                .Append($"<p class=\"error\">{ex.Message}</p>")
-                .Append($"<pre>{ex.StackTrace}</pre>");
-        });
+        _builder.BeginElement("p", "error")
+                .Append(ex.Message)
+                .EndElement("p");
+#if DEBUG
+        _builder.BeginElement("pre", "error details")
+                .Append(ex.StackTrace)
+                .EndElement("pre");
+#endif
         return this;
     }
 
-    public HtmlBuilder AddResult(string input, string result)
+    public HtmlBuilder AddResult(string result)
     {
-        WrapInResponse(() =>
-        {
-            _builder
-                .Append($"<p class=\"echo\">{input}</p>")
-                .Append($"<p class=\"result\">{result}</p>");
-        });
+        _builder.BeginElement("p", "result")
+                .Append(result)
+                .EndElement("p");
         return this;
     }
 
