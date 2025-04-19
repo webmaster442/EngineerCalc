@@ -1,0 +1,6 @@
+@EngineerCalc_HostAddress = http://localhost:5161
+
+GET {{EngineerCalc_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
