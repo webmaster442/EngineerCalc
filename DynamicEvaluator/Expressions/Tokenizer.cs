@@ -2,7 +2,7 @@
 
 namespace DynamicEvaluator.Expressions;
 
-internal abstract class Tokenizer
+internal static class Tokenizer
 {
     private static bool IsAdditionalyAllowedInNumber(char c )
         => IsFloatCharacter(c) || c == '_';
@@ -11,16 +11,9 @@ internal abstract class Tokenizer
     {
         return c == '.'
             || c == '-'
+            || c == '+'
             || c == 'E'
             || c == 'e';
-    }
-
-    private static bool NextIsDigit(string input, int index)
-    {
-        char next = (index + 1) <= (input.Length - 1)
-            ? input[index + 1]
-            : ' ';
-        return char.IsDigit(next);
     }
 
     private static Token HandleNumber(string input, int start, out int newIndex)
@@ -28,6 +21,9 @@ internal abstract class Tokenizer
         StringBuilder sb = new StringBuilder();
         int index = start;
         bool containsAtLeastOneDigit = false;
+        bool isInScientificMode = false;
+        bool sciencemodePrefixed = false;
+        bool dotFound = false;
         while (index < input.Length)
         {
             if (char.IsDigit(input[index]))
@@ -36,10 +32,42 @@ internal abstract class Tokenizer
                 ++index;
                 containsAtLeastOneDigit = true;
             }
-            else if (containsAtLeastOneDigit && IsAdditionalyAllowedInNumber(input[index]) && NextIsDigit(input, index))
+            else if (containsAtLeastOneDigit && IsAdditionalyAllowedInNumber(input[index]))
             {
-                sb.Append(input[index]);
-                ++index;
+                if (input[index] == '.' && !dotFound)
+                {
+                    dotFound = true;
+                    sb.Append(input[index]);
+                    ++index;
+                }
+                else if ((input[index] == '+' || input[index] == '-') && isInScientificMode)
+                {
+                    if (!sciencemodePrefixed)
+                    {
+                        sciencemodePrefixed = true;
+                        sb.Append(input[index]);
+                        ++index;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                else if (input[index] == 'e' || input[index] == 'E' && !isInScientificMode)
+                {
+                    isInScientificMode = true;
+                    sb.Append(input[index]);
+                    ++index;
+                }
+                else if (input[index] == '_')
+                {
+                    sb.Append(input[index]);
+                    ++index;
+                }
+                else
+                {
+                    break;
+                }
             }
             else
             {

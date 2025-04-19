@@ -183,6 +183,7 @@ public class ExpressionTests
     [TestCase("1\n+1", 2)]
     [TestCase("1\r\n+1", 2)]
     [TestCase("1+-2", -1)]
+    [TestCase("33-22", 11)]
     [TestCase("x+y", 3)]
     [TestCase("fromhex('ff')", 255)]
     [TestCase("1_000+100", "1100")]
@@ -202,6 +203,10 @@ public class ExpressionTests
         });
     }
 
+    [TestCase("1.1", 1.1d)]
+    [TestCase("1e-3", 0.001d)]
+    [TestCase("1.1e3", 1100d)]
+    [TestCase("1.1e+3", 1100d)]
     [TestCase("sin(0)", 0d)]
     [TestCase("cos(0)", 1d)]
     [TestCase("tan(0)", 0d)]
