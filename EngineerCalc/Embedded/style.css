@@ -63,6 +63,7 @@ body {
     0% {
         transform: rotate(0deg);
     }
+
     100% {
         transform: rotate(360deg);
     }
@@ -87,23 +88,23 @@ body {
 
 /*Response formatting*/
 
-.response {
+.main .response {
     border-bottom: 1px solid var(--brightBlack);
 }
 
-.prompt {
+.main .prompt {
     color: var(--white);
     margin-bottom: 0px;
     font-style: italic;
     opacity: 0.8;
 }
 
-.result {
+.main.result {
     margin-left: 20px;
     color: var(--green);
 }
 
-.error {
+.main .error {
     margin-left: 20px;
     color: var(--red);
 }

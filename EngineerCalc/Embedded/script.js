@@ -11,20 +11,51 @@ function render(input, result) {
     if (resultsDiv) {
         const html = `<div class="response"><p class="prompt">${getTimeStamp()}: '${encodeURI(input)}' &gt;</p>${result}</div>`;
         resultsDiv.insertAdjacentHTML("beforeend", html);
+        const newItem = resultsDiv.lastElementChild;
+        if (newItem) {
+            newItem.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }
     }
     else {
         console.warn('there is no results div');
     }
 }
 
+function handleClientCommand(input) {
+    const resultsDiv = document.getElementById('results');
+    if (!resultsDiv) {
+        console.warn('there is no results div');
+        return;
+    }
+    switch (input.toLowerCase()) {
+        case '#clear':
+            resultsDiv.innerHTML = "";
+            return true;
+        case '#reload':
+            window.location.reload();
+            return true;
+        default:
+            return false;
+    }
+}
+
 async function execute(input) {
-    document.getElementById('loader').style.visibility = 'visible';
     try {
-        const url = `/evaluate?e=${encodeURIComponent(input)}`
+        let url = `/evaluate?e=${encodeURIComponent(input)}`;
+        if (input.startsWith('#')) {
+            if (handleClientCommand(input)) {
+                return;
+            }
+            url = `/cmd?c=${encodeURIComponent(input)}`;
+        }
+        document.getElementById('loader').style.visibility = 'visible';
         const response = await fetch(url);
         const result = await response.text();
         if (!response.ok) {
             console.error(`Error (${response.status}): ${result}`);
+            if (result === "") {
+                result = `Error ${response.status}`;
+            }
         }
         render(input, result);
     }
@@ -37,11 +68,11 @@ async function execute(input) {
 
 document.addEventListener('DOMContentLoaded', () => {
     const inputElement = document.getElementById("input");
-    inputElement.focus();
     if (!inputElement) {
         console.warn('no input element found');
         return;
     }
+    inputElement.focus();
     inputElement.addEventListener("keydown", (event) => {
         if (event.key == 'Enter') {
             execute(inputElement.value);
