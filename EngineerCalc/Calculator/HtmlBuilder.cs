@@ -1,11 +1,12 @@
 ﻿using System.Text;
+using System.Web;
 
 namespace EngineerCalc.Calculator;
 
 internal static class Extensions
 {
     public static StringBuilder BeginElement(this StringBuilder sb, string element, string @class)
-        => sb.Append($"<div class=\"{@class}\">");
+        => sb.Append($"<{element} class=\"{@class}\">");
 
     public static StringBuilder EndElement(this StringBuilder sb, string element)
         => sb.Append($"</{element}>");
@@ -24,11 +25,11 @@ internal sealed class HtmlBuilder
     public HtmlBuilder Exception(Exception ex)
     {
         _builder.BeginElement("p", "error")
-                .Append(ex.Message)
+                .Append(HttpUtility.HtmlEncode(ex.Message))
                 .EndElement("p");
 #if DEBUG
         _builder.BeginElement("pre", "error details")
-                .Append(ex.StackTrace)
+                .Append(HttpUtility.HtmlEncode(ex.StackTrace))
                 .EndElement("pre");
 #endif
         return this;
@@ -37,7 +38,7 @@ internal sealed class HtmlBuilder
     public HtmlBuilder AddResult(string result)
     {
         _builder.BeginElement("p", "result")
-                .Append(result)
+                .Append(HttpUtility.HtmlEncode(result))
                 .EndElement("p");
         return this;
     }

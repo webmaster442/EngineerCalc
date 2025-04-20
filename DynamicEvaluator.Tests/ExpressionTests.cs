@@ -184,6 +184,7 @@ public class ExpressionTests
     [TestCase("1\r\n+1", 2)]
     [TestCase("1+-2", -1)]
     [TestCase("33-22", 11)]
+    [TestCase("33+22", 55)]
     [TestCase("x+y", 3)]
     [TestCase("fromhex('ff')", 255)]
     [TestCase("1_000+100", "1100")]

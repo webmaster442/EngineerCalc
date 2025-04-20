@@ -1,4 +1,11 @@
-﻿html,
+﻿@font-face {
+    font-family: 'Ubuntu Mono';
+    src: url('UbuntuMono-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+html,
 body {
     margin: 0px;
     padding: 0px;
@@ -26,7 +33,39 @@ body {
     grid-area: main;
     overflow: auto;
     padding-left: 10px;
+    padding-top: 10px;
+    font-family: "Ubuntu Mono", monospace;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16pt;
+}
 
+.loader {
+    grid-area: main;
+    overflow: auto;
+    z-index: 99999;
+    background-color: var(--background);
+    visibility: collapse;
+    margin: 0px auto;
+    margin-top: 10%;
+}
+
+.loader-spinner {
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #3498db;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .footer {
@@ -40,4 +79,31 @@ body {
     border: 0px;
     background-color: var(--background);
     color: var(--foreground);
+    font-family: "Ubuntu Mono", monospace;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16pt;
+}
+
+/*Response formatting*/
+
+.response {
+    border-bottom: 1px solid var(--brightBlack);
+}
+
+.prompt {
+    color: var(--white);
+    margin-bottom: 0px;
+    font-style: italic;
+    opacity: 0.8;
+}
+
+.result {
+    margin-left: 20px;
+    color: var(--green);
+}
+
+.error {
+    margin-left: 20px;
+    color: var(--red);
 }

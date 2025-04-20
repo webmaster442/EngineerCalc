@@ -26,7 +26,7 @@ embeddedServer.MapEmbeddedFilesAsRoutes(app);
 
 app.MapGet("/evaluate", async (HttpRequest request) =>
 {
-    var expression = HttpUtility.UrlDecode(request.Query["e"]) ?? string.Empty;
+    string expression = request.Query["e"].FirstOrDefault() ?? "";
     string stateId = StateIdFactroy.Create(request.HttpContext.Connection.RemoteIpAddress,
                                            request.Scheme,
                                            request.Headers.UserAgent);

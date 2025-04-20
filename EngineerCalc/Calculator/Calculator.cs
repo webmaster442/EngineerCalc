@@ -57,7 +57,9 @@ public sealed class Calculator
             }
 
             _memoryCache.Set(stateId, state, TimeSpan.FromMinutes(15));
-            return (htmlBuilder.ToString(), ok);
+            var str = htmlBuilder.ToString();
+
+            return (str, ok);
         });
     }
 
