@@ -8,6 +8,30 @@ namespace DynamicEvaluator;
 
 public static partial class Extensions
 {
+    [GeneratedRegex(@"[\""].+?[\""]|\S+")]
+    private static partial Regex QuotesMatcher();
+
+    [GeneratedRegex("[1-9]000", RegexOptions.Singleline, 2000)]
+    private static partial Regex DigitWith3LeadingZeros();
+
+    public static IEnumerable<string> SplitBySpaceOrQuotes(this string input)
+    {
+        var matches = QuotesMatcher().Matches(input);
+        foreach (Match match in matches)
+        {
+            string value = match.Value;
+            if ((value.StartsWith('"') && value.EndsWith('"')) ||
+                (value.StartsWith('\'') && value.EndsWith('\'')))
+            {
+                yield return value.Substring(1, value.Length - 2);
+            }
+            else
+            {
+                yield return value;
+            }
+        }
+    }
+
     public static string Stringify(this object result, CultureInfo cultureInfo)
     {
         if (result is string str)
@@ -48,9 +72,6 @@ public static partial class Extensions
     private static bool IsInteger(object value)
         => value is long;
 
-    [GeneratedRegex("[1-9]000", RegexOptions.Singleline, 2000)]
-    private static partial Regex DigitWith3LeadingZeros();
-
     private static int GetDigits(IFormattable formattable)
     {
         const int maxDigits = 20;
@@ -71,5 +92,4 @@ public static partial class Extensions
             .TrimEnd('0')
             .TrimEnd(cultureInfo.NumberFormat.NumberDecimalSeparator[0]);
     }
-
 }

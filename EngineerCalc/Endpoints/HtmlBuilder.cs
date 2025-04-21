@@ -1,7 +1,9 @@
 ﻿using System.Text;
 using System.Web;
 
-namespace EngineerCalc.Calculator;
+using EngineerCalc.Calculator;
+
+namespace EngineerCalc.Endpoints;
 
 internal static class Extensions
 {
@@ -40,6 +42,33 @@ internal sealed class HtmlBuilder
         _builder.BeginElement("p", "result")
                 .Append(HttpUtility.HtmlEncode(result))
                 .EndElement("p");
+        return this;
+    }
+
+    public HtmlBuilder AddTable(TableData tableData)
+    {
+        _builder.BeginElement("table", "table");
+        _builder.Append("<th>");
+        foreach (var header in tableData.HeaderColumns)
+        {
+            _builder.Append("<td>")
+                    .Append(HttpUtility.HtmlEncode(header))
+                    .Append("</td>");
+        }
+        _builder.Append("</th>");
+
+        foreach (var row in tableData.TableContent)
+        {
+            _builder.Append("<tr>");
+            foreach (var colum in row)
+            {
+                _builder.Append("<td>")
+                        .Append(HttpUtility.HtmlEncode(colum))
+                        .Append("</td>");
+            }
+            _builder.Append("</tr>");
+        }
+        _builder.EndElement("table");
         return this;
     }
 

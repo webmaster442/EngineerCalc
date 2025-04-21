@@ -50,7 +50,7 @@ async function execute(input) {
         }
         document.getElementById('loader').style.visibility = 'visible';
         const response = await fetch(url);
-        const result = await response.text();
+        let result = await response.text();
         if (!response.ok) {
             console.error(`Error (${response.status}): ${result}`);
             if (result === "") {

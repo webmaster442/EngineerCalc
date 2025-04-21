@@ -3,6 +3,7 @@ using System.Web;
 
 using EngineerCalc;
 using EngineerCalc.Calculator;
+using EngineerCalc.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +13,8 @@ builder.Services.AddOpenApi();
 
 WebApplication app = builder.Build();
 EmbeddedServer embeddedServer = new();
-Calculator calculator = new Calculator();
+StateManager stateManager = new();
+EndpointFunctions endpoints = new();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -27,14 +29,14 @@ embeddedServer.MapEmbeddedFilesAsRoutes(app);
 app.MapGet("/evaluate", async (HttpRequest request) =>
 {
     string expression = request.Query["e"].FirstOrDefault() ?? "";
-    string stateId = StateIdFactroy.Create(request.HttpContext.Connection.RemoteIpAddress,
-                                           request.Scheme,
-                                           request.Headers.UserAgent);
-    
-    var result = await calculator.Process(expression, stateId);
 
-    return result.ok 
-        ? Results.Content(result.response, MediaTypeNames.Text.Html) 
+    (string response, bool ok) result = ("", false);
+    await stateManager.WithState(request, async (state) =>
+    {
+        result = await endpoints.Evaluate(state, expression);
+    });
+    return result.ok
+        ? Results.Content(result.response, MediaTypeNames.Text.Html)
         : Results.InternalServerError(result.response);
 });
 

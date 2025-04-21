@@ -2,7 +2,7 @@
 
 using DynamicEvaluator;
 
-namespace EngineerCalc.Calculator;
+namespace EngineerCalc.Endpoints;
 
 public class State
 {
