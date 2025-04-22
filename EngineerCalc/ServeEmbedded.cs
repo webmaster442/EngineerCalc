@@ -1,10 +1,13 @@
 ﻿using System.Reflection;
 
+using Microsoft.AspNetCore.StaticFiles;
+
 namespace EngineerCalc;
 
 internal sealed class EmbeddedServer
 {
-    private Dictionary<string, string> _fileRoutes;
+    private readonly Dictionary<string, string> _fileRoutes;
+    private readonly FileExtensionContentTypeProvider _mimes = new();
 
     public EmbeddedServer()
     {
@@ -28,7 +31,7 @@ internal sealed class EmbeddedServer
         }
     }
 
-    private static async Task Serve(HttpContext context, string resourceName)
+    private async Task Serve(HttpContext context, string resourceName)
     {
         await using Stream? source = typeof(EmbeddedServer).Assembly.GetManifestResourceStream(resourceName);
         if (source == null)
@@ -36,8 +39,12 @@ internal sealed class EmbeddedServer
             context.Response.StatusCode = 404;
             return;
         }
+        if (!_mimes.TryGetContentType(resourceName, out string? mime))
+            mime = "application/octet-stream";
+
         context.Response.StatusCode = 200;
         context.Response.ContentLength = source.Length;
+        context.Response.ContentType = mime;
         await source.CopyToAsync(context.Response.Body);
     }
 }

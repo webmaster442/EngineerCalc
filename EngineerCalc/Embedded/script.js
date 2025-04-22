@@ -5,11 +5,15 @@
     return `${hours}:${minutes}`;
 }
 
+function makeInputSafe(input) {
+    return encodeURI(input).replace("%20", " ");
+}
+
 function render(input, result) {
     if (!input || input.trim() === "") return;
     const resultsDiv = document.getElementById('results');
     if (resultsDiv) {
-        const html = `<div class="response"><p class="prompt">${getTimeStamp()}: '${encodeURI(input)}' &gt;</p>${result}</div>`;
+        const html = `<div class="response"><p class="prompt">${getTimeStamp()}: '${makeInputSafe(input)}' &gt;</p>${result}</div>`;
         resultsDiv.insertAdjacentHTML("beforeend", html);
         const newItem = resultsDiv.lastElementChild;
         if (newItem) {
@@ -38,7 +42,6 @@ function handleClientCommand(input) {
             return false;
     }
 }
-
 async function execute(input) {
     try {
         let url = `/evaluate?e=${encodeURIComponent(input)}`;
@@ -66,12 +69,33 @@ async function execute(input) {
     document.getElementById('loader').style.visibility = 'collapse';
 }
 
+async function intro() {
+    try {
+        document.getElementById('loader').style.visibility = 'visible';
+        const response = await fetch("/intro");
+        const result = await response.text();
+        if (!response.ok) {
+            throw new Error("Failed to get intro");
+        }
+        render("intro", result);
+    }
+    catch (error) {
+        console.error(error);
+    }
+    document.getElementById('loader').style.visibility = 'collapse';
+}
+
+function type() {
+
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const inputElement = document.getElementById("input");
     if (!inputElement) {
         console.warn('no input element found');
         return;
     }
+    intro();
     inputElement.focus();
     inputElement.addEventListener("keydown", (event) => {
         if (event.key == 'Enter') {

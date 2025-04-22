@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Reflection.PortableExecutable;
+using System.Text;
 using System.Web;
 
 using EngineerCalc.Calculator;
@@ -45,28 +46,48 @@ internal sealed class HtmlBuilder
         return this;
     }
 
+    public HtmlBuilder AddHeader(string header, int level = 1)
+    {
+        ArgumentOutOfRangeException.ThrowIfLessThan(level, 1);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(level, 6);
+
+        _builder.Append($"<h{level}>")
+                .Append(HttpUtility.HtmlEncode(header))
+                .Append($"</h{level}>");
+        return this;
+    }
+
+    public HtmlBuilder AddCode(string code, string @class)
+    {
+        _builder.BeginElement("code", @class)
+                .Append(HttpUtility.HtmlEncode(code))
+                .EndElement("code");
+        return this;
+    }
+      
+
     public HtmlBuilder AddTable(TableData tableData)
     {
         _builder.BeginElement("table", "table");
-        _builder.Append("<th>");
+        _builder.AppendLine("<tr>");
         foreach (var header in tableData.HeaderColumns)
         {
-            _builder.Append("<td>")
+            _builder.Append("<th>")
                     .Append(HttpUtility.HtmlEncode(header))
-                    .Append("</td>");
+                    .AppendLine("</th>");
         }
-        _builder.Append("</th>");
+        _builder.AppendLine("</tr>");
 
         foreach (var row in tableData.TableContent)
         {
-            _builder.Append("<tr>");
+            _builder.AppendLine("<tr>");
             foreach (var colum in row)
             {
                 _builder.Append("<td>")
                         .Append(HttpUtility.HtmlEncode(colum))
-                        .Append("</td>");
+                        .AppendLine("</td>");
             }
-            _builder.Append("</tr>");
+            _builder.AppendLine("</tr>");
         }
         _builder.EndElement("table");
         return this;

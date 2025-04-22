@@ -1,4 +1,25 @@
-﻿@font-face {
+﻿:root {
+    --black: #181A1F;
+    --red: #FF16B0;
+    --green: #929292;
+    --yellow: #fcee54;
+    --blue: #46BDFF;
+    --purple: #FF92DF;
+    --cyan: #df81fc;
+    --white: #FFFFFF;
+    --brightBlack: #FF16B0;
+    --brightRed: #f85353;
+    --brightGreen: #fcee54;
+    --brightYellow: #ffffff;
+    --brightBlue: #46BDFF;
+    --brightPurple: #FF92DF;
+    --brightCyan: #ff901f;
+    --brightWhite: #ffffff;
+    --background: #070825;
+    --foreground: #46BDFF;
+}
+
+@font-face {
     font-family: 'Ubuntu Mono';
     src: url('UbuntuMono-Regular.ttf') format('truetype');
     font-weight: normal;
@@ -107,4 +128,18 @@ body {
 .main .error {
     margin-left: 20px;
     color: var(--red);
+}
+
+.table {
+    width: 50%;
+}
+
+.table th {
+    background: var(--foreground);
+    color: var(--background);
+    text-align: center;
+}
+
+.table td {
+    text-align: center;
 }
