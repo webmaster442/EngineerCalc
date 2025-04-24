@@ -137,30 +137,37 @@ internal sealed class QuineMcclusky
 
         for (int i = implicants.Count - 1; i >= 0; i--)
         {
-            if (config.Negate)
-            {
-                final
-                    .Append(implicants[i].ToString(longest, config))
-                    .Append(" & ");
-            }
-            else
-            {
-                final
-                    .Append(implicants[i].ToString(longest, config))
-                    .Append(" | ");
-            }
+
+            final
+                .Append(implicants[i].ToString(longest, config))
+                .Append(" | ");
+
         }
         string ret = final.ToString();
-        if (ret.Length > 3)
+
+        switch (ret)
         {
-            ret = ret[0..^3];
+            case " | ":
+            case "! | ":
+                return "true";
+            case " & ":
+            case "":
+                return "false";
         }
-        return ret switch
-        {
-            " | " => "true",
-            "" => "false",
-            _ => ret,
-        };
+
+        int start = 0;
+        int end = ret.Length - 1;
+
+        if (ret.StartsWith('&'))
+            start++;
+
+        if (ret.EndsWith(" | "))
+            end -= 2;
+
+        if (start != 0 || end != ret.Length - 1)
+            ret = ret.Substring(start, end);
+
+        return ret;
     }
 
     public static string GetSimplified(IEnumerable<int> care, IEnumerable<int> dontcre, int variables, QuineMcCluskeyConfig? config = null)

@@ -13,11 +13,6 @@ internal sealed class QuineMcCluskeyConfig
     public bool AIsLsb { get; set; }
 
     /// <summary>
-    /// Negate the result expresion or not
-    /// </summary>
-    public bool Negate { get; set; }
-
-    /// <summary>
     /// Variable names to use
     /// </summary>
     public string[] VariableNamesToUse { get; set; }

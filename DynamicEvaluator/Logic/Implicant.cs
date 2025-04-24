@@ -15,20 +15,6 @@ internal sealed class Implicant : IEquatable<Implicant?>
 
     public string ToString(int length, QuineMcCluskeyConfig config)
     {
-        static void FormatOr(StringBuilder strFinal, string mask, int i, string varialbe)
-        {
-            if (mask[i] == '0') strFinal.AppendFormat("{0} |", varialbe);
-            else if (mask[i] == '1') strFinal.AppendFormat("!{0} |", varialbe);
-            if (i != mask.Length - 1) strFinal.Append("|");
-        }
-
-        static void FormatAnd(StringBuilder strFinal, string mask, int i, string varialbe)
-        {
-            if (mask[i] == '0') strFinal.AppendFormat("!{0}", varialbe);
-            else if (mask[i] == '1') strFinal.AppendFormat("{0}", varialbe);
-            if (i != mask.Length - 1) strFinal.Append("&");
-        }
-
         var strFinal = new StringBuilder();
         var mask = Mask;
 
@@ -39,15 +25,12 @@ internal sealed class Implicant : IEquatable<Implicant?>
         {
             for (int i = 0; i < mask.Length; i++)
             {
-                string varialbe = config.VariableNamesToUse[i];
-                if (config.Negate)
-                {
-                    FormatOr(strFinal, mask, i, varialbe);
-                }
-                else
-                {
-                    FormatAnd(strFinal, mask, i, varialbe);
-                }
+                string variable = i < config.VariableNamesToUse.Length ? config.VariableNamesToUse[i] : "";
+
+                if (mask[i] == '0') strFinal.AppendFormat("!{0}", variable);
+                else if (mask[i] == '1') strFinal.AppendFormat("{0}", variable);
+                if ((mask[i]) != '-' && i != mask.Length - 1) strFinal.Append('&');
+
             }
         }
         else
@@ -55,19 +38,14 @@ internal sealed class Implicant : IEquatable<Implicant?>
             for (int i = 0; i < mask.Length; i++)
             {
                 string variable = config.VariableNamesToUse[(config.VariableNamesToUse.Length - 1) - i];
-                if (config.Negate)
-                {
-                    FormatOr(strFinal, mask, i, variable);
-                }
-                else
-                {
-                    FormatAnd(strFinal, mask, i, variable);
-                }
+
+                if (mask[i] == '0') strFinal.AppendFormat("!{0}", variable);
+                else if (mask[i] == '1') strFinal.AppendFormat("!{0}", variable);
+                if ((mask[i]) != '-' && i != mask.Length - 1) strFinal.Append('&');
+
             }
         }
-        return config.Negate
-            ? "(" + strFinal.Remove(strFinal.Length - 1, 1) + ")"
-            : strFinal.ToString();
+        return strFinal.ToString().TrimEnd('&');
     }
 
     public override bool Equals(object? obj)

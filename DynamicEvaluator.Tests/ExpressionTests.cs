@@ -157,11 +157,14 @@ public class ExpressionTests
         Assert.That(simplified.ToString(), Is.EqualTo(expected));
     }
 
+    [TestCase("false", "False")]
+    [TestCase("true", "True")]
     [TestCase("!a&!b|!a&b", "(!a)")]
-    [TestCase("!a&b | a&!b", "!a&b | a&!b")]
     [TestCase("a&!b | a&b", "a")]
+    [TestCase("!a&b | a&!b", "((b & (!a)) | ((!b) & a))")]
     [TestCase("!a&!b | !a&b | a&!b | a&b", "True")]
-    [TestCase("(a|!b)&(a!c|!d)|!a&b&c&d", " !a&b&c&d | !b&!d | a&!c | a&!d")]
+    [TestCase("d&(c&b|b&d)|!(d&a)", "((b | (!d)) | (!a))")]
+    [TestCase("!a&!b&!c&!d|!a&!b&!c&d|!a&b&!c&!d|!a&b&!c&d|a&b&!c&!d|a&b&!c&d", "(((!c) & b) | ((!c) & (!a)))")]
     public void EnsureThat_LogicSimplify_Works(string expression, string expected)
     {
         IExpression parsed = _expressionFactory.Create(expression);
