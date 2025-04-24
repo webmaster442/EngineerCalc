@@ -47,6 +47,7 @@ public static class IExpressionExtensions
         variableNames = flatExpression
             .OfType<VariableExpression>()
             .Select(v => v.Identifier)
+            .Distinct()
             .ToArray();
 
 

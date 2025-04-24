@@ -15,6 +15,20 @@ internal sealed class Implicant : IEquatable<Implicant?>
 
     public string ToString(int length, QuineMcCluskeyConfig config)
     {
+        static void FormatOr(StringBuilder strFinal, string mask, int i, string varialbe)
+        {
+            if (mask[i] == '0') strFinal.AppendFormat("{0} |", varialbe);
+            else if (mask[i] == '1') strFinal.AppendFormat("!{0} |", varialbe);
+            if (i != mask.Length - 1) strFinal.Append("|");
+        }
+
+        static void FormatAnd(StringBuilder strFinal, string mask, int i, string varialbe)
+        {
+            if (mask[i] == '0') strFinal.AppendFormat("!{0}", varialbe);
+            else if (mask[i] == '1') strFinal.AppendFormat("{0}", varialbe);
+            if (i != mask.Length - 1) strFinal.Append("&");
+        }
+
         var strFinal = new StringBuilder();
         var mask = Mask;
 
@@ -28,13 +42,11 @@ internal sealed class Implicant : IEquatable<Implicant?>
                 string varialbe = config.VariableNamesToUse[i];
                 if (config.Negate)
                 {
-                    if (mask[i] == '0') strFinal.AppendFormat("{0} |", varialbe);
-                    else if (mask[i] == '1') strFinal.AppendFormat("!{0} |", varialbe);
+                    FormatOr(strFinal, mask, i, varialbe);
                 }
                 else
                 {
-                    if (mask[i] == '0') strFinal.AppendFormat("!{0}", varialbe);
-                    else if (mask[i] == '1') strFinal.AppendFormat("{0}", varialbe);
+                    FormatAnd(strFinal, mask, i, varialbe);
                 }
             }
         }
@@ -45,14 +57,11 @@ internal sealed class Implicant : IEquatable<Implicant?>
                 string variable = config.VariableNamesToUse[(config.VariableNamesToUse.Length - 1) - i];
                 if (config.Negate)
                 {
-                    if (mask[i] == '0') strFinal.AppendFormat("{0} |", variable);
-                    else if (mask[i] == '1') strFinal.AppendFormat("!{0} |", variable);
-                    if (i != mask.Length - 1) strFinal.Append("|");
+                    FormatOr(strFinal, mask, i, variable);
                 }
                 else
                 {
-                    if (mask[i] == '0') strFinal.AppendFormat("!{0}", variable);
-                    else if (mask[i] == '1') strFinal.AppendFormat("!{0}", variable);
+                    FormatAnd(strFinal, mask, i, variable);
                 }
             }
         }

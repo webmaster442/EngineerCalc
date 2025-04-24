@@ -157,7 +157,7 @@ internal sealed class QuineMcclusky
         }
         return ret switch
         {
-            " + " => "true",
+            " | " => "true",
             "" => "false",
             _ => ret,
         };
