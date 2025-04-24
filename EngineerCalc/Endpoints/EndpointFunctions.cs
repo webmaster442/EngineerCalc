@@ -8,6 +8,8 @@ internal sealed class EndpointFunctions
     private readonly Dictionary<string, ICommand> _commands;
     private readonly Version _version;
 
+    public IEnumerable<string> CommandNames => _commands.Keys;
+
     public EndpointFunctions()
     {
         _expressionFactory = new ExpressionFactory();
@@ -97,6 +99,7 @@ internal sealed class EndpointFunctions
             <li>To list available # (hashmark) commands, type <a href="#" onclick="typeIntoInput(event)">#commands</a></li>
             <li>To clear the current output screen type: <a href="#" onclick="typeIntoInput(event)">#clear</a></li>
             <li>To reload page type: <a href="#" onclick="typeIntoInput(event)">#reload</a></li>
+            <li>To list commands type: <a href="#" onclick="typeIntoInput(event)">#commands</a></li>
         </ul>
         """;
 

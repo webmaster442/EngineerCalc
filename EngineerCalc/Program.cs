@@ -52,4 +52,9 @@ app.MapGet("/intro", async (HttpRequest request) =>
     return result.ToIResult();
 });
 
+app.MapGet("/commands", () =>
+{
+    return endpoints.CommandNames.ToArray();
+});
+
 app.Run();

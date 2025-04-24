@@ -1,4 +1,15 @@
-﻿function getTimeStamp() {
+﻿let commands = [];
+
+function getCommandsHtml() {
+    let html = '<h1>Available commands</h1><ul>';
+    for (i = 0; i < commands.length; i++) {
+        html += `<li><a href="#" onclick="typeIntoInput(event)">${commands[i]}</a</li>`;
+    }
+    html += "</ul>";
+    return html;
+}
+
+function getTimeStamp() {
     const now = new Date();
     const hours = String(now.getHours()).padStart(2, '0');
     const minutes = String(now.getMinutes()).padStart(2, '0');
@@ -38,6 +49,9 @@ function handleClientCommand(input) {
         case '#reload':
             window.location.reload();
             return true;
+        case '#commands':
+            render("#commands", getCommandsHtml());
+            return true;
         default:
             return false;
     }
@@ -72,12 +86,23 @@ async function execute(input) {
 async function intro() {
     try {
         document.getElementById('loader').style.visibility = 'visible';
-        const response = await fetch("/intro");
-        const result = await response.text();
-        if (!response.ok) {
+        const introResponse = await fetch("/intro");
+        if (!introResponse.ok) {
             throw new Error("Failed to get intro");
         }
-        render("intro", result);
+        const introResult = await introResponse.text();
+
+        const commandsResponse = await fetch("/commands");
+        if (!commandsResponse.ok) {
+            throw new Error("Failed to get intro");
+        }
+        const commandsResult = await commandsResponse.json();
+
+        commands = commandsResult;
+        commands.push("#clear", "#reload", "#commands");
+        commands.sort();
+
+        render("intro", introResult);
     }
     catch (error) {
         console.error(error);
