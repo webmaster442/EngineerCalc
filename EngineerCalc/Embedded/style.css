@@ -97,6 +97,17 @@ body {
     grid-area: footer;
 }
 
+.suggest {
+    font-size: 16pt;
+    font-family: "Ubuntu Mono", monospace;
+    padding: 5px;
+}
+
+    .suggest a {
+        text-decoration: none;
+        color: var(--yellow);
+    }
+
 .input {
     padding: 10px;
     width: 99%;

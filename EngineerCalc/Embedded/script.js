@@ -1,5 +1,7 @@
 ﻿let commands = [];
 
+// ----------------------------------------------------------------------------
+
 function getCommandsHtml() {
     let html = '<h1>Available commands</h1><ul>';
     for (i = 0; i < commands.length; i++) {
@@ -20,8 +22,24 @@ function makeInputSafe(input) {
     return encodeURI(input).replace("%20", " ");
 }
 
+function typeIntoInput(event) {
+    event.preventDefault();
+    const anchor = event.currentTarget;
+    const text = anchor.textContent || anchor.innerText;
+    const inputElement = document.getElementById("input");
+    if (!inputElement) {
+        console.warn('no input element found');
+        return;
+    }
+    inputElement.value = text;
+    inputElement.focus();
+}
+
+// ----------------------------------------------------------------------------
+
 function render(input, result) {
     if (!input || input.trim() === "") return;
+
     const resultsDiv = document.getElementById('results');
     if (resultsDiv) {
         const html = `<div class="response"><p class="prompt">${getTimeStamp()}: '${makeInputSafe(input)}' &gt;</p>${result}</div>`;
@@ -34,6 +52,29 @@ function render(input, result) {
     else {
         console.warn('there is no results div');
     }
+}
+
+function trySuggest(currentInput) {
+    const suggestions = document.getElementById('suggestions');
+    if (!suggestions) {
+        return;
+    }
+
+    suggestions.innerHTML = "";
+
+    if (!currentInput || currentInput === "") {
+        return;
+    }
+
+    let html = "<span>Suggestions: </span>";
+    const lowerInput = currentInput.toLowerCase();
+    commands.forEach(command => {
+        if (command.toLowerCase().startsWith(lowerInput)) {
+            html += `<a href="#" onclick="typeIntoInput(event)">${command}</a>,`;
+        }
+    });
+
+    suggestions.insertAdjacentHTML("beforeend", html);
 }
 
 function handleClientCommand(input) {
@@ -110,19 +151,6 @@ async function intro() {
     document.getElementById('loader').style.visibility = 'collapse';
 }
 
-function typeIntoInput(event) {
-    event.preventDefault();
-    const anchor = event.currentTarget;
-    const text = anchor.textContent || anchor.innerText;
-    const inputElement = document.getElementById("input");
-    if (!inputElement) {
-        console.warn('no input element found');
-        return;
-    }
-    inputElement.value = text;
-    inputElement.focus();
-}
-
 document.addEventListener('DOMContentLoaded', () => {
     const inputElement = document.getElementById("input");
     if (!inputElement) {
@@ -136,6 +164,9 @@ document.addEventListener('DOMContentLoaded', () => {
             execute(inputElement.value);
             inputElement.value = '';
             inputElement.focus();
+            trySuggest('');
+            return
         }
+        trySuggest(inputElement.value);
     });
 });
