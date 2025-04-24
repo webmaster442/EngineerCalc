@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-using Microsoft.AspNetCore.StaticFiles;
+﻿using Microsoft.AspNetCore.StaticFiles;
 
 namespace EngineerCalc;
 

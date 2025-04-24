@@ -85,8 +85,17 @@ async function intro() {
     document.getElementById('loader').style.visibility = 'collapse';
 }
 
-function type() {
-
+function typeIntoInput(event) {
+    event.preventDefault();
+    const anchor = event.currentTarget;
+    const text = anchor.textContent || anchor.innerText;
+    const inputElement = document.getElementById("input");
+    if (!inputElement) {
+        console.warn('no input element found');
+        return;
+    }
+    inputElement.value = text;
+    inputElement.focus();
 }
 
 document.addEventListener('DOMContentLoaded', () => {

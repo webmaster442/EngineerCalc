@@ -1,22 +1,24 @@
 ﻿:root {
-    --black: #181A1F;
-    --red: #FF16B0;
-    --green: #929292;
-    --yellow: #fcee54;
-    --blue: #46BDFF;
-    --purple: #FF92DF;
-    --cyan: #df81fc;
-    --white: #FFFFFF;
-    --brightBlack: #FF16B0;
-    --brightRed: #f85353;
-    --brightGreen: #fcee54;
-    --brightYellow: #ffffff;
-    --brightBlue: #46BDFF;
-    --brightPurple: #FF92DF;
-    --brightCyan: #ff901f;
-    --brightWhite: #ffffff;
-    --background: #070825;
-    --foreground: #46BDFF;
+  --black: #000000;
+  --red: #ff5555;
+  --green: #50fa7b;
+  --yellow: #f1fa8c;
+  --blue: #bd93f9;
+  --purple: #ff79c6;
+  --cyan: #8be9fd;
+  --white: #bbbbbb;
+  --brightBlack: #555555;
+  --brightRed: #ff5555;
+  --brightGreen: #50fa7b;
+  --brightYellow: #f1fa8c;
+  --brightBlue: #bd93f9;
+  --brightPurple: #ff79c6;
+  --brightCyan: #8be9fd;
+  --brightWhite: #ffffff;
+  --background: #1e1f29;
+  --foreground: #f8f8f2;
+  --selectionBackground: #44475a;
+  --cursorColor: #bbbbbb;
 }
 
 @font-face {
@@ -130,16 +132,26 @@ body {
     color: var(--red);
 }
 
-.table {
+.main a {
+    text-decoration: none;
+    color: var(--blue);
+}
+
+    .main a:hover {
+        text-decoration: underline;
+        color: var(--brightBlue);
+    }
+
+.main .table {
     width: 50%;
 }
 
-.table th {
-    background: var(--foreground);
-    color: var(--background);
-    text-align: center;
-}
+    .main .table th {
+        background: var(--foreground);
+        color: var(--background);
+        text-align: center;
+    }
 
-.table td {
-    text-align: center;
-}
+    .main .table td {
+        text-align: center;
+    }

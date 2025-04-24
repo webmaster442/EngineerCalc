@@ -2,7 +2,7 @@
 
 namespace EngineerCalc.Endpoints;
 
-internal class EndpointFunctions
+internal sealed class EndpointFunctions
 {
     private readonly ExpressionFactory _expressionFactory;
     private readonly Dictionary<string, ICommand> _commands;
@@ -93,10 +93,10 @@ internal class EndpointFunctions
         </table>
         <h3>Version: {_version}</h3>
         <ul>
-            <li>To start evaluating enter an expression like: <a href="#" onclick="type()">33+22</a></li>
-            <li>To list available # (hashmark) commands, type <a href="#" onclick="type()">#commands</a></li>
-            <li>To clear the current output screen type: <a href="#" onclick="type()">#clear</a></li>
-            <li>To reload page type: <a href="#" onclick="type()">#reload</a></li>
+            <li>To start evaluating enter an expression like: <a href="#" onclick="typeIntoInput(event)">33+22</a></li>
+            <li>To list available # (hashmark) commands, type <a href="#" onclick="typeIntoInput(event)">#commands</a></li>
+            <li>To clear the current output screen type: <a href="#" onclick="typeIntoInput(event)">#clear</a></li>
+            <li>To reload page type: <a href="#" onclick="typeIntoInput(event)">#reload</a></li>
         </ul>
         """;
 
