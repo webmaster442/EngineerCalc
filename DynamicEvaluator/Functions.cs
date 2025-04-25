@@ -118,4 +118,13 @@ public static class Functions
 
     public static long Random(long minimum, long maximum)
         => System.Random.Shared.NextInt64(minimum, maximum);
+
+    public static double Ceiling(double x)
+        => Math.Ceiling(x);
+
+    public static double Floor(double x)
+        => Math.Floor(x);
+
+    public static double Round(double x, int digits)
+        => Math.Round(x, digits);
 }
