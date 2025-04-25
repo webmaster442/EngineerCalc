@@ -23,6 +23,6 @@ internal sealed class SetCommand : CommandBase<SetCommand.Settings>
         var factory = new ExpressionFactory();
         var value = factory.Create(settings.Expression).Evaluate(state.Variables);
         state.Variables.Add(settings.Name, value);
-        return Task.FromResult(Result.FromSuccess($"<p>{settings.Name} is now set to {value}</p>"));
+        return Task.FromResult(Result.SuccessToHtml($"{settings.Name} is now set to {value}"));
     }
 }

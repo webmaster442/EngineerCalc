@@ -1,5 +1,4 @@
-﻿using System.Reflection.PortableExecutable;
-using System.Text;
+﻿using System.Text;
 using System.Web;
 
 using EngineerCalc.Calculator;
@@ -27,7 +26,7 @@ internal sealed class HtmlBuilder
 
     public HtmlBuilder Exception(Exception ex)
     {
-        _builder.BeginElement("p", "error")
+        _builder.BeginElement("p", CssClassNames.Error)
                 .Append(HttpUtility.HtmlEncode(ex.Message))
                 .EndElement("p");
 #if DEBUG
@@ -40,7 +39,7 @@ internal sealed class HtmlBuilder
 
     public HtmlBuilder AddResult(string result)
     {
-        _builder.BeginElement("p", "result")
+        _builder.BeginElement("p", CssClassNames.Result)
                 .Append(HttpUtility.HtmlEncode(result))
                 .EndElement("p");
         return this;

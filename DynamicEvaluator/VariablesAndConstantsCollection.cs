@@ -52,6 +52,9 @@ public sealed class VariablesAndConstantsCollection : IEnumerable<KeyValuePair<s
     public void Clear()
         => _variables.Clear();
 
+    public bool Remove(string key)
+        => _variables.Remove(key);
+
     public dynamic this[string key]
     {
         get => _constants.ContainsKey(key) ? _constants[key] : _variables[key];
