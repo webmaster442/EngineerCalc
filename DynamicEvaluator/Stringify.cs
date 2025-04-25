@@ -52,11 +52,16 @@ public static partial class Extensions
                 return FormatFloat(formattable, cultureInfo);
         }
 
-        return result.ToString() ?? "<null>";
+        return result.ToString() ?? "[null]";
     }
 
     private static string FormatFraction(Fraction fraction, CultureInfo cultureInfo)
-        => $"{{ {fraction.Numerator} \\over {fraction.Denominator} }}";
+    {
+        if (fraction.Denominator == 1)
+            return fraction.Numerator.ToString(cultureInfo);
+
+        return $"{{ {fraction.Numerator.ToString(cultureInfo)} \\over {fraction.Denominator.ToString(cultureInfo)} }}";
+    }
 
     private static string FormatComplex(Complex complex, CultureInfo cultureInfo)
     {
