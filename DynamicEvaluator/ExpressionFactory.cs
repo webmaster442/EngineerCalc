@@ -70,23 +70,13 @@ public sealed class ExpressionFactory
 
                 var right = ParseMultExpression(tokens);
 
-                switch (opType)
+                exp = opType switch
                 {
-                    case TokenType.Plus:
-                        exp = new AddExpression(exp, right);
-                        break;
-
-                    case TokenType.Or:
-                        exp = new OrExpression(exp, right);
-                        break;
-
-                    case TokenType.Minus:
-                        exp = new SubtractExpression(exp, right);
-                        break;
-
-                    default:
-                        throw new InvalidOperationException($"Expcted as plus, minus, or. Got: {opType}");
-                }
+                    TokenType.Plus => new AddExpression(exp, right),
+                    TokenType.Or => new OrExpression(exp, right),
+                    TokenType.Minus => new SubtractExpression(exp, right),
+                    _ => throw new InvalidOperationException($"Expcted +, -, or |. Got: {opType}"),
+                };
             }
 
             return exp;
@@ -110,23 +100,13 @@ public sealed class ExpressionFactory
                 }
                 var right = ParseExpExpression(tokens);
 
-                switch (opType)
+                exp = opType switch
                 {
-                    case TokenType.Multiply:
-                        exp = new MultiplyExpression(exp, right);
-                        break;
-
-                    case TokenType.Divide:
-                        exp = new DivideExpression(exp, right);
-                        break;
-
-                    case TokenType.And:
-                        exp = new AndExpression(exp, right);
-                        break;
-
-                    default:
-                        throw new InvalidOperationException($"Expected * or /, got: {opType}");
-                }
+                    TokenType.Multiply => new MultiplyExpression(exp, right),
+                    TokenType.Divide => new DivideExpression(exp, right),
+                    TokenType.And => new AndExpression(exp, right),
+                    _ => throw new InvalidOperationException($"Expected * or /, got: {opType}"),
+                };
             }
 
             return exp;
@@ -140,7 +120,13 @@ public sealed class ExpressionFactory
         {
             var exp = ParseUnaryExpression(tokens);
 
-            if (tokens.Check(new TokenSet(TokenType.Exponent)))
+            if (tokens.Check(new TokenSet(TokenType.Exponent,
+                                          TokenType.LessThan,
+                                          TokenType.GreaterThan,
+                                          TokenType.LessThanOrEqual,
+                                          TokenType.GreaterThanOrEqual,
+                                          TokenType.Equal,
+                                          TokenType.NotEqual)))
             {
                 var opType = tokens.CurrentToken.Type;
                 tokens.Eat(opType);
@@ -150,15 +136,17 @@ public sealed class ExpressionFactory
                 }
                 var right = ParseUnaryExpression(tokens);
 
-                switch (opType)
+                exp = opType switch
                 {
-                    case TokenType.Exponent:
-                        exp = new ExponentExpression(exp, right);
-                        break;
-
-                    default:
-                        throw new InvalidOperationException($"Expected ^ got: {opType}");
-                }
+                    TokenType.Exponent => new ExponentExpression(exp, right),
+                    TokenType.LessThan => new LessThanExpression(exp, right),
+                    TokenType.GreaterThan => new GreaterThanExpression(exp, right),
+                    TokenType.LessThanOrEqual => new LessThanOrEqualExpression(exp, right),
+                    TokenType.GreaterThanOrEqual => new GreaterThanOrEqualExpression(exp, right),
+                    TokenType.Equal => new EqualExpression(exp, right),
+                    TokenType.NotEqual => new NotEqualExpression(exp, right),
+                    _ => throw new InvalidOperationException($"Expected ^, <, >, >=, <=, == or != got: {opType}"),
+                };
             }
 
             return exp;
@@ -252,7 +240,7 @@ public sealed class ExpressionFactory
             }
 
             exp = (exp == null) ? right : new MultiplyExpression(exp, right);
-        } 
+        }
         while (tokens.Check(FirstFactor));
 
         return exp;

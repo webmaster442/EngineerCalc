@@ -183,19 +183,47 @@ internal static class Tokenizer
                     ++index;
                     continue;
                 }
-                Token op = HandleOperator(input[index], index);
-                tokens.Add(op);
-                ++index;
+
+                char current = input[index];
+                char next = index +1 < input.Length ? input[index + 1] : '\0';
+                Token @operator = HandleOperator(current, next, index, out newIndex);
+                tokens.Add(@operator);
+                index = newIndex;
             }
         }
         tokens.Add(new Token(string.Empty, TokenType.Eof));
         return tokens;
     }
 
-    private static Token HandleOperator(char c, int position)
+    private static Token HandleOperator(char current, char next, int index, out int newIndex)
     {
-        return c switch
+        string combined = $"{current}{next}";
+        switch (combined)
         {
+            case "==":
+                newIndex = index += 2;
+                return new Token(combined, TokenType.Equal);
+            case "!=":
+                newIndex = index += 2;
+                return new Token(combined, TokenType.NotEqual);
+            case "<=":
+                newIndex = index += 2;
+                return new Token(combined, TokenType.LessThanOrEqual);
+            case ">=":
+                newIndex = index + 2;
+                return new Token(combined, TokenType.GreaterThanOrEqual);
+            default:
+                newIndex = index + 1;
+                return HandleSingleCharOperator(current, index);
+        }
+    }
+
+    private static Token HandleSingleCharOperator(char current, int position)
+    {
+        return current switch
+        {
+            '<' => new Token("<", TokenType.LessThan),
+            '>' => new Token(">", TokenType.GreaterThan),
             '|' => new Token("|", TokenType.Or),
             '&' => new Token("&", TokenType.And),
             '!' => new Token("!", TokenType.Not),
@@ -207,7 +235,7 @@ internal static class Tokenizer
             '(' => new Token("(", TokenType.OpenParen),
             ')' => new Token(")", TokenType.CloseParen),
             ',' => new Token(",", TokenType.ArgumentDivider),
-            _ => throw new InvalidOperationException($"Invalid operator `{c}` at {position}"),
+            _ => throw new InvalidOperationException($"Invalid operator `{current}` at position {position}"),
         };
     }
 }

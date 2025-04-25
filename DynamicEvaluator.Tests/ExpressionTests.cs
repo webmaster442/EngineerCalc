@@ -179,6 +179,12 @@ public class ExpressionTests
     [TestCase("1:2")]
     [TestCase("1Ö2")]
     [TestCase("1=2")]
+    [TestCase("1<")]
+    [TestCase("1>")]
+    [TestCase("1<=")]
+    [TestCase("1>=")]
+    [TestCase("1!")]
+    [TestCase("1!=")]
     [TestCase("")]
     [TestCase("\t")]
     [TestCase(" ")]
@@ -219,6 +225,33 @@ public class ExpressionTests
         Assert.Multiple(() =>
         {
             Assert.That(result, Is.TypeOf<long>());
+            Assert.That(result, Is.EqualTo(expected));
+        });
+    }
+
+    [TestCase("x<y", true)]
+    [TestCase("x>y", false)]
+    [TestCase("11<22", true)]
+    [TestCase("11>22", false)]
+    [TestCase("11==11", true)]
+    [TestCase("x==y", false)]
+    [TestCase("x==x", true)]
+    [TestCase("12<=12", true)]
+    [TestCase("12>=12", true)]
+    [TestCase("random()>-1", true)]
+    [TestCase("random(10, 15) >= 10 & random(10, 15) < 15", true)]
+    public void EnsureThat_Evaluate_Works_Comparision(string expression, bool expected)
+    {
+        IExpression parsed = _expressionFactory.Create(expression);
+        VariablesAndConstantsCollection variables = new()
+        {
+            { "x", 1L },
+            { "y", 2L },
+        };
+        dynamic result = parsed.Evaluate(variables);
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.TypeOf<bool>());
             Assert.That(result, Is.EqualTo(expected));
         });
     }
