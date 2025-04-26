@@ -47,6 +47,9 @@ function render(input, result) {
         const newItem = resultsDiv.lastElementChild;
         if (newItem) {
             newItem.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            MathJax.typesetPromise([newItem]).then(() => {
+                console.log('Math typesetting complete!');
+            });
         }
     }
     else {
@@ -68,13 +71,16 @@ function trySuggest(currentInput) {
 
     let html = "<span>Suggestions: </span>";
     const lowerInput = currentInput.toLowerCase();
+    let wasAny = false;
     commands.forEach(command => {
         if (command.toLowerCase().startsWith(lowerInput)) {
-            html += `<a href="#" onclick="typeIntoInput(event)">${command}</a>,`;
+            html += `<a href="#" onclick="typeIntoInput(event)">${command}</a>, `;
+            wasAny = true;
         }
     });
-
-    suggestions.insertAdjacentHTML("beforeend", html);
+    if (wasAny) {
+        suggestions.insertAdjacentHTML("beforeend", html);
+    }
 }
 
 function handleClientCommand(input) {

@@ -1,6 +1,8 @@
 ﻿using System.Net.Mime;
 using System.Web;
 
+using Microsoft.AspNetCore.Http.HttpResults;
+
 namespace EngineerCalc.Endpoints;
 
 internal sealed record class Result
@@ -49,8 +51,7 @@ internal sealed record class Result
 
     public IResult ToIResult(string mediaType = MediaTypeNames.Text.Html)
     {
-        return IsSuccess 
-            ? Results.Content(Message, mediaType) 
-            : Results.InternalServerError(Message);
+        int statuscode = IsSuccess ? 200 : 400;
+        return Results.Content(Message, mediaType, statusCode: statuscode); 
     }
 }
