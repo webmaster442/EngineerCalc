@@ -231,6 +231,7 @@ internal static class Tokenizer
             '-' => new Token("-", TokenType.Minus),
             '*' => new Token("*", TokenType.Multiply),
             '/' => new Token("/", TokenType.Divide),
+            '%' => new Token("%", TokenType.Modulo),
             '^' => new Token("^", TokenType.Exponent),
             '(' => new Token("(", TokenType.OpenParen),
             ')' => new Token(")", TokenType.CloseParen),

@@ -29,7 +29,7 @@ internal sealed class DivideExpression : BinaryExpression
         if (leftConst != null && rightConst != null)
         {
             // two constants
-            if (rightConst.Value == 0)
+            if (rightConst.Value == 0L)
             {
                 throw new DivideByZeroException();
             }

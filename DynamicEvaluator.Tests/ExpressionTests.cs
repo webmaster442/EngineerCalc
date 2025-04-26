@@ -116,6 +116,19 @@ public class ExpressionTests
     [TestCase("-y*-1", "y")]
     [TestCase("-y*-x", "(y * x)")]
     [TestCase("x*y", "(x * y)")]
+    //Divide
+    [TestCase("0/x", "0")]
+    [TestCase("3/1", "3")]
+    [TestCase("x/1", "x")]
+    [TestCase("x/-1", "(-x)")]
+    [TestCase("-x/-y", "(x / y)")]
+    [TestCase("x/y", "(x / y)")]
+    //modulo
+    [TestCase("0%x", "0")]
+    [TestCase("3%1", "0")]
+    [TestCase("x%1", "0")]
+    [TestCase("x%-1", "(x % -1)")]
+    [TestCase("x%y", "(x % y)")]
     //Subtrasct
     [TestCase("0-y", "(-y)")]
     [TestCase("0--y", "y")]
@@ -213,6 +226,7 @@ public class ExpressionTests
     [TestCase("x+y", 3)]
     [TestCase("fromhex('ff')", 255)]
     [TestCase("1_000+100", "1100")]
+    [TestCase("3%2", 1)]
     public void EnsureThat_Evaluate_Works_Integers(string expression, long expected)
     {
         IExpression parsed = _expressionFactory.Create(expression);

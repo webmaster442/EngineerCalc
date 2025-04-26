@@ -90,7 +90,7 @@ public sealed class ExpressionFactory
         {
             var exp = ParseExpExpression(tokens);
 
-            while (tokens.Check(new TokenSet(TokenType.Multiply, TokenType.Divide, TokenType.And)))
+            while (tokens.Check(new TokenSet(TokenType.Multiply, TokenType.Divide, TokenType.Modulo, TokenType.And)))
             {
                 var opType = tokens.CurrentToken.Type;
                 tokens.Eat(opType);
@@ -104,8 +104,9 @@ public sealed class ExpressionFactory
                 {
                     TokenType.Multiply => new MultiplyExpression(exp, right),
                     TokenType.Divide => new DivideExpression(exp, right),
+                    TokenType.Modulo => new ModuloExpression(exp, right),
                     TokenType.And => new AndExpression(exp, right),
-                    _ => throw new InvalidOperationException($"Expected * or /, got: {opType}"),
+                    _ => throw new InvalidOperationException($"Expected *, /, % or &, got: {opType}"),
                 };
             }
 
