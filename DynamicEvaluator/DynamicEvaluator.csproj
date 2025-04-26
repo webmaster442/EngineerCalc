@@ -7,7 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Docs\*.md" />
+    <None Remove="Doc.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Doc.md" />
   </ItemGroup>
 
 </Project>

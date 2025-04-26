@@ -1,0 +1,202 @@
+# Ceiling
+
+Returns the smallest integral value that is greater than or equal to the specified double-precision floating-point number. Note that this method returns a double instead of an integral type.
+
+`Ceiling(value)`
+
+## Parameters
+
+* value
+
+     A number to be rounded.
+
+# Cos
+
+Computes the cosine of the given input. Supports both double and Complex types. If the input is neither, an Exception is thrown.
+
+`cos(value)`
+
+## Parameters
+
+* value
+
+    The input value for which to calculate the cosine. Can be a double, a Complex number, or any type that can be converted to double.
+
+# Cplx
+
+Create a complex number from real and imaginary number part.
+
+`Cplx(real, imaginary)`
+
+## Parameters
+
+* real
+
+    The real part of the complex number
+
+* imaginary
+
+    The imaginary part of the complex number
+
+# Ctg
+
+Computes the cotangent (1 / tangent) of the given input. Supports both double and Complex types. If the input is neither, an Exception is thrown.
+
+`ctg(value)`
+
+## Parameters
+
+* value
+
+    The input value for which to calculate the tangent. Can be a double, a Complex number, or any type that can be converted to double.
+
+# Floor
+
+Returns the largest integral value less than or equal to the specified double-precision floating-point number. Note that this method returns a double instead of an integral type.
+
+`Floor(value)`
+
+## Parameters
+
+* value
+
+     A number.
+
+# FromBin
+
+Parses a binary (base-2) string and converts it into a long integer. The string must consist only of characters 0 and 1. Throws an exception if the string is not a valid binary representation.
+
+## Parameters
+
+* string
+
+    The binary string to convert. Should only contain '0' and '1' characters and no prefix like 0b.
+
+# FromHex
+
+Parses a hexadecimal string and converts it into a long integer. Supports both uppercase and lowercase hexadecimal digits. Throws an exception if the string is not a valid hexadecimal representation.
+
+`FromHex(string)`
+
+## Parameters
+
+* string
+
+    The hexadecimal string to convert. Should not include prefixes like 0x.
+
+# Lcm
+
+Calculate the Least Common Multiple (LCM) of two integers. The LCM of two integers is the smallest positive integer that is divisible by both numbers.
+
+`Lcm(a, b)`
+
+## Parameters
+
+* a
+
+    The first integer.
+
+* b
+
+     The second integer.
+
+# Ln
+
+Computes the natural logarithm (base e) of a given value. Supports both real and complex numbers. If the input is neither, an Exception is thrown.
+
+`Ln(value)`
+
+## Parameters
+
+* value
+
+    The input value to compute the natural logarithm of. Can be a real number, complex number, or a value convertible to a double.
+
+# Log
+
+Computes the logarithm of a number (number) with a specified base (@base). Supports both double and Complex types. If the input is neither, an Exception is thrown.
+
+`Log(number, base)`
+
+## Parameters
+
+* number
+
+    The number for which the logarithm is calculated. Can be a double or a Complex number.
+
+* base
+
+    The base of the logarithm. Must be convertible to a double.
+
+# Random
+
+Generates a non negative random number. If called without parameters, the value will be between 0 and (2^63) - 1. If called with parameters, then the value that is generated will be in the specified interval by the parameters. If called with parameters and the specified min value is greater than the specified max value an exception will be thrown.
+
+`Random()`
+`Random(min, max)`
+
+## Parameters
+
+* min
+
+    The inclusive lower bound of the random number returned.
+
+* max
+
+    The exclusive upper bound of the random number returned. Must be greater than or equal to min. 
+
+# Root
+
+Calculates the nth root of a given number. Supports both double and Complex types. If the input is neither, an Exception is thrown.
+
+`Root(y, y)`
+
+## Parameters
+
+* x
+
+    The number whose root is to be calculated. Can be a double or a Complex number.
+
+* y
+
+    The degree of the root. Must be convertible to a double.
+
+# Round
+
+Rounds a double-precision floating-point value to a specified number of fractional digits, and rounds midpoint values to the nearest even number.
+
+`round(value, digits)`
+
+## Parameters
+
+* value
+
+     A number to be rounded.
+
+* digits
+
+    The number of fractional digits in the return value.
+
+# Sin
+
+Computes the sine of the given input. Supports both double and Complex types. If the input is neither, an Exception is thrown.
+
+`sin(value)`
+
+## Parameters
+
+* value
+
+    The input value for which to calculate the sine. Can be a double, a Complex number, or any type that can be converted to double.
+
+# Tan
+
+Computes the tangent of the given input. Supports both double and Complex types. If the input is neither, an Exception is thrown.
+
+`tan(value)`
+
+## Parameters
+
+* value
+
+    The input value for which to calculate the tangent. Can be a double, a Complex number, or any type that can be converted to double.
