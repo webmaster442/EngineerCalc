@@ -273,6 +273,8 @@ public class ExpressionTests
     [TestCase("sin(pi/2)", 1.0d)]
     [TestCase("2*kilo", 2000.0d)]
     [TestCase("21*milli", 0.021d)]
+    [TestCase("abs(-1)", 1.0d)]
+    [TestCase("abs(22)", 22.0d)]
     public void EnsureThat_Evaluate_Works_Doubles(string expression, double expected)
     {
         IExpression parsed = _expressionFactory.Create(expression);

@@ -1,7 +1,5 @@
-﻿using System.Net.Http.Headers;
-using System.Numerics;
+﻿using System.Numerics;
 
-using DynamicEvaluator.Expressions.Specific;
 using DynamicEvaluator.InternalFcuntions;
 using DynamicEvaluator.Types;
 
@@ -9,6 +7,20 @@ namespace DynamicEvaluator;
 
 public static class Functions
 {
+    public static dynamic Abs(dynamic value)
+    {
+        if (value is Complex c)
+            return Complex.Abs(c);
+
+        if (value is Fraction fr)
+            return Fraction.Abs(fr);
+
+        if (TypeFactory.DynamicConvert<double>(value, out double d))
+            return Math.Abs(d);
+
+        throw new InvalidOperationException($"Can't perform Abs function on type {value.GetType()}");
+    }
+
     public static dynamic Ln(dynamic value)
     {
         if (value is Complex c)

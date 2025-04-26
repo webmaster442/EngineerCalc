@@ -47,9 +47,16 @@ public readonly struct Fraction :
         {
             throw new DivideByZeroException();
         }
-        Simplify(ref numerator, ref denominator);
-        Numerator = numerator;
-        Denominator = denominator;
+
+        if (denominator < 0)
+        {
+            numerator = -numerator;
+            denominator = -denominator;
+        }
+
+        long gcd = Integers.GreatestCommonDivisor(numerator, denominator);
+        Numerator = numerator / gcd;
+        Denominator = denominator / gcd;
     }
 
     /// <inheritdoc/>
@@ -284,15 +291,9 @@ public readonly struct Fraction :
         return $"{numerator} / {denominator}";
     }
 
-    private void Simplify(ref long Numerator, ref long Denominator)
+    public static Fraction Abs(Fraction f)
     {
-        if (Denominator < 0)
-        {
-            Numerator = -Numerator;
-            Denominator = -Denominator;
-        }
-        long gcd = Integers.GreatestCommonDivisor(Numerator, Denominator);
-        Numerator /= gcd;
-        Denominator /= gcd;
+        long newNumerator = f.Numerator < 0 ? -1L * f.Numerator : f.Numerator;
+        return new Fraction(newNumerator, f.Denominator);
     }
 }

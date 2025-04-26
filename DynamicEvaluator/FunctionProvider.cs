@@ -81,6 +81,7 @@ internal sealed class FunctionProvider
         //Special functions
         return function switch
         {
+            "abs" => new AbsExpression(parameters[0]),
             "cos" => new CosExpression(parameters[0]),
             "sin" => new SinExpression(parameters[0]),
             "tan" => new TanExpression(parameters[0]),

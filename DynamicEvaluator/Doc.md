@@ -1,3 +1,15 @@
+# Abs
+
+Returns the absolute value of a given number.
+
+`Abs(value)`
+
+## Parameters
+
+* value
+
+     A number, whose absolute value will be returned.
+
 # Ceiling
 
 Returns the smallest integral value that is greater than or equal to the specified double-precision floating-point number. Note that this method returns a double instead of an integral type.
