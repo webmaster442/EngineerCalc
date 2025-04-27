@@ -1,4 +1,4 @@
-﻿namespace DynamicEvaluator.Expressions.Specific;
+﻿namespace DynamicEvaluator.Expressions.Specific.SpecialFunctions;
 
 internal sealed class LnExpression : UnaryExpression
 {

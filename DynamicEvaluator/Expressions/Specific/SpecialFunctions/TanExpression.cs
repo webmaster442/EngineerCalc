@@ -1,14 +1,14 @@
-﻿namespace DynamicEvaluator.Expressions.Specific;
+﻿namespace DynamicEvaluator.Expressions.Specific.SpecialFunctions;
 
-internal sealed class CtgExpression : UnaryExpression
+internal sealed class TanExpression : UnaryExpression
 {
-    public CtgExpression(IExpression child) : base(child)
+    public TanExpression(IExpression child) : base(child)
     {
     }
 
     public override IExpression Differentiate(string byVariable)
     {
-        return new NegateExpression(new MultiplyExpression(new ExponentExpression(new SinExpression(Child), new ConstantExpression(-2)), Child.Differentiate(byVariable)));
+        return new MultiplyExpression(new ExponentExpression(new CosExpression(Child), new ConstantExpression(-2)), Child.Differentiate(byVariable));
     }
 
     public override IExpression Simplify()
@@ -21,18 +21,18 @@ internal sealed class CtgExpression : UnaryExpression
         }
         if (newChild.IsIntegerMultupleOfPi())
         {
-            return new ConstantExpression(double.PositiveInfinity);
+            return new ConstantExpression(0);
         }
-        return new CtgExpression(newChild);
+        return new TanExpression(newChild);
     }
 
     protected override dynamic Evaluate(dynamic value)
-        => Functions.Ctg(value);
+        => Functions.Tan(value);
 
     protected override string Render(bool emitLatex)
     {
         return emitLatex
-            ? $"{{ ctg({Child}) }}"
-            : $"ctg({Child})";
+            ? $"{{ tan({Child}) }}"
+            : $"tan({Child})";
     }
 }

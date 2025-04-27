@@ -1,16 +1,16 @@
-﻿
+﻿using System.Net.Http.Headers;
 
-namespace DynamicEvaluator.Expressions.Specific;
+namespace DynamicEvaluator.Expressions.Specific.SpecialFunctions;
 
-internal sealed class SinExpression : UnaryExpression
+internal sealed class CosExpression : UnaryExpression
 {
-    public SinExpression(IExpression child) : base(child)
+    public CosExpression(IExpression child) : base(child)
     {
     }
 
     public override IExpression Differentiate(string byVariable)
     {
-        return new MultiplyExpression(new CosExpression(Child), Child.Differentiate(byVariable));
+        return new MultiplyExpression(new NegateExpression(new SinExpression(Child)), Child.Differentiate(byVariable));
     }
 
     public override IExpression Simplify()
@@ -23,20 +23,18 @@ internal sealed class SinExpression : UnaryExpression
         }
         if (newChild.IsIntegerMultupleOfPi())
         {
-            return new ConstantExpression(0L);
+            return new ConstantExpression(-1L);
         }
-        return new SinExpression(newChild);
+        return new CosExpression(newChild);
     }
 
-
-
     protected override dynamic Evaluate(dynamic value)
-        => Functions.Sin(value);
+        => Functions.Cos(value);
 
     protected override string Render(bool emitLatex)
     {
         return emitLatex
-            ? $"{{ sin({Child}) }}"
-            : $"sin({Child})";
+            ? $"{{ cos({Child}) }}"
+            : $"cos({Child})";
     }
 }

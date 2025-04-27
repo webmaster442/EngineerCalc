@@ -34,6 +34,11 @@ public class ExpressionTests
     [TestCase("cos(x)", "(-sin(x))")]
     [TestCase("tan(x)", "(cos(x) ^ -2)")]
     [TestCase("ctg(x)", "(-(sin(x) ^ -2))")]
+    [TestCase("arcsin(x)", "(1 / ((1 - (x ^ 2)) ^ (1 / 2)))")]
+    [TestCase("arccos(x)", "(-1 / ((1 - (x ^ 2)) ^ (1 / 2)))")]
+    [TestCase("arctan(x)", "(1 / ((x ^ 2) + 1))")]
+    [TestCase("arcctg(x)", "(-1 / ((x ^ 2) + 1))")]
+    [TestCase("arcsin(1-x)", "(1 / ((1 - ((1 - x) ^ 2)) ^ (1 / 2)))")]
     //Root
     [TestCase("root(x,2)", "(1 / 2 * (x ^ -1 / 2))")]
     //Logarithms
@@ -43,7 +48,7 @@ public class ExpressionTests
     public void EnsureThat_Differentiate_Works(string expression, string expected)
     {
         IExpression derived = _expressionFactory.Create(expression).Differentiate("x").Simplify();
-        Assert.That(derived.ToString(), Is.EquivalentTo(expected));
+        Assert.That(derived.ToString(), Is.EqualTo(expected));
     }
 
     //add

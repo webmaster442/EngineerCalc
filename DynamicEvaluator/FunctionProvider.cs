@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Reflection;
-using System.Runtime.Serialization.Json;
+﻿using System.Reflection;
 
 using DynamicEvaluator.Expressions.Specific;
+using DynamicEvaluator.Expressions.Specific.SpecialFunctions;
 
 namespace DynamicEvaluator;
 
@@ -82,10 +81,14 @@ internal sealed class FunctionProvider
         return function switch
         {
             "abs" => new AbsExpression(parameters[0]),
-            "cos" => new CosExpression(parameters[0]),
             "sin" => new SinExpression(parameters[0]),
+            "arcsin" => new ArcSinExpression(parameters[0]),
+            "cos" => new CosExpression(parameters[0]),
+            "arccos" => new ArcCosExpression(parameters[0]),
             "tan" => new TanExpression(parameters[0]),
+            "arctan" => new ArcTanExpression(parameters[0]),
             "ctg" => new CtgExpression(parameters[0]),
+            "arcctg" => new ArcCtgExpression(parameters[0]),
             "ln" => new LnExpression(parameters[0]),
             "log" => new LogExpression(parameters[0], parameters[1]),
             "root" => new RootExpression(parameters[0], parameters[1]),
@@ -103,13 +106,13 @@ internal sealed class FunctionProvider
             throw new InvalidOperationException($"No overload of {function} found that takes {passedParameterCount} parameters");
     }
 
-    private LambdaExpression CreateLambda(string function, IReadOnlyList<IExpression> parameters)
+    private GenericFunctionExpression CreateLambda(string function, IReadOnlyList<IExpression> parameters)
     {
         var entry = _functions[function]
             .Where(x => x.Parameters == parameters.Count)
             .First();
 
-        return new LambdaExpression(entry.Method, parameters);
+        return new GenericFunctionExpression(entry.Method, parameters);
     }
 
 }

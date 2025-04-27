@@ -2,13 +2,13 @@
 
 namespace DynamicEvaluator.Expressions.Specific;
 
-internal sealed class LambdaExpression : IExpression
+internal sealed class GenericFunctionExpression : IExpression
 {
     private readonly MethodInfo _method;
     private readonly IReadOnlyList<IExpression> _parameters;
     private readonly int _parameterCount;
 
-    public LambdaExpression(MethodInfo method, IReadOnlyList<IExpression> parameters)
+    public GenericFunctionExpression(MethodInfo method, IReadOnlyList<IExpression> parameters)
     {
         _method = method;
         _parameters = parameters;
@@ -29,7 +29,7 @@ internal sealed class LambdaExpression : IExpression
     }
 
     public IExpression Simplify()
-        => new LambdaExpression(_method, _parameters);
+        => new GenericFunctionExpression(_method, _parameters);
 
     public string ToLatex()
     {

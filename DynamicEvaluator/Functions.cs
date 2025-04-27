@@ -43,6 +43,17 @@ public static class Functions
         throw new InvalidOperationException($"Can't perform Sin function on type {value.GetType()}");
     }
 
+    public static dynamic ArcSin(dynamic value)
+    {
+        if (value is Complex c)
+            return Complex.Asin(c);
+
+        if (TypeFactory.DynamicConvert<double>(value, out double d))
+            return Math.Asin(d);
+
+        throw new InvalidOperationException($"Can't perform ArcSin function on type {value.GetType()}");
+    }
+
     public static dynamic Cos(dynamic value)
     {
         if (value is Complex c)
@@ -52,6 +63,17 @@ public static class Functions
             return Math.Cos(d);
 
         throw new InvalidOperationException($"Can't perform Cos function on type {value.GetType()}");
+    }
+
+    public static dynamic ArcCos(dynamic value)
+    {
+        if (value is Complex c)
+            return Complex.Acos(c);
+
+        if (TypeFactory.DynamicConvert<double>(value, out double d))
+            return Math.Acos(d);
+
+        throw new InvalidOperationException($"Can't perform ArcCos function on type {value.GetType()}");
     }
 
     public static dynamic Tan(dynamic value)
@@ -65,6 +87,17 @@ public static class Functions
         throw new InvalidOperationException($"Can't perform Tan function on type {value.GetType()}");
     }
 
+    public static dynamic ArcTan(dynamic value)
+    {
+        if (value is Complex c)
+            return Complex.Atan(c);
+
+        if (TypeFactory.DynamicConvert<double>(value, out double d))
+            return Math.Atan(d);
+
+        throw new InvalidOperationException($"Can't perform ArcTan function on type {value.GetType()}");
+    }
+
     public static dynamic Ctg(dynamic value)
     {
         if (value is Complex c)
@@ -74,6 +107,17 @@ public static class Functions
             return 1.0 / Math.Tan(d);
 
         throw new InvalidOperationException($"Can't perform Ctg function on type {value.GetType()}");
+    }
+
+    public static dynamic ArcCtg(dynamic value)
+    {
+        if (value is Complex c)
+            return Complex.Atan(1 / c);
+
+        if (TypeFactory.DynamicConvert<double>(value, out double d))
+            return Math.Atan(1 / d);
+
+        throw new InvalidOperationException($"Can't perform ArcCtg function on type {value.GetType()}");
     }
 
     public static dynamic Log(dynamic number, dynamic @base)

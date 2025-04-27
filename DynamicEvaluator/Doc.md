@@ -1,4 +1,4 @@
-# Abs
+﻿# Abs
 
 Returns the absolute value of a given number.
 
@@ -9,6 +9,54 @@ Returns the absolute value of a given number.
 * value
 
      A number, whose absolute value will be returned.
+
+# ArcCos
+
+Returns the angle whose cosine is the specified number.
+
+`ArcCos(value)`
+
+## Parameters
+
+* value
+
+     A number representing a cosine, where value must be greater than or equal to -1, but less than or equal to 1.
+
+# ArcCtg
+
+Returns the angle whose cotangent is the specified number.
+
+`ArcCtg(value)`
+
+## Parameters
+
+* value
+
+     An angle, θ, measured in radians, such that -π/2 ≤ θ ≤ π/2.
+
+# ArcSin
+
+Returns the angle whose sine is the specified number.
+
+`ArcSin(value)`
+
+## Parameters
+
+* value
+
+     A number representing a sine, where value must be greater than or equal to -1, but less than or equal to 1.
+
+# ArcTan
+
+Returns the angle whose tangent is the specified number.
+
+`ArcTan(value)`
+
+## Parameters
+
+* value
+
+     An angle, θ, measured in radians, such that -π/2 ≤ θ ≤ π/2.
 
 # Ceiling
 
