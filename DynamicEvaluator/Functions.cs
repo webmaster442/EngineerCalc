@@ -183,4 +183,10 @@ public static class Functions
 
     public static double Round(double x, int digits)
         => Math.Round(x, digits);
+
+    public static dynamic Min(params dynamic[] numbers)
+        => numbers.Min() ?? throw new InvalidOperationException("Invalid types for function Min()");
+
+    public static dynamic Max(params dynamic[] numbers)
+        => numbers.Max() ?? throw new InvalidOperationException("Invalid types for function Max()");
 }

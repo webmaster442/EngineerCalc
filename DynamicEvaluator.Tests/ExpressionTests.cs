@@ -232,6 +232,12 @@ public class ExpressionTests
     [TestCase("fromhex('ff')", 255)]
     [TestCase("1_000+100", "1100")]
     [TestCase("3%2", 1)]
+    [TestCase("min(1, 2, 3, 4, 5)", 1)]
+    [TestCase("min(1, 2, 3, 4)", 1)]
+    [TestCase("min(1, 2, 3)", 1)]
+    [TestCase("max(1, 2, 3, 4, 5)", 5)]
+    [TestCase("max(1, 2, 3, 4)", 4)]
+    [TestCase("max(1, 2, 3)", 3)]
     public void EnsureThat_Evaluate_Works_Integers(string expression, long expected)
     {
         IExpression parsed = _expressionFactory.Create(expression);

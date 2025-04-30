@@ -188,6 +188,26 @@ Computes the logarithm of a number (number) with a specified base (@base). Suppo
 
     The base of the logarithm. Must be convertible to a double.
 
+# Min
+
+Returns the minimum value from the given parameters.
+
+`min(parameters)`
+
+## Parameters
+
+   This function accepts variable ammount of parameters, but at least one must be provided.
+
+# Max
+
+Returns the maximum value from the given parameters. 
+
+`max(parameters)`
+
+## Parameters
+
+   This function accepts variable ammount of parameters, but at least one must be provided.
+
 # Random
 
 Generates a non negative random number. If called without parameters, the value will be between 0 and (2^63) - 1. If called with parameters, then the value that is generated will be in the specified interval by the parameters. If called with parameters and the specified min value is greater than the specified max value an exception will be thrown.

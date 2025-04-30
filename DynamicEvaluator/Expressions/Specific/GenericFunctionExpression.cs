@@ -1,18 +1,21 @@
-﻿using System.Reflection;
+﻿using System.ComponentModel;
+using System.Reflection;
+
+using DynamicEvaluator.Types;
 
 namespace DynamicEvaluator.Expressions.Specific;
 
 internal sealed class GenericFunctionExpression : IExpression
 {
     private readonly MethodInfo _method;
+    private readonly bool _isParams;
     private readonly IReadOnlyList<IExpression> _parameters;
-    private readonly int _parameterCount;
 
-    public GenericFunctionExpression(MethodInfo method, IReadOnlyList<IExpression> parameters)
+    public GenericFunctionExpression(MethodInfo method, bool isParams, IReadOnlyList<IExpression> parameters)
     {
+        _isParams = isParams;
         _method = method;
         _parameters = parameters;
-        _parameterCount = _method.GetParameters().Length;
     }
 
     public IExpression Differentiate(string byVariable)
@@ -20,16 +23,23 @@ internal sealed class GenericFunctionExpression : IExpression
 
     public dynamic Evaluate(VariablesAndConstantsCollection variables)
     {
-        dynamic[] args = new dynamic[_parameterCount];
-        for (int i = 0; i < args.Length; i++)
+        dynamic[] args = new dynamic[_parameters.Count];
+        for (int i=0; i<args.Length; i++)
         {
             args[i] = _parameters[i].Evaluate(variables);
         }
+
+        if (_isParams)
+        {
+           args = new dynamic[] { args };
+        }
+
         return _method.Invoke(null, args) ?? throw new InvalidOperationException($"Method invoke failed: {_method.Name}");
     }
 
+
     public IExpression Simplify()
-        => new GenericFunctionExpression(_method, _parameters);
+        => new GenericFunctionExpression(_method, _isParams, _parameters);
 
     public string ToLatex()
     {

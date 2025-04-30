@@ -251,9 +251,8 @@ public sealed class ExpressionFactory
     {
         var opType = tokens.CurrentToken.Type;
         var function = tokens.CurrentToken.Value.ToLower();
-        IEnumerable<int> overloads = _functionTable.GetParameterCounts(function);
 
-        if (!overloads.Any())
+        if (!_functionTable.IsFunction(function))
             throw new InvalidOperationException($"Unknown function: {function}");
 
         tokens.Eat(opType);

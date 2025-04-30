@@ -7,7 +7,12 @@ namespace DynamicEvaluator;
 
 internal sealed class FunctionProvider
 {
-    private sealed record class FunctionEntry(MethodInfo Method, int Parameters);
+    private sealed record class FunctionEntry
+    {
+        public required MethodInfo Method { get; init; }
+        public required int ParameterCount { get; init; }
+        public required bool IsParamsMethod { get; init; }
+    }
 
     private readonly Dictionary<string, List<FunctionEntry>> _functions;
     private readonly List<string> _documentations;
@@ -31,10 +36,24 @@ internal sealed class FunctionProvider
                 _functions.Add(method.Name, value);
             }
 
-            value.Add(new FunctionEntry(Method: method, Parameters: method.GetParameters().Length));
+            (int count, bool isParams) = GetParameterCount(method.GetParameters());
+
+            value.Add(new FunctionEntry
+            {
+                Method = method,
+                ParameterCount = count,
+                IsParamsMethod = isParams,
+            });
         }
 
         _documentations.AddRange(docs);
+    }
+
+    private static (int count, bool isParams) GetParameterCount(ParameterInfo[] parameterInfos)
+    {
+        int count = parameterInfos.Length;
+        bool isParams = parameterInfos.Any(pi => pi.GetCustomAttribute<ParamArrayAttribute>() != null);
+        return (count, isParams);
     }
 
     public IEnumerable<string> GetFunctionNames()
@@ -61,21 +80,13 @@ internal sealed class FunctionProvider
         return string.Empty;
     }
 
-    public IEnumerable<int> GetParameterCounts(string name)
-    {
-        if (!_functions.ContainsKey(name))
-            return Enumerable.Empty<int>();
-
-        return _functions[name].Select(x => x.Parameters);
-    }
-
     public IExpression Create(string function, IReadOnlyList<IExpression> parameters)
     {
-        IEnumerable<int> parameterCounts = GetParameterCounts(function);
-        if (!parameterCounts.Any())
+        if (!_functions.TryGetValue(function, out var overloads))
             throw new InvalidOperationException($"Unknown function: {function}");
 
-        ValidateParameterCount(function, parameters.Count, parameterCounts);
+        if (!ValidateParameterCount(overloads, parameters.Count))
+            throw new InvalidOperationException($"No overload of {function} found that takes {parameters.Count} parameters");
 
         //Special functions
         return function switch
@@ -96,23 +107,30 @@ internal sealed class FunctionProvider
         };
     }
 
-    private void ValidateParameterCount(string function, int passedParameterCount, IEnumerable<int> overloadParameterCounts)
+    private static bool ValidateParameterCount(List<FunctionEntry> overloads, int count)
     {
-        bool check = overloadParameterCounts
-            .Where(x => x == passedParameterCount)
-        .Any();
-
-        if (!check)
-            throw new InvalidOperationException($"No overload of {function} found that takes {passedParameterCount} parameters");
+        if (overloads.Any(func => func.IsParamsMethod))
+        {
+            return true;
+        }
+        bool check = overloads.Any(func => func.ParameterCount == count);
+        return check;
     }
 
     private GenericFunctionExpression CreateLambda(string function, IReadOnlyList<IExpression> parameters)
     {
-        var entry = _functions[function]
-            .Where(x => x.Parameters == parameters.Count)
-            .First();
+        FunctionEntry? byCount = _functions[function].FirstOrDefault(overload => overload.ParameterCount == parameters.Count);
+        if (byCount != null)
+        {
+            return new GenericFunctionExpression(byCount.Method, byCount.IsParamsMethod, parameters);
+        }
 
-        return new GenericFunctionExpression(entry.Method, parameters);
+        var byIsParams = _functions[function].FirstOrDefault(overload => overload.IsParamsMethod);
+        if (byIsParams == null)
+            throw new InvalidOperationException($"No overload of {function} is found that takes {parameters.Count} parameters");
+
+        return new GenericFunctionExpression(byIsParams.Method, byIsParams.IsParamsMethod, parameters);
+        
     }
 
 }
