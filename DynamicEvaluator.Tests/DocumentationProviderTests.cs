@@ -14,7 +14,7 @@ public class DocumentationProviderTests
         _documentationProvider = new DocumentationProvider();
         _skip =
         [
-            "pow"
+            "Pow"
         ];
     }
 
@@ -22,9 +22,9 @@ public class DocumentationProviderTests
     {
         get
         {
-            return typeof(Functions)
-                .GetMethods(BindingFlags.Public | BindingFlags.Static)
-                .Select(x => x.Name.ToLower());
+            var provider = new FunctionProvider();
+            provider.FillFrom(typeof(Functions));
+            return provider.GetFunctionNames();
         }
     }
 

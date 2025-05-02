@@ -7,9 +7,9 @@
     <VersionPrefix>1.0</VersionPrefix>
     <VersionSuffix>build$(Date:yyyyMMdd)</VersionSuffix>
   </PropertyGroup>
-
+ 
   <ItemGroup>
-    <None Remove="Doc.md" />
+    <InternalsVisibleTo Include="DynamicEvaluator.Tests"/>
   </ItemGroup>
 
   <ItemGroup>

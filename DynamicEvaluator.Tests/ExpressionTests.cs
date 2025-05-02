@@ -33,12 +33,13 @@ public class ExpressionTests
     [TestCase("sin(x)", "cos(x)")]
     [TestCase("cos(x)", "(-sin(x))")]
     [TestCase("tan(x)", "(cos(x) ^ -2)")]
-    [TestCase("ctg(x)", "(-(sin(x) ^ -2))")]
+    [TestCase("ctg(x)", "((-(cos(x) ^ -2)) / (tan(x) ^ 2))")]
     [TestCase("arcsin(x)", "(1 / ((1 - (x ^ 2)) ^ (1 / 2)))")]
-    [TestCase("arccos(x)", "(-1 / ((1 - (x ^ 2)) ^ (1 / 2)))")]
+    [TestCase("arccos(x)", "(-(1 / ((1 - (x ^ 2)) ^ (1 / 2))))")]
     [TestCase("arctan(x)", "(1 / ((x ^ 2) + 1))")]
-    [TestCase("arcctg(x)", "(-1 / ((x ^ 2) + 1))")]
-    [TestCase("arcsin(1-x)", "(1 / ((1 - ((1 - x) ^ 2)) ^ (1 / 2)))")]
+    [TestCase("arcctg(x)", "((-1 / (x ^ 2)) / (((1 / x) ^ 2) + 1))")]
+    [TestCase("arcsin(1-x)", "(-1 / ((1 - ((1 - x) ^ 2)) ^ (1 / 2)))")]
+    [TestCase("arcsin(2x)", "(2 / ((1 - ((2 * x) ^ 2)) ^ (1 / 2)))")]
     //Root
     [TestCase("root(x,2)", "(1 / 2 * (x ^ -1 / 2))")]
     //Logarithms
@@ -164,11 +165,7 @@ public class ExpressionTests
     [TestCase("tan(0)", "0")]
     [TestCase("tan(x)", "tan(x)")]
     //ctg
-    [TestCase("ctg(pi)", "Infinity")]
-    [TestCase("ctg(2*pi)", "Infinity")]
-    [TestCase("ctg(8*pi)", "Infinity")]
-    [TestCase("ctg(0)", "Infinity")]
-    [TestCase("ctg(x)", "ctg(x)")]
+    [TestCase("ctg(x)", "(1 / tan(x))")]
     public void EnsureThat_Simplify_Works(string expression, string expected)
     {
         IExpression simplified = _expressionFactory.Create(expression).Simplify();

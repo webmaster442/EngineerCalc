@@ -8,7 +8,7 @@ internal sealed class ArcSinExpression : UnaryExpression
 
     public override IExpression Differentiate(string byVariable)
     {
-        return new DivideExpression(new ConstantExpression(1L),
+        return new DivideExpression(Child.Differentiate(byVariable),
             new RootExpression(
                 new SubtractExpression(new ConstantExpression(1L), new ExponentExpression(Child, new ConstantExpression(2L))),
                 new ConstantExpression(2L)));
@@ -31,7 +31,7 @@ internal sealed class ArcSinExpression : UnaryExpression
     protected override string Render(bool emitLatex)
     {
         return emitLatex
-            ? $"{{ arcsin({Child}) }}"
+            ? $"{{ sin^{{-1}}(x) }}"
             : $"arcsin({Child})";
     }
 }

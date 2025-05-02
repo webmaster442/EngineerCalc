@@ -8,7 +8,7 @@ internal sealed class ArcTanExpression : UnaryExpression
 
     public override IExpression Differentiate(string byVariable)
     {
-        return new DivideExpression(new ConstantExpression(1L), 
+        return new DivideExpression(Child.Differentiate(byVariable),
                new AddExpression(new ExponentExpression(Child, new ConstantExpression(2L)), new ConstantExpression(1L)));
     }
 
@@ -29,7 +29,7 @@ internal sealed class ArcTanExpression : UnaryExpression
     protected override string Render(bool emitLatex)
     {
         return emitLatex
-            ? $"{{ arctan({Child}) }}"
+            ? $"{{ tan^{{-1}}(x) }}"
             : $"arctan({Child})";
     }
 }

@@ -35,10 +35,10 @@ internal sealed class DivideExpression : BinaryExpression
             }
             return new ConstantExpression(Evaluate(leftConst.Value, rightConst.Value));
         }
-        if (leftConst?.Value == 0)
+        if (leftConst != null && leftConst.Value == 0L)
         {
             // 0 / y
-            if (rightConst?.Value == 0)
+            if (rightConst?.Value == 0L)
             {
                 throw new DivideByZeroException();
             }

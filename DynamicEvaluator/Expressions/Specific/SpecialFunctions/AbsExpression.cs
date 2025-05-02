@@ -28,7 +28,7 @@ internal class AbsExpression : UnaryExpression
     protected override string Render(bool emitLatex)
     {
         return emitLatex
-            ? $"{{ abs({Child}) }}"
+            ? $"{{ \\mid {Child} \\mid }}"
             : $"abs({Child})";
     }
 }

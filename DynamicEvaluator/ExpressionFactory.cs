@@ -30,9 +30,6 @@ public sealed class ExpressionFactory
     public IEnumerable<string> KnownFunctions
         => _functionTable.GetFunctionNames();
 
-    public string GetFuncionDocumentation(string function)
-        => _functionTable.GetDocumentation(function);
-
     public IExpression Create(string input)
     {
         TokenCollection tokens = Tokenizer.Tokenize(input, _functionTable.IsFunction);

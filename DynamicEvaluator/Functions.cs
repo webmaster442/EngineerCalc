@@ -98,28 +98,6 @@ public static class Functions
         throw new InvalidOperationException($"Can't perform ArcTan function on type {value.GetType()}");
     }
 
-    public static dynamic Ctg(dynamic value)
-    {
-        if (value is Complex c)
-            return 1.0 / Complex.Tan(c);
-
-        if (TypeFactory.DynamicConvert<double>(value, out double d))
-            return 1.0 / Math.Tan(d);
-
-        throw new InvalidOperationException($"Can't perform Ctg function on type {value.GetType()}");
-    }
-
-    public static dynamic ArcCtg(dynamic value)
-    {
-        if (value is Complex c)
-            return Complex.Atan(1 / c);
-
-        if (TypeFactory.DynamicConvert<double>(value, out double d))
-            return Math.Atan(1 / d);
-
-        throw new InvalidOperationException($"Can't perform ArcCtg function on type {value.GetType()}");
-    }
-
     public static dynamic Log(dynamic number, dynamic @base)
     {
         if (TypeFactory.DynamicConvert<double>(number, out double d1)

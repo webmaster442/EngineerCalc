@@ -110,6 +110,18 @@ Computes the cotangent (1 / tangent) of the given input. Supports both double an
 
     The input value for which to calculate the tangent. Can be a double, a Complex number, or any type that can be converted to double.
 
+# Deg
+
+Converts an angle given in radians to degrees.
+
+`deg(radians)`
+
+## Parameters
+
+* radians
+
+    An angle expressed in radians
+
 # Floor
 
 Returns the largest integral value less than or equal to the specified double-precision floating-point number. Note that this method returns a double instead of an integral type.
@@ -143,6 +155,18 @@ Parses a hexadecimal string and converts it into a long integer. Supports both u
 * string
 
     The hexadecimal string to convert. Should not include prefixes like 0x.
+
+# Grad
+
+Converts an angle given in radians to gradians.
+
+`grad(radians)`
+
+## Parameters
+
+* radians
+
+    An angle expressed in radians
 
 # Lcm
 

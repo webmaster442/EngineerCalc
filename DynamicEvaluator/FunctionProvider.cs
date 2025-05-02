@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 
 using DynamicEvaluator.Expressions.Specific;
+using DynamicEvaluator.Expressions.Specific.Rewritables;
 using DynamicEvaluator.Expressions.Specific.SpecialFunctions;
 
 namespace DynamicEvaluator;
@@ -16,11 +17,13 @@ internal sealed class FunctionProvider
 
     private readonly Dictionary<string, List<FunctionEntry>> _functions;
     private readonly List<string> _documentations;
+    private readonly string[] _rewriteFunctions;
 
     public FunctionProvider()
     {
         _functions = new Dictionary<string, List<FunctionEntry>>(StringComparer.OrdinalIgnoreCase);
         _documentations = new List<string>();
+        _rewriteFunctions = ["ctg", "arcctg", "deg", "grad"];
     }
 
     public void FillFrom(Type type)
@@ -57,36 +60,21 @@ internal sealed class FunctionProvider
     }
 
     public IEnumerable<string> GetFunctionNames()
-        => _functions.Keys;
+        => _functions.Keys.Concat(_rewriteFunctions);
 
     public bool IsFunction(string name)
-        => _functions.ContainsKey(name);
-
-    public string GetDocumentation(string function)
-    {
-        var selector = $".{function}.md";
-        var fullName = _documentations.Where(x => x.EndsWith(function, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
-
-        if (string.IsNullOrEmpty(fullName))
-            return string.Empty;
-
-        using var manifestStream = typeof(Functions).Assembly.GetManifestResourceStream(fullName);
-        if (manifestStream != null)
-        {
-            using var reader = new StreamReader(manifestStream);
-            return reader.ReadToEnd();
-        }
-
-        return string.Empty;
-    }
+        => _functions.ContainsKey(name) || _rewriteFunctions.Contains(name, StringComparer.OrdinalIgnoreCase);
 
     public IExpression Create(string function, IReadOnlyList<IExpression> parameters)
     {
-        if (!_functions.TryGetValue(function, out var overloads))
-            throw new InvalidOperationException($"Unknown function: {function}");
+        if (!_rewriteFunctions.Contains(function))
+        {
+            if (!_functions.TryGetValue(function, out var overloads))
+                throw new InvalidOperationException($"Unknown function: {function}");
 
-        if (!ValidateParameterCount(overloads, parameters.Count))
-            throw new InvalidOperationException($"No overload of {function} found that takes {parameters.Count} parameters");
+            if (!ValidateParameterCount(overloads, parameters.Count))
+                throw new InvalidOperationException($"No overload of {function} found that takes {parameters.Count} parameters");
+        }
 
         //Special functions
         return function switch
@@ -103,6 +91,8 @@ internal sealed class FunctionProvider
             "ln" => new LnExpression(parameters[0]),
             "log" => new LogExpression(parameters[0], parameters[1]),
             "root" => new RootExpression(parameters[0], parameters[1]),
+            "deg" => new DegExpression(parameters[0]),
+            "grad" => new GradExpression(parameters[0]),
             _ => CreateLambda(function, parameters),
         };
     }

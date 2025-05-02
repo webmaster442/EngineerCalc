@@ -8,10 +8,10 @@ internal sealed class ArcCosExpression : UnaryExpression
 
     public override IExpression Differentiate(string byVariable)
     {
-        return new DivideExpression(new ConstantExpression(-1L),
+        return new NegateExpression(new DivideExpression(Child.Differentiate(byVariable),
             new RootExpression(
                 new SubtractExpression(new ConstantExpression(1L), new ExponentExpression(Child, new ConstantExpression(2L))),
-                new ConstantExpression(2L)));
+                new ConstantExpression(2L))));
     }
 
     public override IExpression Simplify()
@@ -31,7 +31,7 @@ internal sealed class ArcCosExpression : UnaryExpression
     protected override string Render(bool emitLatex)
     {
         return emitLatex
-            ? $"{{ arccos({Child}) }}"
+            ? $"{{ cos^{{-1}}(x) }}"
             : $"arccos({Child})";
     }
 }

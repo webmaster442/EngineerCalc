@@ -35,7 +35,7 @@ internal sealed class LogExpression : BinaryExpression
     protected override string Render(bool emitLatex)
     {
         return emitLatex
-            ? $"{{ log({Left}, {Right}) }}"
+            ? $"{{ log_{Left} {Right} }}"
             : $"log({Left}, {Right})";
     }
 }
