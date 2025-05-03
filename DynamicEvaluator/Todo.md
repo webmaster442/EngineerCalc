@@ -5,6 +5,7 @@
 - [x] GradToRad(grad) function
 - [x] DegToRad(deg) function
 - [x] Proper LaTex rendering
+- [ ] greek identifiers latex encoding
 
 # Webapp
 
