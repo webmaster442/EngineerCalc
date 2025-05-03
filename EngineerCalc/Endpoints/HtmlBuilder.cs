@@ -45,6 +45,20 @@ internal sealed class HtmlBuilder
         return this;
     }
 
+    public HtmlBuilder AddResults(params string[] results)
+    {
+        _builder.BeginElement("div", CssClassNames.Result);
+        foreach (string result in results)
+        {
+            _builder.Append("<p>")
+                .Append(HttpUtility.HtmlEncode(result))
+                .Append("</p>");
+
+        }
+        _builder.EndElement("div");
+        return this;
+    }
+
     public HtmlBuilder AddHeader(string header, int level = 1)
     {
         ArgumentOutOfRangeException.ThrowIfLessThan(level, 1);
@@ -63,7 +77,7 @@ internal sealed class HtmlBuilder
                 .EndElement("code");
         return this;
     }
-      
+
 
     public HtmlBuilder AddTable(TableData tableData)
     {

@@ -122,6 +122,19 @@ Converts an angle given in radians to degrees.
 
     An angle expressed in radians
 
+# DegToRad
+
+Converts an angle given in degrees to radians.
+
+`degtorad(degrees)`
+
+## Parameters
+
+* degrees
+
+    An angle expressed in degrees
+
+
 # Floor
 
 Returns the largest integral value less than or equal to the specified double-precision floating-point number. Note that this method returns a double instead of an integral type.
@@ -167,6 +180,18 @@ Converts an angle given in radians to gradians.
 * radians
 
     An angle expressed in radians
+
+# GradToRad
+
+Converts an angle given in gradians to radians.
+
+`gradtorad(gradians)`
+
+## Parameters
+
+* gradians
+
+    An angle expressed in gradians
 
 # Lcm
 

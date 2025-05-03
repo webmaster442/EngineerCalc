@@ -23,7 +23,7 @@ internal sealed class FunctionProvider
     {
         _functions = new Dictionary<string, List<FunctionEntry>>(StringComparer.OrdinalIgnoreCase);
         _documentations = new List<string>();
-        _rewriteFunctions = ["ctg", "arcctg", "deg", "grad"];
+        _rewriteFunctions = ["ctg", "arcctg", "deg", "grad", "degtorad", "gradtorad"];
     }
 
     public void FillFrom(Type type)
@@ -93,6 +93,8 @@ internal sealed class FunctionProvider
             "root" => new RootExpression(parameters[0], parameters[1]),
             "deg" => new DegExpression(parameters[0]),
             "grad" => new GradExpression(parameters[0]),
+            "degtorad" => new DegToRadExpression(parameters[0]),
+            "gradtorad" => new GradToRadExpression(parameters[0]),
             _ => CreateLambda(function, parameters),
         };
     }

@@ -297,6 +297,12 @@ public class ExpressionTests
     [TestCase("21*milli", 0.021d)]
     [TestCase("abs(-1)", 1.0d)]
     [TestCase("abs(22)", 22.0d)]
+    [TestCase("deg(0)", 0d)]
+    [TestCase("deg(pi)", 180d)]
+    [TestCase("grad(0)", 0d)]
+    [TestCase("grad(pi)", 200d)]
+    [TestCase("degtorad(180)", Math.PI)]
+    [TestCase("gradtorad(200)", Math.PI)]
     public void EnsureThat_Evaluate_Works_Doubles(string expression, double expected)
     {
         IExpression parsed = _expressionFactory.Create(expression);
