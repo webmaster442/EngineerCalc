@@ -14,3 +14,7 @@
 - [ ] #derive command
 - [ ] #variables command
 - [ ] Create docker file
+- [ ] Self host mathjax
+- [ ] Ubuntu mono as webfont
+- [ ] #help functionname command
+- [ ] Two level dropdown menu
