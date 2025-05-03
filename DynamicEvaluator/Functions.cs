@@ -135,11 +135,17 @@ public static class Functions
     public static dynamic Root(dynamic x, dynamic y)
         => Pow(x, 1 / y);
 
-    public static long FromHex(string str)
+    public static long Hex(string str)
         => long.Parse(str, System.Globalization.NumberStyles.HexNumber);
 
-    public static long FromBin(string str)
+    public static string ToHex(long number)
+        => Convert.ToString(number, 16).ToUpper();
+
+    public static long Bin(string str)
         => long.Parse(str, System.Globalization.NumberStyles.BinaryNumber);
+
+    public static string ToBin(long number)
+        => Convert.ToString(number, 2);
 
     public static long Lcm(long a, long b)
         => Integers.Lcm(a, b);

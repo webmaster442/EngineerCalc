@@ -10,6 +10,18 @@ Returns the absolute value of a given number.
 
      A number, whose absolute value will be returned.
 
+# Bin
+
+Parses a binary (base-2) string and converts it into a long integer. The string must consist only of characters 0 and 1. Throws an exception if the string is not a valid binary representation.
+
+`bin(string)`
+
+## Parameters
+
+* string
+
+    The binary string to convert. Should only contain '0' and '1' characters and no prefix like 0b.
+
 # ArcCos
 
 Returns the angle whose cosine is the specified number.
@@ -147,28 +159,6 @@ Returns the largest integral value less than or equal to the specified double-pr
 
      A number.
 
-# FromBin
-
-Parses a binary (base-2) string and converts it into a long integer. The string must consist only of characters 0 and 1. Throws an exception if the string is not a valid binary representation.
-
-## Parameters
-
-* string
-
-    The binary string to convert. Should only contain '0' and '1' characters and no prefix like 0b.
-
-# FromHex
-
-Parses a hexadecimal string and converts it into a long integer. Supports both uppercase and lowercase hexadecimal digits. Throws an exception if the string is not a valid hexadecimal representation.
-
-`FromHex(string)`
-
-## Parameters
-
-* string
-
-    The hexadecimal string to convert. Should not include prefixes like 0x.
-
 # Grad
 
 Converts an angle given in radians to gradians.
@@ -192,6 +182,18 @@ Converts an angle given in gradians to radians.
 * gradians
 
     An angle expressed in gradians
+
+# Hex
+
+Parses a hexadecimal string and converts it into a long integer. Supports both uppercase and lowercase hexadecimal digits. Throws an exception if the string is not a valid hexadecimal representation.
+
+`Hex(string)`
+
+## Parameters
+
+* string
+
+    The hexadecimal string to convert. Should not include prefixes like 0x.
 
 # Lcm
 
@@ -329,3 +331,27 @@ Computes the tangent of the given input. Supports both double and Complex types.
 * value
 
     The input value for which to calculate the tangent. Can be a double, a Complex number, or any type that can be converted to double.
+
+# ToBin
+
+Converts an integer to its binary representation string.
+
+`tobin(number)`
+
+## Parameters
+
+* number
+
+    An input integer number that will be converted to its binary representation
+
+# ToHex
+
+Converts an integer to its hexadecimal representation string.
+
+`ToHex(number)`
+
+## Parameters
+
+* number
+
+    An input integer number that will be converted to its hexadecimal representation

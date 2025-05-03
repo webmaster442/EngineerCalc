@@ -226,7 +226,8 @@ public class ExpressionTests
     [TestCase("33-22", 11)]
     [TestCase("33+22", 55)]
     [TestCase("x+y", 3)]
-    [TestCase("fromhex('ff')", 255)]
+    [TestCase("hex('ff')", 255)]
+    [TestCase("bin('1010')", 10)]
     [TestCase("1_000+100", "1100")]
     [TestCase("3%2", 1)]
     [TestCase("min(1, 2, 3, 4, 5)", 1)]
@@ -323,6 +324,8 @@ public class ExpressionTests
     [TestCase("'foo'+'foo'", "foofoo")]
     [TestCase("\"foo\"", "foo")]
     [TestCase("\"foo\"+\"foo\"", "foofoo")]
+    [TestCase("tohex(255)", "FF")]
+    [TestCase("tobin(10)", "1010")]
     public void EnsureThat_Evaluate_Works_Strings(string expression, string expected)
     {
         IExpression parsed = _expressionFactory.Create(expression);
