@@ -1,4 +1,5 @@
-﻿using System.Resources;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Resources;
 
 using DynamicEvaluator.Expressions;
 using DynamicEvaluator.Expressions.Specific;
@@ -99,7 +100,7 @@ public static class IExpressionExtensions
         return false;
     }
 
-    public static bool TrySimplfyAsLogicExpression(this IExpression expression, out IExpression? simplified)
+    public static bool TrySimplfyAsLogicExpression(this IExpression expression, [NotNullWhen(true)] out IExpression? simplified)
     {
         if (!IsLogicExpression(expression))
         {
