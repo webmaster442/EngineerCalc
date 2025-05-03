@@ -55,7 +55,7 @@ internal sealed class ModuloExpression : BinaryExpression
     protected override string Render(bool emitLatex)
     {
         return emitLatex
-            ? $"{{ {Left} mod {Right} }}"
+            ? $"{{ {Left.ToLatex()} mod {Right.ToLatex()} }}"
             : $"({Left} % {Right})";
     }
 }

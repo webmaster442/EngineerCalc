@@ -31,7 +31,7 @@ internal sealed class ArcSinExpression : UnaryExpression
     protected override string Render(bool emitLatex)
     {
         return emitLatex
-            ? $"{{ sin^{{-1}}(x) }}"
+            ? $"{{ sin^{{-1}}({Child.ToLatex()}) }}"
             : $"arcsin({Child})";
     }
 }

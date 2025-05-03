@@ -30,7 +30,7 @@ internal sealed class NotEqualExpression : BinaryExpression
     protected override string Render(bool emitLatex)
     {
         return emitLatex
-            ? $"{{ {Left} \\neq {Right} }}"
+            ? $"{{ {Left.ToLatex()} \\neq {Right.ToLatex()} }}"
             : $"({Left} != {Right})";
     }
 }

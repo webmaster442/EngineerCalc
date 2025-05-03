@@ -53,7 +53,7 @@ internal sealed class OrExpression : BinaryExpression
     protected override string Render(bool emitLatex)
     {
         return emitLatex
-            ? $"{{ {Left} \\lor {Right} }}"
+            ? $"{{ {Left.ToLatex()} \\lor {Right.ToLatex()} }}"
             : $"({Left} | {Right})";
     }
 }

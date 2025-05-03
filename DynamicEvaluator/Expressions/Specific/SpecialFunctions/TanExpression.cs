@@ -32,7 +32,7 @@ internal sealed class TanExpression : UnaryExpression
     protected override string Render(bool emitLatex)
     {
         return emitLatex
-            ? $"{{ tan({Child}) }}"
+            ? $"{{ tan({Child.ToLatex()}) }}"
             : $"tan({Child})";
     }
 }

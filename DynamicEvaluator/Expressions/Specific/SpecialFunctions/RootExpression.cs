@@ -63,7 +63,7 @@ internal sealed class RootExpression : BinaryExpression
     protected override string Render(bool emitLatex)
     {
         return emitLatex
-            ? $"{{ \\sqrt[{Right}] {{{Left}}} }}"
+            ? $"{{ \\sqrt[{Right.ToLatex()}] {{{Left.ToLatex()}}} }}"
             : $"root({Left}, {Right})";
     }
 }

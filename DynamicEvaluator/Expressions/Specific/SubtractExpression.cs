@@ -53,7 +53,7 @@ internal sealed class SubtractExpression : BinaryExpression
     protected override string Render(bool emitLatex)
     {
         return emitLatex ?
-            $"{{ {Left} - {Right} }}"
+            $"{{ {Left.ToLatex()} - {Right.ToLatex()} }}"
             : $"({Left} - {Right})";
     }
 }

@@ -33,8 +33,18 @@ internal sealed class VariableExpression : IExpression
     public IExpression Simplify()
         => new VariableExpression(Identifier);
 
+    private static string Encode(string identifier)
+    {
+        return identifier switch
+        {
+            "pi" => "\\pi",
+            _ => identifier,
+        };
+    }
+
+
     public string ToLatex()
-        => $"{{ {Identifier} }}";
+        => $"{{ {Encode(Identifier)} }}";
 
     public override string ToString()
         => Identifier;

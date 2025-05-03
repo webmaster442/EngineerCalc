@@ -29,7 +29,7 @@ internal sealed class ArcTanExpression : UnaryExpression
     protected override string Render(bool emitLatex)
     {
         return emitLatex
-            ? $"{{ tan^{{-1}}(x) }}"
+            ? $"{{ tan^{{-1}}({Child.ToLatex()}) }}"
             : $"arctan({Child})";
     }
 }

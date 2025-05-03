@@ -34,7 +34,7 @@ internal sealed class CosExpression : UnaryExpression
     protected override string Render(bool emitLatex)
     {
         return emitLatex
-            ? $"{{ cos({Child}) }}"
+            ? $"{{ cos({Child.ToLatex()}) }}"
             : $"cos({Child})";
     }
 }

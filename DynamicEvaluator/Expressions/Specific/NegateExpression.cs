@@ -26,7 +26,7 @@ internal sealed class NegateExpression : UnaryExpression
     protected override string Render(bool emitLatex)
     {
         return emitLatex ?
-            $"- {{ {Child} }}"
+            $"- {{ {Child.ToLatex()} }}"
             : $"(-{Child})";
     }
 }

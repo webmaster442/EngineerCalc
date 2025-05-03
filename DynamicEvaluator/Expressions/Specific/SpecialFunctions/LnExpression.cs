@@ -32,7 +32,7 @@ internal sealed class LnExpression : UnaryExpression
     protected override string Render(bool emitLatex)
     {
         return emitLatex
-            ? $"{{ ln({Child}) }}"
+            ? $"{{ ln({Child.ToLatex()}) }}"
             : $"ln({Child})";
     }
 }

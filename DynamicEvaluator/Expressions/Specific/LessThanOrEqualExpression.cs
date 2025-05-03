@@ -30,7 +30,7 @@ internal sealed class LessThanOrEqualExpression : BinaryExpression
     protected override string Render(bool emitLatex)
     {
         return emitLatex
-            ? $"{{ {Left} \\le {Right} }}"
+            ? $"{{ {Left.ToLatex()} \\le {Right.ToLatex()} }}"
             : $"({Left} <= {Right})";
     }
 }

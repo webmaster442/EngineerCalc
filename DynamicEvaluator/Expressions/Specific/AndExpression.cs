@@ -53,7 +53,7 @@ internal sealed class AndExpression : BinaryExpression
     protected override string Render(bool emitLatex)
     {
         return emitLatex
-            ? $"{{ {Left} \\land {Right} }}"
+            ? $"{{ {Left.ToLatex()} \\land {Right.ToLatex()} }}"
             : $"({Left} & {Right})";
     }
 }

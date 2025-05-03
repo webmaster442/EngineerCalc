@@ -88,6 +88,17 @@ public static class IExpressionExtensions
         return expression.Flatten().All(IsLogicExpressionNode);
     }
 
+    public static bool TryGetConstantValue(this IExpression expression, out dynamic value)
+    {
+        if (expression is ConstantExpression constant)
+        {
+            value = constant.Value;
+            return true;
+        }
+        value = 0;
+        return false;
+    }
+
     public static bool TrySimplfyAsLogicExpression(this IExpression expression, out IExpression? simplified)
     {
         if (!IsLogicExpression(expression))

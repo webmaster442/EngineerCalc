@@ -44,7 +44,7 @@ internal sealed class LogicNegateExpression : UnaryExpression
     protected override string Render(bool emitLatex)
     {
         return emitLatex
-             ? $"{{ \\neg {Child} }}"
+             ? $"{{ \\neg {Child.ToLatex()} }}"
              : $"(!{Child})";
     }
 }

@@ -31,7 +31,7 @@ internal sealed class ArcCosExpression : UnaryExpression
     protected override string Render(bool emitLatex)
     {
         return emitLatex
-            ? $"{{ cos^{{-1}}(x) }}"
+            ? $"{{ cos^{{-1}}({Child.ToLatex()}) }}"
             : $"arccos({Child})";
     }
 }

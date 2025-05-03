@@ -34,7 +34,7 @@ internal sealed class SinExpression : UnaryExpression
     protected override string Render(bool emitLatex)
     {
         return emitLatex
-            ? $"{{ sin({Child}) }}"
+            ? $"{{ sin({Child.ToLatex()}) }}"
             : $"sin({Child})";
     }
 }

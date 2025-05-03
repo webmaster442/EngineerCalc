@@ -60,7 +60,7 @@ public static partial class Extensions
         if (fraction.Denominator == 1)
             return fraction.Numerator.ToString(cultureInfo);
 
-        return $"{{ {fraction.Numerator.ToString(cultureInfo)} \\over {fraction.Denominator.ToString(cultureInfo)} }}";
+        return $"{{{{ {fraction.Numerator.ToString(cultureInfo)} \\over {fraction.Denominator.ToString(cultureInfo)} }} \\sim {Stringify((double)fraction, cultureInfo)} }}";
     }
 
     private static string FormatComplex(Complex complex, CultureInfo cultureInfo)

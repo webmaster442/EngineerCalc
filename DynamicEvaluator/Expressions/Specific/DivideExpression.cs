@@ -88,7 +88,7 @@ internal sealed class DivideExpression : BinaryExpression
     protected override string Render(bool emitLatex)
     {
         return emitLatex
-            ? $"{{ {Left} \\over {Right} }}"
+            ? $"{{ {Left.ToLatex()} \\over {Right.ToLatex()} }}"
             : $"({Left} / {Right})";
     }
 }

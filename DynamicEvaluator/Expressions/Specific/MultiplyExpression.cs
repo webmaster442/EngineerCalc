@@ -89,7 +89,7 @@ internal sealed class MultiplyExpression : BinaryExpression
     protected override string Render(bool emitLatex)
     {
         return emitLatex
-            ? $"{{ {Left} \\cdot {Right} }}"
+            ? $"{{ {Left.ToLatex()} \\cdot {Right.ToLatex()} }}"
             : $"({Left} * {Right})";
     }
 }
