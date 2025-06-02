@@ -173,4 +173,40 @@ public static class Functions
 
     public static dynamic Max(params dynamic[] numbers)
         => numbers.Max() ?? throw new InvalidOperationException("Invalid types for function Max()");
+
+    public static dynamic Vector(params dynamic[] values)
+    {
+        float x = 0, y = 0, z = 0, w = 0;
+
+        if (values.Length == 0)
+            throw new ArgumentException("Vector must have at least one element.", nameof(values));
+
+        if (values.Length == 1 && values[0] is Complex complex)
+        {
+        }
+        else if (values.Length == 2
+                && TypeFactory.DynamicConvert<float>(values[0], out x)
+                && TypeFactory.DynamicConvert<float>(values[1], out y))
+        {
+            return new Vector2(x, y);
+        }
+        else if (values.Length == 3
+                && TypeFactory.DynamicConvert<float>(values[0], out x)
+                && TypeFactory.DynamicConvert<float>(values[1], out y)
+                && TypeFactory.DynamicConvert<float>(values[1], out z))
+        {
+            return new Vector3(x, y, z);
+        }
+        else if (values.Length == 4
+                && TypeFactory.DynamicConvert<float>(values[0], out x)
+                && TypeFactory.DynamicConvert<float>(values[1], out y)
+                && TypeFactory.DynamicConvert<float>(values[1], out z)
+                && TypeFactory.DynamicConvert<float>(values[2], out w))
+        {
+            return new Vector4(x, y, z, w);
+        }
+
+        var strValues = string.Join(", ", values);
+        throw new InvalidCastException($"Don't know how to cast {strValues} to vector");
+    }
 }

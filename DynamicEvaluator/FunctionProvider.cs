@@ -122,7 +122,5 @@ internal sealed class FunctionProvider
             throw new InvalidOperationException($"No overload of {function} is found that takes {parameters.Count} parameters");
 
         return new GenericFunctionExpression(byIsParams.Method, byIsParams.IsParamsMethod, parameters);
-        
     }
-
 }

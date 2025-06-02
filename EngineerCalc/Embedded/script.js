@@ -19,7 +19,8 @@ function getTimeStamp() {
 }
 
 function makeInputSafe(input) {
-    return encodeURI(input).replace("%20", " ");
+    const encoded = encodeURI(input);
+    return encoded.replaceAll("%20", " ");
 }
 
 function typeIntoInput(event) {

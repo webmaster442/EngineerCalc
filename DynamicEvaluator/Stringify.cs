@@ -37,6 +37,15 @@ public static partial class Extensions
         if (result is string str)
             return str;
 
+        if (result is Vector2 vector2)
+            return $"X: {FormatFloat(vector2.X, cultureInfo)}, Y: {FormatFloat(vector2.Y, cultureInfo)}";
+        
+        if (result is Vector3 vector3)
+            return $"X: {FormatFloat(vector3.X, cultureInfo)}, Y: {FormatFloat(vector3.Y, cultureInfo)}, Z: {FormatFloat(vector3.Z, cultureInfo)}";
+
+        if (result is Vector4 vector4)
+            return $"X: {FormatFloat(vector4.X, cultureInfo)}, Y: {FormatFloat(vector4.Y, cultureInfo)}, Z: {FormatFloat(vector4.Z, cultureInfo)}, W: {FormatFloat(vector4.W, cultureInfo)}";
+
         if (result is Fraction fraction)
             return FormatFraction(fraction, cultureInfo);
 
