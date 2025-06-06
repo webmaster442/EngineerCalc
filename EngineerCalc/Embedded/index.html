@@ -11,17 +11,19 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
     <link rel="stylesheet" type="text/css" href="style.css" />
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
     <script type="text/javascript">
         window.MathJax = {
             tex: {
                 inlineMath: [['$', '$'], ['\\(', '\\)'], ['{', '}']]
             },
             chtml: {
-                scale: 2.0
+                scale: 1.5,
+                displayIndent: '1em'
             },
             svg: {
-                scale: 2.0
+                scale: 1.5,
+                displayIndent: '1em'
             }
         };
     </script>
@@ -31,20 +33,23 @@
     <section class="layout">
         <div class="header">
             <img class="logo" src="favicon-32x32.png" />
-            <nav role="navigation" class="primary-navigation">
-                <ul>
-                    <li><a href="#">Home</a></li>
+            <nav role="navigation">
+                <ul class="navbar">
                     <li>
-                        <a href="#">Work &dtrif;</a>
-                        <ul class="dropdown">
-                            <li><a href="#">Web Development</a></li>
-                            <li><a href="#">Web Design</a></li>
-                            <li><a href="#">Illustration</a></li>
-                            <li><a href="#">Iconography</a></li>
+                        <a href="#">Application</a>
+                        <ul>
+                            <li><a href="#" onclick="execute('#reload')">Reload</a></li>
+                            <li><a href="#" onclick="execute('#clear')">Clear output</a></li>
+                            <li><a href="#" onclick="execute('#commands')">List commands</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">Help</a>
+                        <ul>
+                            <li><a href="#">Function reference</a></li>
                         </ul>
                     </li>
                     <li><a href="#">About</a></li>
-                    <li><a href="#">Contact</a></li>
                 </ul>
             </nav>
         </div>
