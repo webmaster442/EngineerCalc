@@ -44,7 +44,8 @@ function render(input, result) {
 
     const resultsDiv = document.getElementById('results');
     if (resultsDiv) {
-        const html = `<div class="response"><p class="prompt">${getTimeStamp()}: '${makeInputSafe(input)}' &gt;</p>${result}</div>`;
+        const resultHtml = result.replaceAll("\t\n", "<br>\n");
+        const html = `<div class="response"><p class="prompt">${getTimeStamp()}: '${makeInputSafe(input)}' &gt;</p>${resultHtml}</div>`;
         resultsDiv.insertAdjacentHTML("beforeend", html);
         const newItem = resultsDiv.lastElementChild;
         if (newItem) {
