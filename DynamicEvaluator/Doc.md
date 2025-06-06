@@ -336,7 +336,7 @@ Computes the tangent of the given input. Supports both double and Complex types.
 
 Converts an integer to its binary representation string.
 
-`tobin(number)`
+`ToBin(number)`
 
 ## Parameters
 
@@ -355,3 +355,31 @@ Converts an integer to its hexadecimal representation string.
 * number
 
     An input integer number that will be converted to its hexadecimal representation
+
+# Vect
+
+Create a vector from the given parameters. The parameters can be of any type, but they must be convertible to double.
+Parameter number can be 2, 3, or 4. If more than 4 or less than 1 parameters are provided, an exception will be thrown.
+
+`Vect(x, y)`
+`Vect(x, y, z)`
+`Vect(x, y, z, w)`
+
+## Parameters
+
+* x
+
+    The first component of the vector.
+
+* y
+    
+    The second component of the vector.
+
+* z
+
+    The third component of the vector. Optional, if not provided, the vector will be 2D.
+
+* w
+
+    The fourth component of the vector. Optional, if not provided, the vector will be 2D or 3D depending on the number of parameters provided.
+    

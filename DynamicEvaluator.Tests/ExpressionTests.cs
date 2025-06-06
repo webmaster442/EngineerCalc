@@ -1,4 +1,6 @@
-﻿using DynamicEvaluator.Types;
+﻿using System.Numerics;
+
+using DynamicEvaluator.Types;
 
 namespace DynamicEvaluator.Tests;
 
@@ -250,6 +252,25 @@ public class ExpressionTests
             Assert.That(result, Is.TypeOf<long>());
             Assert.That(result, Is.EqualTo(expected));
         });
+    }
+
+    [TestCase("x/y", typeof(Fraction))]
+    [TestCase("1/2", typeof(Fraction))]
+    [TestCase("Cplx(1, 2)", typeof(Complex))]
+    [TestCase("Cplx(x, y)", typeof(Complex))]
+    [TestCase("Vect(1, 2)", typeof(Vector2))]
+    [TestCase("Vect(1, 2, 3)", typeof(Vector3))]
+    [TestCase("Vect(1, 2, 3, 4)", typeof(Vector4))]
+    public void EnsureThat_Evaluate_Works_TypeCreation_Expressions(string expression, Type expectedType)
+    {
+        IExpression parsed = _expressionFactory.Create(expression);
+        VariablesAndConstantsCollection variables = new()
+        {
+            { "x", 1L },
+            { "y", 2L },
+        };
+        dynamic result = parsed.Evaluate(variables);
+        Assert.That(result.GetType(), Is.EqualTo(expectedType));
     }
 
     [TestCase("x<y", true)]
