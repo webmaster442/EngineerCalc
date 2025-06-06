@@ -1,5 +1,6 @@
 ﻿let commands = [];
-
+let history = [];
+let currentHistoryIndex = -1;
 // ----------------------------------------------------------------------------
 
 function getCommandsHtml() {
@@ -168,11 +169,42 @@ document.addEventListener('DOMContentLoaded', () => {
     inputElement.focus();
     inputElement.addEventListener("keydown", (event) => {
         if (event.key == 'Enter') {
+            history.push(inputElement.value);
+            currentHistoryIndex = -1;
             execute(inputElement.value);
             inputElement.value = '';
             inputElement.focus();
             trySuggest('');
-            return
+            return;
+        }
+        else if (event.key == 'ArrowUp') {
+            if (currentHistoryIndex - 1 < 0) {
+                currentHistoryIndex = history.length - 1;
+            }
+            else {
+                currentHistoryIndex--;
+            }
+            inputElement.value = history[currentHistoryIndex] || '';
+            inputElement.focus();
+            inputElement.selectionStart = inputElement.selectionEnd = inputElement.value.length;
+            return;
+        }
+        else if (event.key == 'ArrowDown') {
+            if (currentHistoryIndex + 1 >= history.length) {
+                currentHistoryIndex = 0;
+            }
+            else {
+                currentHistoryIndex++;
+            }
+            inputElement.focus();
+            inputElement.selectionStart = inputElement.selectionEnd = inputElement.value.length;
+            inputElement.value = history[currentHistoryIndex] || '';
+            return;
+        }
+        else if (event.key == 'Escape') {
+            inputElement.value = '';
+            trySuggest('');
+            return;
         }
         trySuggest(inputElement.value);
     });
