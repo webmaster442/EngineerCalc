@@ -52,5 +52,6 @@ app.MapGet("/intro", async (HttpRequest request) =>
 });
 
 app.MapGet("/commands", () => endpoints.CommandNames.ToArray());
+app.MapGet("/functions", () => endpoints.FunctionNames.ToArray());
 
 app.Run();

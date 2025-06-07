@@ -60,6 +60,15 @@ function render(input, result) {
     }
 }
 
+function renderFunctionsMenu(functions) {
+    const functionsMenu = document.getElementById('functionsMenu');
+    let html = "";
+    functions.forEach(fnc => {
+        html += `<li><a href="#">${fnc}</a></li>`;
+    });
+    functionsMenu.innerHTML = html;
+}
+
 function trySuggest(currentInput) {
     const suggestions = document.getElementById('suggestions');
     if (!suggestions) {
@@ -134,8 +143,8 @@ async function execute(input) {
 }
 
 async function intro() {
+    document.getElementById('loader').style.visibility = 'visible';
     try {
-        document.getElementById('loader').style.visibility = 'visible';
         const introResponse = await fetch("/intro");
         if (!introResponse.ok) {
             throw new Error("Failed to get intro");
@@ -147,6 +156,13 @@ async function intro() {
             throw new Error("Failed to get intro");
         }
         const commandsResult = await commandsResponse.json();
+
+        const functionsResponse = await fetch("/functions");
+        if (!functionsResponse.ok) {
+            throw new Error("Failed to get functions");
+        }
+        const functionsResult = await functionsResponse.json();
+        renderFunctionsMenu(functionsResult);
 
         commands = commandsResult;
         commands.push("#clear", "#reload", "#commands");

@@ -7,11 +7,15 @@ internal sealed class EndpointFunctions
     private readonly ExpressionFactory _expressionFactory;
     private readonly Dictionary<string, ICommand> _commands;
     private readonly Version _version;
+    private readonly DocumentationProvider _documentationProvider;
 
     public IEnumerable<string> CommandNames => _commands.Keys;
 
+    public IEnumerable<string> FunctionNames => _documentationProvider.FunctionNames;
+
     public EndpointFunctions()
     {
+        _documentationProvider = new DocumentationProvider();
         _expressionFactory = new ExpressionFactory();
         _commands = LoadCommands();
         _version = typeof(EndpointFunctions).Assembly.GetName().Version ?? new Version(0, 0);
