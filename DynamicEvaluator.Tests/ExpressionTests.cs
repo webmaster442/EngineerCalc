@@ -168,6 +168,10 @@ public class ExpressionTests
     [TestCase("tan(x)", "tan(x)")]
     //ctg
     [TestCase("ctg(x)", "(1 / tan(x))")]
+    //Member access
+    [TestCase("(1/2).Numerator", "1")]
+    [TestCase("(1/2).Denominator", "2")]
+    [TestCase("(x/y).Numerator", "(x / y).Numerator")]
     public void EnsureThat_Simplify_Works(string expression, string expected)
     {
         IExpression simplified = _expressionFactory.Create(expression).Simplify();
@@ -211,6 +215,8 @@ public class ExpressionTests
     [TestCase("sin(99ö)")]
     [TestCase("root(99,)")]
     [TestCase("root(,99)")]
+    [TestCase("Cplx(1, 2).21")]
+    [TestCase("Cplx(1, 2).(x+21)")]
     public void EnsureThat_InvalidExpression_Throws(string expression)
     {
         Assert.Throws<InvalidOperationException>(() =>
@@ -238,6 +244,10 @@ public class ExpressionTests
     [TestCase("max(1, 2, 3, 4, 5)", 5)]
     [TestCase("max(1, 2, 3, 4)", 4)]
     [TestCase("max(1, 2, 3)", 3)]
+    [TestCase("(1/2).Numerator", 1)]
+    [TestCase("(1/2).Denominator", 2)]
+    [TestCase("(x/y).Numerator", 1)]
+    [TestCase("(x/y).Denominator", 2)]
     public void EnsureThat_Evaluate_Works_Integers(string expression, long expected)
     {
         IExpression parsed = _expressionFactory.Create(expression);
@@ -261,6 +271,11 @@ public class ExpressionTests
     [TestCase("Vect(1, 2)", typeof(Vector2))]
     [TestCase("Vect(1, 2, 3)", typeof(Vector3))]
     [TestCase("Vect(1, 2, 3, 4)", typeof(Vector4))]
+    [TestCase("Cplx(1, 2).Real", typeof(double))]
+    [TestCase("Cplx(1, 2).Imaginary", typeof(double))]
+    [TestCase("Vect(1, 2).X", typeof(float))]
+    [TestCase("Vect(1, 2).Y", typeof(float))]
+    [TestCase("Vect(1, 2, 3).Z", typeof(float))]
     public void EnsureThat_Evaluate_Works_TypeCreation_Expressions(string expression, Type expectedType)
     {
         IExpression parsed = _expressionFactory.Create(expression);
@@ -325,6 +340,8 @@ public class ExpressionTests
     [TestCase("grad(pi)", 200d)]
     [TestCase("degtorad(180)", Math.PI)]
     [TestCase("gradtorad(200)", Math.PI)]
+    [TestCase("Cplx(11, 22).Imaginary", 22d)]
+    [TestCase("Cplx(11, 22).Real * 2", 22d)]
     public void EnsureThat_Evaluate_Works_Doubles(string expression, double expected)
     {
         IExpression parsed = _expressionFactory.Create(expression);

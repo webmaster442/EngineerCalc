@@ -236,6 +236,7 @@ internal static class Tokenizer
             '(' => new Token("(", TokenType.OpenParen),
             ')' => new Token(")", TokenType.CloseParen),
             ',' => new Token(",", TokenType.ArgumentDivider),
+            '.' => new Token(".", TokenType.MemberAccess),
             _ => throw new InvalidOperationException($"Invalid operator `{current}` at position {position}"),
         };
     }

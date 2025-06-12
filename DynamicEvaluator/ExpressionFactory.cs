@@ -124,7 +124,8 @@ public sealed class ExpressionFactory
                                           TokenType.LessThanOrEqual,
                                           TokenType.GreaterThanOrEqual,
                                           TokenType.Equal,
-                                          TokenType.NotEqual)))
+                                          TokenType.NotEqual,
+                                          TokenType.MemberAccess)))
             {
                 var opType = tokens.CurrentToken.Type;
                 tokens.Eat(opType);
@@ -143,7 +144,8 @@ public sealed class ExpressionFactory
                     TokenType.GreaterThanOrEqual => new GreaterThanOrEqualExpression(exp, right),
                     TokenType.Equal => new EqualExpression(exp, right),
                     TokenType.NotEqual => new NotEqualExpression(exp, right),
-                    _ => throw new InvalidOperationException($"Expected ^, <, >, >=, <=, == or != got: {opType}"),
+                    TokenType.MemberAccess => new MemberAccessExpression(exp, right),
+                    _ => throw new InvalidOperationException($"Expected ^, ., <, >, >=, <=, == or != got: {opType}"),
                 };
             }
 

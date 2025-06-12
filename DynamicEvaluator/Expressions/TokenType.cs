@@ -23,6 +23,7 @@ internal enum TokenType : uint
     Exponent                = 65536,
     Function                = 131072,
     ArgumentDivider         = 262144,
+    MemberAccess            = 524288,
 
     OpenParen               = 0x20000000,
     CloseParen              = 0x40000000,
