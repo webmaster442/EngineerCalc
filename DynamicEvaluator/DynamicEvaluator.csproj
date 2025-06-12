@@ -9,11 +9,15 @@
   </PropertyGroup>
  
   <ItemGroup>
-    <InternalsVisibleTo Include="DynamicEvaluator.Tests"/>
+    <InternalsVisibleTo Include="DynamicEvaluator.Tests" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Doc.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="UnitsNet" Version="5.74.0" />
   </ItemGroup>
 
 </Project>
