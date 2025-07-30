@@ -1,6 +1,0 @@
-@EngineerCalc_HostAddress = http://localhost:5161
-
-GET {{EngineerCalc_HostAddress}}/evaluate?e=33-22
-Accept: application/json
-
-###

@@ -174,6 +174,15 @@ public static class Functions
     public static dynamic Max(params dynamic[] numbers)
         => numbers.Max() ?? throw new InvalidOperationException("Invalid types for function Max()");
 
+    public static ValueUnit ValueUnit(dynamic value, string unit)
+    {
+        if (TypeFactory.DynamicConvert<double>(value, out double d))
+        {
+            return new ValueUnit(d, unit);
+        }
+        throw new InvalidOperationException($"Can't create ValueUnit from type {value.GetType()}");
+    }
+
     public static dynamic Vect(params dynamic[] values)
     {
         float x = 0, y = 0, z = 0, w = 0;
