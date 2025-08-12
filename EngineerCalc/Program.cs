@@ -5,16 +5,17 @@ using EngineerCalc.Commands;
 using EngineerCalc.Tui;
 using EngineerCalc.Tui.Readline;
 
-var readline = new LineReader();
 var expressionFactory = new ExpressionFactory();
 var api = new CommandApi(new VariablesAndConstantsCollection(), expressionFactory);
-var statusBar = new Statusbar();
 
 Dictionary<string, ICommand> commands = new(StringComparer.OrdinalIgnoreCase)
 {
     { ".exit", new ExitCommand() },
     { ".clear", new ClearCommand() }
 };
+
+var statusBar = new Statusbar();
+var readline = new LineReader(new LineCompleter(expressionFactory.KnownFunctions, commands.Keys));
 
 while (true)
 {

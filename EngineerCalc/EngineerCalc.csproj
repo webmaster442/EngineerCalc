@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="EngineerCalc.Tests"/>
+  </ItemGroup>
+  
+  <ItemGroup>
     <ProjectReference Include="..\DynamicEvaluator\DynamicEvaluator.csproj" />
   </ItemGroup>
 
