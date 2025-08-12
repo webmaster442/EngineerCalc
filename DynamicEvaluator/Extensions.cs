@@ -29,7 +29,7 @@ public static partial class Extensions
         }
     }
 
-    public static string Stringify(this object result, CultureInfo cultureInfo)
+    public static string FormatToLatex(this object result, CultureInfo cultureInfo)
     {
         ResultBuilder resultBuilder = new(cultureInfo);
 
