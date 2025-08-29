@@ -1,4 +1,6 @@
-﻿namespace EngineerCalc.Tui;
+﻿using Spectre.Console;
+
+namespace EngineerCalc.Tui;
 
 public sealed class SystemConsoleDriver : IConsoleDriver
 {
@@ -12,10 +14,13 @@ public sealed class SystemConsoleDriver : IConsoleDriver
     }
     
     public void Write(string text)
-        => Console.Write(text);
-    
+        => AnsiConsole.Write(text);
+
+    public void Write(char c)
+        => AnsiConsole.Write(c);
+
     public void WriteLine()
-        => Console.WriteLine();
+        => AnsiConsole.WriteLine();
     
     public ConsoleKeyInfo ReadKey(bool intercept)
         => Console.ReadKey(intercept);

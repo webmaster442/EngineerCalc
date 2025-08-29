@@ -140,8 +140,8 @@ internal sealed class LineReader
         }
         else if (_history.CurrentIndex + 1 < _history.Count)
         {
-            ++_history.CurrentIndex;
             RewriteText(_history.Current);
+            ++_history.CurrentIndex;
         }
     }
 
@@ -156,8 +156,8 @@ internal sealed class LineReader
         }
         else if (_history.CurrentIndex - 1 >= 0)
         {
-            --_history.CurrentIndex;
             RewriteText(_history.Current);
+            --_history.CurrentIndex;
         }
         if (_history.CurrentIndex < 0)
         {
@@ -181,6 +181,13 @@ internal sealed class LineReader
 
     private void RewriteText()
     {
+        if (_currentPosition.ScreenPosition - _console.CursorLeft == 1
+            && _currentPosition.StringPosition == _buffer.Length)
+        {
+            _console.Write(_buffer[_buffer.Length - 1]);
+            return;
+        }
+        
         _console.CursorLeft = _startPosition.ScreenPosition;
         _console.Write(_buffer.ToString());
         _console.CursorLeft = _currentPosition.ScreenPosition;

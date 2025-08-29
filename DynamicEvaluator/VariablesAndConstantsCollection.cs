@@ -70,6 +70,18 @@ public sealed class VariablesAndConstantsCollection : IEnumerable<KeyValuePair<s
         set => Add(key, value);
     }
 
+    public IEnumerable<KeyValuePair<string, dynamic>> Variables()
+    {
+        foreach (var item in _variables)
+            yield return item;
+    }
+
+    public IEnumerable<KeyValuePair<string, dynamic>> Constants()
+    {
+        foreach (var item in _constants)
+            yield return item;
+    }
+
     public IEnumerator<KeyValuePair<string, dynamic>> GetEnumerator()
     {
         foreach (var item in _constants)

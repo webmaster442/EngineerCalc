@@ -10,13 +10,10 @@ var expressionFactory = new ExpressionFactory();
 var api = new CommandApi(new VariablesAndConstantsCollection(), expressionFactory);
 
 var runner = new CommandRunner(api);
-var statusBar = new Statusbar();
 var readline = new LineReader(new LineCompleter(expressionFactory.KnownFunctions, runner.KnownCommands));
 
 while (true)
 {
-    statusBar.Render($"Time: {DateTime.Now}");
-
     string line = readline.ReadLine("> ");
     if (string.IsNullOrWhiteSpace(line))
         continue;
@@ -46,7 +43,7 @@ while (true)
     }
     catch (Exception ex)
     {
-        if (ex is InvalidOperationException)
+        if (ex is InvalidOperationException or OverflowException)
         {
             AnsiConsole.MarkupLineInterpolated($"[red]{ex.Message}[/]");
             continue;

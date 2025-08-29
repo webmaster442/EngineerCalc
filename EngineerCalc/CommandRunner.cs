@@ -34,9 +34,12 @@ internal sealed class CommandRunner
             config
                 .AddCommand<Commands.ExitCommand>(".exit")
                 .WithDescription("Exits the application.");
+            config
+                .AddCommand<Commands.VariablesCommand>(".variables")
+                .WithDescription("Lists all defined variables.");
 
         });
-        _knownCommands = [".clear", ".exit"];
+        _knownCommands = [".clear", ".exit", ".variables"];
     }
 
     public IEnumerable<string> KnownCommands => _knownCommands;
