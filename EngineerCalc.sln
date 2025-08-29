@@ -8,10 +8,16 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicEvaluator.Tests", "DynamicEvaluator.Tests\DynamicEvaluator.Tests.csproj", "{9FCFF958-33B4-4BFD-A768-0E30195F3DA2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Others", "Others", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		Readme.md = Readme.md
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EngineerCalc", "EngineerCalc\EngineerCalc.csproj", "{54B5B088-2337-4392-96C9-B0A7BD59469F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EngineerCalc.Tests", "EngineerCalc.Tests\EngineerCalc.Tests.csproj", "{34706B17-BE63-9618-6EC4-0AE84C74DF1C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{0AB3BF05-4346-4AA6-1389-037BE0695223}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -74,6 +80,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9FCFF958-33B4-4BFD-A768-0E30195F3DA2} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+		{34706B17-BE63-9618-6EC4-0AE84C74DF1C} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BA571B91-B67A-46AC-88F9-BAB7C01A235B}

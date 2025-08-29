@@ -1,9 +1,10 @@
-﻿using Spectre.Console;
-using Spectre.Console.Cli;
+﻿using System.Text.RegularExpressions;
+
+using EngineerCalc.Commands.Abstraction;
 
 namespace EngineerCalc.Commands;
 
-internal sealed class VariablesCommand : Command
+internal sealed class VariablesCommand : TableCommand<KeyValuePair<string, object>>
 {
     private readonly ICommandApi _api;
 
@@ -11,19 +12,13 @@ internal sealed class VariablesCommand : Command
     {
         _api = api;
     }
-    public override int Execute(CommandContext context)
-    {
-        var variables =  _api.Evaluator.VariablesAndConstants;
-        var table = new Table();
-        table.AddColumns("Name", "Value");
-        foreach (var (name, value) in variables.Variables())
-        {
-            string valueStr = value.ToString();
-            table.AddRow(name, valueStr);
-        }
 
-        AnsiConsole.Write(table);
+    protected override IEnumerable<KeyValuePair<string, object>> GetDataSet(Regex filter)
+        => _api.Evaluator.VariablesAndConstants.Variables().Where(kv => filter.IsMatch(kv.Key));
 
-        return ExitCodes.Success;
-    }
+    protected override string[] GetTableHeaders()
+        => ["Name", "Value"];
+
+    protected override string[] ToTableRow(KeyValuePair<string, object> data)
+        => [data.Key, data.Value.ToString() ?? string.Empty];
 }
