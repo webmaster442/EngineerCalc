@@ -27,8 +27,12 @@ internal sealed class VariableExpression : IExpression
         return new ConstantExpression(0L);
     }
 
-    public dynamic Evaluate(VariablesAndConstantsCollection variables) 
-        => variables[Identifier];
+    public dynamic Evaluate(VariablesAndConstantsCollection variables)
+    {
+        return variables.IsDefined(Identifier)
+            ? variables[Identifier]
+            : throw new InvalidOperationException($"Variable '{Identifier}' is not defined");
+    }
 
     public IExpression Simplify()
         => new VariableExpression(Identifier);
@@ -63,7 +67,6 @@ internal sealed class VariableExpression : IExpression
             _ => identifier,
         };
     }
-
 
     public string ToLatex()
         => $"{{ {Encode(Identifier)} }}";

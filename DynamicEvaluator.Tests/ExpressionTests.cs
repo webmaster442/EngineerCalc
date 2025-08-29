@@ -440,7 +440,7 @@ public class ExpressionTests
         dynamic result = parsed.Evaluate(variables);
         Assert.Multiple(() =>
         {
-            Assert.That(result, Is.TypeOf<object>());
+            Assert.That(result, Is.TypeOf<NoResult>());
             Assert.That(variables[expectedVariable], Is.EqualTo(valueToAssign));
         });
     }

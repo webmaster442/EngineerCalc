@@ -1,21 +1,17 @@
 ﻿using DynamicEvaluator;
 
 using EngineerCalc;
-using EngineerCalc.Commands;
 using EngineerCalc.Tui;
 using EngineerCalc.Tui.Readline;
+
+using Spectre.Console;
 
 var expressionFactory = new ExpressionFactory();
 var api = new CommandApi(new VariablesAndConstantsCollection(), expressionFactory);
 
-Dictionary<string, ICommand> commands = new(StringComparer.OrdinalIgnoreCase)
-{
-    { ".exit", new ExitCommand() },
-    { ".clear", new ClearCommand() }
-};
-
+var runner = new CommandRunner(api);
 var statusBar = new Statusbar();
-var readline = new LineReader(new LineCompleter(expressionFactory.KnownFunctions, commands.Keys));
+var readline = new LineReader(new LineCompleter(expressionFactory.KnownFunctions, runner.KnownCommands));
 
 while (true)
 {
@@ -25,15 +21,13 @@ while (true)
     if (string.IsNullOrWhiteSpace(line))
         continue;
 
-    IEnumerable<string> tokens = line.SplitBySpaceOrQuotes();
-    string commandName = tokens.FirstOrDefault() ?? string.Empty;
-    string[] arguments = [.. tokens.Skip(1)];
+    List<string> tokens = line.SplitBySpaceOrQuotes().ToList();
 
     try
     {
-        if (commands.TryGetValue(commandName, out ICommand? command))
+        if (runner.CanRun(tokens))
         {
-            await command.Execute(api, arguments);
+            await runner.Run(tokens);
         }
         else
         {
@@ -44,7 +38,16 @@ while (true)
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"Error: {ex.Message}");
+        if (ex is InvalidOperationException)
+        {
+            AnsiConsole.MarkupLineInterpolated($"[red]{ex.Message}[/]");
+            continue;
+        }
 
+#if DEBUG
+        AnsiConsole.WriteException(ex);
+#else
+        AnsiConsole.WriteException(ex, ExceptionFormats.NoStackTrace);
+#endif
     }
 }

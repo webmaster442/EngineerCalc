@@ -40,6 +40,15 @@ public sealed class VariablesAndConstantsCollection : IEnumerable<KeyValuePair<s
         };
     }
 
+    public bool IsConstant(string key)
+        => _constants.ContainsKey(key);
+
+    public bool IsVariable(string key)
+        => _variables.ContainsKey(key);
+
+    public bool IsDefined(string key)
+        => IsConstant(key) || IsVariable(key);
+
     public void Add(string key, dynamic value)
     {
         if (_constants.ContainsKey(key))

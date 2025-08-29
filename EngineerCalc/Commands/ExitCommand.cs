@@ -1,10 +1,19 @@
-﻿namespace EngineerCalc.Commands;
+﻿using Spectre.Console.Cli;
 
-internal sealed class ExitCommand : ICommand
+namespace EngineerCalc.Commands;
+
+internal sealed class ExitCommand : Command
 {
-    public Task Execute(ICommandApi api, string[] args)
+    private readonly ICommandApi _api;
+
+    public ExitCommand(ICommandApi api)
     {
-        api.Exit(0);
-        return Task.CompletedTask;
+        _api = api;
+    }
+
+    public override int Execute(CommandContext context)
+    {
+        _api.Exit(0);
+        return ExitCodes.Success;
     }
 }

@@ -1,10 +1,19 @@
-﻿namespace EngineerCalc.Commands;
+﻿using Spectre.Console.Cli;
 
-internal sealed class ClearCommand : ICommand
+namespace EngineerCalc.Commands;
+
+internal sealed class ClearCommand : Command
 {
-    public Task Execute(ICommandApi api, string[] args)
+    private readonly ICommandApi _api;
+
+    public ClearCommand(ICommandApi api)
     {
-        api.Clear();
-        return Task.CompletedTask;
+        _api = api;
+    }
+
+    public override int Execute(CommandContext context)
+    {
+        _api.Clear();
+        return ExitCodes.Success;
     }
 }
