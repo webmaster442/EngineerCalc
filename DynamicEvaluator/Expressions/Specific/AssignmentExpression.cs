@@ -1,4 +1,6 @@
-﻿namespace DynamicEvaluator.Expressions.Specific;
+﻿using DynamicEvaluator.Types;
+
+namespace DynamicEvaluator.Expressions.Specific;
 
 internal sealed class AssignmentExpression : IExpression
 {
@@ -20,7 +22,7 @@ internal sealed class AssignmentExpression : IExpression
     public dynamic Evaluate(VariablesAndConstantsCollection variables)
     {
         variables[_variable.Identifier] = _expression.Simplify().Evaluate(variables);
-        return new object();
+        return new NoResult();
     }
 
     public IExpression Simplify()
