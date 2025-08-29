@@ -7,6 +7,14 @@ using Spectre.Console.Cli;
 
 namespace EngineerCalc;
 
+internal enum CommandState
+{
+    NotACommand,
+    UnknownCommand,
+    KnownCommand,
+    Empty,
+}
+
 internal sealed class CommandRunner
 {
     private readonly CommandApp _commandApp;
@@ -44,9 +52,18 @@ internal sealed class CommandRunner
         }
     }
 
-    public bool CanRun(IReadOnlyList<string> tokens)
+    public CommandState IdentifyState(IReadOnlyList<string> tokens)
     {
-        return tokens.Count != 0
-            && _knownCommands.Contains(tokens[0]);
+        if (tokens.Count == 0)
+            return CommandState.Empty;
+        
+        if (tokens[0].StartsWith('.'))
+        {
+            return _knownCommands.Contains(tokens[0]) 
+                ? CommandState.KnownCommand 
+                : CommandState.UnknownCommand;
+        }
+
+        return CommandState.NotACommand;
     }
 }

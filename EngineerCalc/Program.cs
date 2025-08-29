@@ -25,15 +25,23 @@ while (true)
 
     try
     {
-        if (runner.CanRun(tokens))
+
+        var state = runner.IdentifyState(tokens);
+        switch (state)
         {
-            await runner.Run(tokens);
-        }
-        else
-        {
-            var expression = expressionFactory.Create(line);
-            var result = expression.Evaluate(api.Evaluator.VariablesAndConstants);
-            Console.WriteLine(result.ToString());
+            case CommandState.Empty:
+                continue;
+            case CommandState.NotACommand:
+                var expression = expressionFactory.Create(line);
+                var result = expression.Evaluate(api.Evaluator.VariablesAndConstants);
+                AnsiConsole.WriteLine(result.ToString());
+                break;
+            case CommandState.KnownCommand:
+                await runner.Run(tokens);
+                break;
+            case CommandState.UnknownCommand:
+                AnsiConsole.WriteLine($"Unknown command: {tokens[0]}");
+                break;
         }
     }
     catch (Exception ex)
