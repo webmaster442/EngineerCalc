@@ -24,6 +24,7 @@ internal enum TokenType : uint
     Function                = 131072,
     ArgumentDivider         = 262144,
     MemberAccess            = 524288,
+    Assignment              = 1048576,
 
     OpenParen               = 0x20000000,
     CloseParen              = 0x40000000,

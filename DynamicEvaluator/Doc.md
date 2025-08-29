@@ -356,6 +356,22 @@ Converts an integer to its hexadecimal representation string.
 
     An input integer number that will be converted to its hexadecimal representation
 
+# ValueUnit
+
+Create a value with a unit. The unit is represented as a string. The value must be a double type. 
+Basic operations between values with units are supported, but the units must be compatible.
+
+`ValueUnit(value, unit)`
+
+## Parameters
+
+* value
+    The numeric value. Must be a double type.
+
+* unit
+
+    The unit of the value. Must be a string.
+
 # Vect
 
 Create a vector from the given parameters. The parameters can be of any type, but they must be convertible to double.

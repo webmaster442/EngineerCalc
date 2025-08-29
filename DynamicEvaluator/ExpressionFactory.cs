@@ -37,7 +37,7 @@ public sealed class ExpressionFactory
         if (!tokens.Next())
             throw new InvalidOperationException("Can't create an expression from an empty input");
 
-        var expression = ParseAddExpression(tokens);
+        var expression = ParseAssignmentExpression(tokens);
         var leftover = new StringBuilder();
         while (tokens.CurrentToken.Type != TokenType.Eof)
         {
@@ -48,6 +48,34 @@ public sealed class ExpressionFactory
             throw new InvalidOperationException($"Couldn't parse part of expression: {leftover}");
 
         return expression;
+    }
+
+    private IExpression ParseAssignmentExpression(TokenCollection tokens)
+    {
+        if (tokens.Check(FirstMultExp))
+        {
+            var exp = ParseAddExpression(tokens);
+            while (tokens.Check(new TokenSet(TokenType.Assignment)))
+            {
+                var opType = tokens.CurrentToken.Type;
+                tokens.Eat(opType);
+                if (!tokens.Check(FirstMultExp))
+                {
+                    throw new InvalidOperationException("Expected expression");
+                }
+
+                var right = ParseAddExpression(tokens);
+
+                exp = opType switch
+                {
+                    TokenType.Assignment => new AssignmentExpression(exp, right),
+                    _ => throw new InvalidOperationException($"Expected =. Got: {opType}"),
+                };
+            }
+
+            return exp;
+        }
+        throw new InvalidOperationException("Invalid expression");
     }
 
     private IExpression ParseAddExpression(TokenCollection tokens)
@@ -145,7 +173,7 @@ public sealed class ExpressionFactory
                     TokenType.Equal => new EqualExpression(exp, right),
                     TokenType.NotEqual => new NotEqualExpression(exp, right),
                     TokenType.MemberAccess => new MemberAccessExpression(exp, right),
-                    _ => throw new InvalidOperationException($"Expected ^, ., <, >, >=, <=, == or != got: {opType}"),
+                    _ => throw new InvalidOperationException($"Expected ^, ., <, >, >=, <=, =, == or != got: {opType}"),
                 };
             }
 

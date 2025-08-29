@@ -426,6 +426,25 @@ public class ExpressionTests
         });
     }
 
+    [TestCase("foo=11", 11, "foo")]
+    [TestCase("bar=33", 33, "bar")]
+    [TestCase("comp=(11+22)*2", 66, "comp")]
+    [TestCase("seted=x*4", 16, "seted")]
+    public void EnsureThat_Assignment_Works(string expression, double valueToAssign, string expectedVariable)
+    {
+        IExpression parsed = _expressionFactory.Create(expression);
+        VariablesAndConstantsCollection variables = new()
+        {
+            { "x", 4d },
+        };
+        dynamic result = parsed.Evaluate(variables);
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.TypeOf<object>());
+            Assert.That(variables[expectedVariable], Is.EqualTo(valueToAssign));
+        });
+    }
+
     [TestCase("random()", 0, long.MaxValue)]
     [TestCase("random(1, 5)", 1, 5)]
     public void EnsureThat_FunctionOverload_Works_ForRandom(string expression, long minValue, long maxValue)
