@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace DynamicEvaluator;
 
-internal partial class ResultBuilder
+public partial class ResultBuilder
 {
     private readonly StringBuilder _builder;
     private readonly CultureInfo _culture;

@@ -1,4 +1,6 @@
-﻿using DynamicEvaluator;
+﻿using System.Globalization;
+
+using DynamicEvaluator;
 
 using EngineerCalc;
 using EngineerCalc.Tui;
@@ -30,9 +32,10 @@ while (true)
             case CommandState.Empty:
                 continue;
             case CommandState.NotACommand:
-                var expression = expressionFactory.Create(line);
-                var result = expression.Evaluate(api.Evaluator.VariablesAndConstants);
-                AnsiConsole.WriteLine(result.ToString());
+                IExpression expression = expressionFactory.Create(line);
+                dynamic result = expression.Evaluate(api.Evaluator.VariablesAndConstants);
+                string resultString = ResultFormatter.Format(result, CultureInfo.InvariantCulture);
+                AnsiConsole.MarkupLine(resultString);
                 break;
             case CommandState.KnownCommand:
                 await runner.Run(tokens);
@@ -41,6 +44,7 @@ while (true)
                 AnsiConsole.WriteLine($"Unknown command: {tokens[0]}");
                 break;
         }
+        AnsiConsole.WriteLine();
     }
     catch (Exception ex)
     {

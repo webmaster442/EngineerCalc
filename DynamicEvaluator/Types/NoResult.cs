@@ -1,6 +1,6 @@
 ﻿namespace DynamicEvaluator.Types;
 
-internal sealed class NoResult : IEquatable<NoResult?>
+public sealed class NoResult : IEquatable<NoResult?>
 {
     public override bool Equals(object? obj)
     {
