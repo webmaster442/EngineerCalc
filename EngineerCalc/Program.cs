@@ -14,6 +14,7 @@ var readline = new LineReader(new LineCompleter(expressionFactory.KnownFunctions
 
 while (true)
 {
+    Prompt.DoPrompt();
     string line = readline.ReadLine("> ");
     if (string.IsNullOrWhiteSpace(line))
         continue;
