@@ -1,6 +1,6 @@
 ﻿using DynamicEvaluator;
 
-namespace EngineerCalc;
+namespace EngineerCalc.Api;
 
 internal interface IEvaluatorApi
 {

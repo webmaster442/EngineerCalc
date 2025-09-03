@@ -1,12 +1,14 @@
-﻿using Spectre.Console.Cli;
+﻿using EngineerCalc.Api;
+
+using Spectre.Console.Cli;
 
 namespace EngineerCalc.Commands;
 
 internal sealed class ClearCommand : Command
 {
-    private readonly ICommandApi _api;
+    private readonly IApplicationApi _api;
 
-    public ClearCommand(ICommandApi api)
+    public ClearCommand(IApplicationApi api)
     {
         _api = api;
     }

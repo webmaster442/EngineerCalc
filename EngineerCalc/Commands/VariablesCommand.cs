@@ -1,20 +1,21 @@
 ﻿using System.Text.RegularExpressions;
 
+using EngineerCalc.Api;
 using EngineerCalc.Commands.Abstraction;
 
 namespace EngineerCalc.Commands;
 
 internal sealed class VariablesCommand : TableCommand<KeyValuePair<string, object>>
 {
-    private readonly ICommandApi _api;
+    private readonly IEvaluatorApi _api;
 
-    public VariablesCommand(ICommandApi api)
+    public VariablesCommand(IEvaluatorApi api)
     {
         _api = api;
     }
 
     protected override IEnumerable<KeyValuePair<string, object>> GetDataSet(Regex filter)
-        => _api.Evaluator.VariablesAndConstants.Variables().Where(kv => filter.IsMatch(kv.Key));
+        => _api.VariablesAndConstants.Variables().Where(kv => filter.IsMatch(kv.Key));
 
     protected override string[] GetTableHeaders()
         => ["Name", "Value"];

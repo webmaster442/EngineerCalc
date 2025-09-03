@@ -1,4 +1,5 @@
-﻿using EngineerCalc.DependencyInjection;
+﻿using EngineerCalc.Api;
+using EngineerCalc.DependencyInjection;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,16 +18,10 @@ internal enum CommandState
 
 internal sealed class CommandRunner
 {
-    private readonly CommandApp _commandApp;
-    private readonly HashSet<string> _knownCommands;
-    private readonly ServiceCollection _services;
-
-    public CommandRunner(ICommandApi api)
+    public CommandRunner(ServiceCollection services)
     {
-        _services = new ServiceCollection();
-        _services.AddSingleton(api);
-        _commandApp = new CommandApp(new TypeRegistrar(_services));
-        _commandApp.Configure(config =>
+        App = new CommandApp(new TypeRegistrar(services));
+        App.Configure(config =>
         {
             config
                 .AddCommand<Commands.ClearCommand>(".clear")
@@ -37,36 +32,22 @@ internal sealed class CommandRunner
             config
                 .AddCommand<Commands.VariablesCommand>(".variables")
                 .WithDescription("Lists all defined variables.");
-
+            config
+                .AddCommand<Commands.CommandsCommand>(".commands")
+                .WithDescription("List known commands");
         });
-        _knownCommands = [".clear", ".exit", ".variables"];
     }
 
-    public IEnumerable<string> KnownCommands => _knownCommands;
+    public CommandApp App { get; }
 
-    public async Task Run(IReadOnlyList<string> tokens)
+    public async Task RunAsync(IReadOnlyList<string> tokens)
     {
         if (tokens.Count == 0)
             return;
-        var result = await _commandApp.RunAsync(tokens);
+        var result = await App.RunAsync(tokens);
         if (result != 0)
         {
             AnsiConsole.MarkupLineInterpolated($"[red]Command execution failed with code {result}.[/]");
         }
-    }
-
-    public CommandState IdentifyState(IReadOnlyList<string> tokens)
-    {
-        if (tokens.Count == 0)
-            return CommandState.Empty;
-        
-        if (tokens[0].StartsWith('.'))
-        {
-            return _knownCommands.Contains(tokens[0]) 
-                ? CommandState.KnownCommand 
-                : CommandState.UnknownCommand;
-        }
-
-        return CommandState.NotACommand;
     }
 }

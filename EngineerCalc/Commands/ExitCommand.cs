@@ -1,12 +1,14 @@
-﻿using Spectre.Console.Cli;
+﻿using EngineerCalc.Api;
+
+using Spectre.Console.Cli;
 
 namespace EngineerCalc.Commands;
 
 internal sealed class ExitCommand : Command
 {
-    private readonly ICommandApi _api;
+    private readonly IApplicationApi _api;
 
-    public ExitCommand(ICommandApi api)
+    public ExitCommand(IApplicationApi api)
     {
         _api = api;
     }
