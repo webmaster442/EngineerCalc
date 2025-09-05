@@ -28,6 +28,8 @@ await commandRunnerApi.Init(runner);
 
 var readline = new LineReader(new LineCompleter(expressionFactory.KnownFunctions, commandRunnerApi.KnownCommands.Keys));
 
+await runner.RunAsync([".intro"]);
+
 while (true)
 {
     Prompt.DoPrompt(appState);

@@ -15,6 +15,11 @@ internal sealed class CommandRunner
         App.Configure(config =>
         {
             config
+                .AddCommand<Commands.IntroCommand>(".intro")
+                .WithDescription("Displays introductory information")
+                .IsHidden();
+
+            config
                 .AddCommand<Commands.ClearCommand>(".clear")
                 .WithDescription("Clears the console screen");
 
