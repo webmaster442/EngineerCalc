@@ -17,6 +17,7 @@ internal sealed class CommandsCommand : TableCommand<KeyValuePair<string, string
     protected override IEnumerable<KeyValuePair<string, string>> GetDataSet(Regex filter)
         => _api.KnownCommands
             .Where(cmd => filter.IsMatch(cmd.Key))
+            .OrderBy(cmd => cmd.Key)
             .Select(cmd => new KeyValuePair<string, string>(cmd.Key, cmd.Value.Description));
 
     protected override string[] GetTableHeaders()

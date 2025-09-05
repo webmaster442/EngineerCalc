@@ -11,11 +11,13 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Spectre.Console;
 
+var appState = new State();
 var expressionFactory = new ExpressionFactory();
 var evaluatorApi = new EvaluatorApi(new VariablesAndConstantsCollection(), expressionFactory);
 var commandRunnerApi = new CommandRunnerApi();
 
 var services = new ServiceCollection();
+services.AddSingleton(appState);
 services.AddSingleton<IApplicationApi, ApplicationApi>();
 services.AddSingleton<IEvaluatorApi>(evaluatorApi);
 services.AddSingleton<ICommandRunnerApi>(commandRunnerApi);
@@ -28,7 +30,7 @@ var readline = new LineReader(new LineCompleter(expressionFactory.KnownFunctions
 
 while (true)
 {
-    Prompt.DoPrompt();
+    Prompt.DoPrompt(appState);
     string line = readline.ReadLine("> ");
     if (string.IsNullOrWhiteSpace(line))
         continue;
@@ -37,15 +39,14 @@ while (true)
 
     try
     {
-        var state =IdentifyState(commandRunnerApi.KnownCommands.Keys, tokens);
-        switch (state)
+        switch (IdentifyState(commandRunnerApi.KnownCommands.Keys, tokens))
         {
             case CommandState.Empty:
                 continue;
             case CommandState.NotACommand:
                 IExpression expression = expressionFactory.Create(line);
                 dynamic result = expression.Evaluate(evaluatorApi.VariablesAndConstants);
-                string resultString = ResultFormatter.Format(result, CultureInfo.InvariantCulture);
+                string resultString = ResultFormatter.Format(result, appState.Culture);
                 AnsiConsole.MarkupLine(resultString);
                 break;
             case CommandState.KnownCommand:

@@ -4,10 +4,9 @@ namespace EngineerCalc.Tui;
 
 internal static class Prompt
 {
-    public static void DoPrompt()
+    public static void DoPrompt(State state)
     {
-        var msg = $"[orangered1]{DateTime.Now.ToShortTimeString().EscapeMarkup()}[/]";
-        var rule = new Rule(msg)
+        var rule = new Rule($"[bold yellow]{state.Culture.ThreeLetterISOLanguageName}[/] | [orangered1]{DateTime.Now.ToShortTimeString().EscapeMarkup()}[/]")
         {
             Justification = Justify.Left
         };

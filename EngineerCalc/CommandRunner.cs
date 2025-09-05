@@ -1,5 +1,4 @@
-﻿using EngineerCalc.Api;
-using EngineerCalc.DependencyInjection;
+﻿using EngineerCalc.DependencyInjection;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -7,14 +6,6 @@ using Spectre.Console;
 using Spectre.Console.Cli;
 
 namespace EngineerCalc;
-
-internal enum CommandState
-{
-    NotACommand,
-    UnknownCommand,
-    KnownCommand,
-    Empty,
-}
 
 internal sealed class CommandRunner
 {
@@ -25,16 +16,22 @@ internal sealed class CommandRunner
         {
             config
                 .AddCommand<Commands.ClearCommand>(".clear")
-                .WithDescription("Clears the console screen.");
+                .WithDescription("Clears the console screen");
+
             config
                 .AddCommand<Commands.ExitCommand>(".exit")
-                .WithDescription("Exits the application.");
+                .WithDescription("Exits the application");
+
             config
                 .AddCommand<Commands.VariablesCommand>(".variables")
-                .WithDescription("Lists all defined variables.");
+                .WithDescription("Lists all defined variables");
+
             config
                 .AddCommand<Commands.CommandsCommand>(".commands")
                 .WithDescription("List known commands");
+
+            config.AddCommand<Commands.CultureCommand>(".culture")
+                .WithDescription("Sets the current culture");
         });
     }
 
