@@ -168,6 +168,21 @@ public class ExpressionTests
     [TestCase("tan(x)", "tan(x)")]
     //ctg
     [TestCase("ctg(x)", "(1 / tan(x))")]
+    //compare
+    [TestCase("1<2", "True")]
+    [TestCase("2<1", "False")]
+    [TestCase("1<=2", "True")]
+    [TestCase("2<=1", "False")]
+    [TestCase("2<=2", "True")]
+    [TestCase("2>1", "True")]
+    [TestCase("1>2", "False")]
+    [TestCase("2>=1", "True")]
+    [TestCase("1>=2", "False")]
+    [TestCase("2>=2", "True")]
+    [TestCase("1==1", "True")]
+    [TestCase("1==2", "False")]
+    [TestCase("1!=2", "True")]
+    [TestCase("1!=1", "False")]
     //Member access
     [TestCase("(1/2).Numerator", "1")]
     [TestCase("(1/2).Denominator", "2")]
@@ -458,5 +473,55 @@ public class ExpressionTests
             Assert.That(result, Is.GreaterThanOrEqualTo(minValue));
             Assert.That(result, Is.LessThan(maxValue));
         });
+    }
+
+    [TestCase("1+1", "{ { 1 } + { 1 } }")]
+    [TestCase("1-1", "{ { 1 } - { 1 } }")]
+    [TestCase("1*1", "{ { 1 } \\cdot { 1 } }")]
+    [TestCase("1/1", "{ { 1 } \\over { 1 } }")]
+    [TestCase("1^1", "{ { 1 } ^ { 1 } }")]
+    [TestCase("sin(x)", "{ sin({ x }) }")]
+    [TestCase("cos(x)", "{ cos({ x }) }")]
+    [TestCase("tan(x)", "{ tan({ x }) }")]
+    [TestCase("ctg(x)", "{ { 1 } \\over { tan({ x }) } }")]
+    [TestCase("arcsin(x)", "{ sin^{-1}({ x }) }")]
+    [TestCase("arccos(x)", "{ cos^{-1}({ x }) }")]
+    [TestCase("arctan(x)", "{ tan^{-1}({ x }) }")]
+    [TestCase("arcctg(x)", "{ tan^{-1}({ { 1 } \\over { x } }) }")]
+    [TestCase("ln(x)", "{ ln({ x }) }")]
+    [TestCase("log(x,2)", "{ log_{ x } { 2 } }")]
+    [TestCase("root(x,2)", "{ \\sqrt[{ 2 }] {{ x }} }")]
+    [TestCase("3*(2+1)", "{ { 3 } \\cdot { { 2 } + { 1 } } }")]
+    [TestCase("True & False", "{ { True } \\land { False } }")]
+    [TestCase("True | False", "{ { True } \\lor { False } }")]
+    [TestCase("!False", "{ \\neg { False } }")]
+    [TestCase("alpha", "{ \\alpha }")]
+    [TestCase("beta", "{ \\beta }")]
+    [TestCase("gamma", "{ \\gamma }")]
+    [TestCase("delta", "{ \\delta }")]
+    [TestCase("epsilon", "{ \\epsilon }")]
+    [TestCase("zeta", "{ \\zeta }")]
+    [TestCase("eta", "{ \\eta }")]
+    [TestCase("theta", "{ \\theta }")]
+    [TestCase("iota", "{ \\iota }")]
+    [TestCase("kappa", "{ \\kappa }")]
+    [TestCase("lambda", "{ \\lambda }")]
+    [TestCase("mu", "{ \\mu }")]
+    [TestCase("nu", "{ \\nu }")]
+    [TestCase("xi", "{ \\xi }")]
+    [TestCase("pi", "{ \\pi }")]
+    [TestCase("rho", "{ \\rho }")]
+    [TestCase("sigma", "{ \\sigma }")]
+    [TestCase("tau", "{ \\tau }")]
+    [TestCase("upsilon", "{ \\upsilon }")]
+    [TestCase("phi", "{ \\phi }")]
+    [TestCase("chi", "{ \\chi }")]
+    [TestCase("psi", "{ \\psi }")]
+    [TestCase("omega", "{ \\omega }")]
+    public void EnsureThat_ToLatex_Works(string expression, string expected)
+    {
+        IExpression parsed = _expressionFactory.Create(expression);
+        string latex = parsed.ToLatex();
+        Assert.That(latex, Is.EqualTo(expected));
     }
 }
