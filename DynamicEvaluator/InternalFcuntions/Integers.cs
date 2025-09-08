@@ -47,4 +47,21 @@ internal static class Integers
             return a << shift;
         }
     }
+
+    internal static int Bits(long number)
+    {
+        int bits = 1;
+        if (number < 0)
+        {
+            number = -number;
+            ++bits; // sign bit
+        }
+
+        while (number > 1)
+        {
+            bits++;
+            number >>= 1;
+        }
+        return bits;
+    }
 }

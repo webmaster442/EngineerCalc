@@ -22,6 +22,18 @@ Parses a binary (base-2) string and converts it into a long integer. The string 
 
     The binary string to convert. Should only contain '0' and '1' characters and no prefix like 0b.
 
+# Bits
+
+Couns the number of bits needed to represent the given integer in binary form.
+
+`bits(number)`
+
+## Parameters
+
+* number
+
+    A number whose bit count is to be determined. If the number is zero, the function returns 1. For negative numbers, the function counts the bits in the absolute value and adds one additional bit for the sign.
+
 # ArcCos
 
 Returns the angle whose cosine is the specified number.
@@ -93,6 +105,23 @@ Computes the cosine of the given input. Supports both double and Complex types. 
 * value
 
     The input value for which to calculate the cosine. Can be a double, a Complex number, or any type that can be converted to double.
+
+# Count
+
+Returns the number of elements passed to the function. If it has been called with a single parameter that is a string, it will return the length of the string.
+
+`Count(numbers)`
+`Count(string)`
+
+## Parameters
+
+* numbers
+
+    Numbers of any type. The function will return the count of the numbers provided.
+
+* string
+
+    A string. The function will return the length of the string.
 
 # Cplx
 

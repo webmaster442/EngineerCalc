@@ -174,6 +174,17 @@ public static class Functions
     public static dynamic Max(params dynamic[] numbers)
         => numbers.Max() ?? throw new InvalidOperationException("Invalid types for function Max()");
 
+    public static dynamic Count(params dynamic[] items)
+    {
+        if (items.Length == 1 && items[0] is string str)
+            return str.Length;
+
+        return items.Length;
+    }
+
+    public static int Bits(long number)
+        => Integers.Bits(number);
+
     public static ValueUnit ValueUnit(dynamic value, string unit)
     {
         if (TypeFactory.DynamicConvert<double>(value, out double d))

@@ -29,6 +29,8 @@ await commandRunnerApi.Init(runner);
 
 var readline = new LineReader(new LineCompleter(expressionFactory.KnownFunctions, commandRunnerApi.KnownCommands.Keys));
 
+AnsiConsole.Clear();
+
 await runner.RunAsync([".intro"]);
 
 while (true)
@@ -66,7 +68,6 @@ while (true)
                 AnsiConsole.WriteLine($"Unknown command: {tokens[0]}");
                 break;
         }
-        AnsiConsole.WriteLine();
     }
     catch (Exception ex)
     {
@@ -81,6 +82,10 @@ while (true)
 #else
         AnsiConsole.WriteException(ex, ExceptionFormats.NoStackTrace);
 #endif
+    }
+    finally
+    {
+        AnsiConsole.WriteLine();
     }
 }
 

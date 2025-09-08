@@ -32,6 +32,14 @@ internal static class ResultFormatter
                 .Append(l)
                 .Append("[/]");
         }
+        else if (result is int i)
+        {
+            resultBuilder
+                .Append("([fuchsia]int[/]) ")
+                .Append("[italic green]")
+                .Append(i)
+                .Append("[/]");
+        }
         else if (result is double d)
         {
             resultBuilder
