@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 
 namespace EngineerCalc;
+
 internal sealed class State
 {
     public CultureInfo Culture { get; set; }
 
+    public ParseMode ParseMode { get; set; }
+
     public State()
     {
+        ParseMode = ParseMode.Infix;
         Culture = CultureInfo.CurrentUICulture;
     }
 }

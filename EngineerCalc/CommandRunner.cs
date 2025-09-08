@@ -37,6 +37,14 @@ internal sealed class CommandRunner
 
             config.AddCommand<Commands.CultureCommand>(".culture")
                 .WithDescription("Sets the current culture");
+
+            config
+                .AddCommand<Commands.InfixCommand>(".infix")
+                .WithDescription("Sets the expression parse mode to infix");
+
+            config
+                .AddCommand<Commands.PostFixCommand>(".postfix")
+                .WithDescription("Sets the expression parse mode to postfix");
         });
     }
 

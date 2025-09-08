@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.ComponentModel.Design;
+using System.Globalization;
 
 using DynamicEvaluator;
 
@@ -46,7 +47,14 @@ while (true)
             case CommandState.Empty:
                 continue;
             case CommandState.NotACommand:
-                IExpression expression = expressionFactory.Create(line);
+                IExpression expression;
+                if (appState.ParseMode == ParseMode.Infix)
+                    expression = expressionFactory.Create(line);
+                else if (appState.ParseMode == ParseMode.Postfix)
+                    expression = expressionFactory.CreateFromRpn(line);
+                else
+                    throw new InvalidOperationException("Unknown parse mode.");
+
                 dynamic result = expression.Evaluate(evaluatorApi.VariablesAndConstants);
                 string resultString = ResultFormatter.Format(result, appState.Culture);
                 AnsiConsole.MarkupLine(resultString);
