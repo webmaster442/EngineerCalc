@@ -524,4 +524,41 @@ public class ExpressionTests
         string latex = parsed.ToLatex();
         Assert.That(latex, Is.EqualTo(expected));
     }
+
+    [TestCase("x", "x")]
+    [TestCase("33", "33")]
+    [TestCase("x y .", "x.y")]
+    [TestCase("3 1 +", "(3 + 1)")]
+    [TestCase("3 1 -", "(3 - 1)")]
+    [TestCase("3 1 *", "(3 * 1)")]
+    [TestCase("3 1 /", "(3 / 1)")]
+    [TestCase("3 1 ^", "(3 ^ 1)")]
+    [TestCase("3 1 %", "(3 % 1)")]
+    [TestCase("true false &", "(True & False)")]
+    [TestCase("true false |", "(True | False)")]
+    [TestCase("false !", "(!False)")]
+    [TestCase("x y <", "(x < y)")]
+    [TestCase("x y >", "(x > y)")]
+    [TestCase("x y <=", "(x <= y)")]
+    [TestCase("x y >=", "(x >= y)")]
+    [TestCase("x y ==", "(x == y)")]
+    [TestCase("x y !=", "(x != y)")]
+    [TestCase("x y =", "x = y")]
+    [TestCase("x sin", "sin(x)")]
+    [TestCase("x cos", "cos(x)")]
+    [TestCase("x tan", "tan(x)")]
+    [TestCase("x ctg", "(1 / tan(x))")]
+    [TestCase("x arcsin", "arcsin(x)")]
+    [TestCase("x arccos", "arccos(x)")]
+    [TestCase("x arctan", "arctan(x)")]
+    [TestCase("x arcctg", "arctan((1 / x))")]
+    [TestCase("x ln", "ln(x)")]
+    [TestCase("2 x root", "root(x, 2)")]
+    [TestCase("2 x log", "log(x, 2)")]
+    [TestCase("3 2 + 2 *", "((3 + 2) * 2)")]
+    public void EnsureThat_CreateFromRpn_Works(string expression, string expected)
+    {
+        IExpression parsed = _expressionFactory.CreateFromRpn(expression);
+        Assert.That(parsed.ToString(), Is.EqualTo(expected));
+    }
 }

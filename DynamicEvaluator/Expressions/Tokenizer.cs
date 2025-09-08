@@ -1,10 +1,11 @@
-﻿using System.Text;
+﻿using System.Globalization;
+using System.Text;
 
 namespace DynamicEvaluator.Expressions;
 
 internal static class Tokenizer
 {
-    private static bool IsAdditionalyAllowedInNumber(char c )
+    private static bool IsAdditionalyAllowedInNumber(char c)
         => IsFloatCharacter(c) || c == '_';
 
     private static bool IsFloatCharacter(char c)
@@ -143,6 +144,89 @@ internal static class Tokenizer
                         : new Token(identifier, TokenType.Variable);
                 }
         }
+    }
+    private static IEnumerable<string> SplitBySpaceWhenNotInQuotes(string input)
+    {
+        StringBuilder sb = new();
+        bool inSingleQuote = false;
+        bool inDoubleQuote = false;
+
+        for (int i = 0; i < input.Length; i++)
+        {
+            char c = input[i];
+
+            if (c == '\'' && !inDoubleQuote)
+            {
+                inSingleQuote = !inSingleQuote;
+                sb.Append(c);
+            }
+            else if (c == '"' && !inSingleQuote)
+            {
+                inDoubleQuote = !inDoubleQuote;
+                sb.Append(c);
+            }
+            else if (char.IsWhiteSpace(c) && !inSingleQuote && !inDoubleQuote)
+            {
+                if (sb.Length > 0)
+                {
+                    var text = sb.ToString();
+                    sb.Clear();
+                    yield return text;
+                }
+            }
+            else
+            {
+                sb.Append(c);
+            }
+        }
+
+        if (sb.Length > 0)
+        {
+            yield return sb.ToString();
+        }
+    }
+
+    public static TokenCollection TokenizeRpn(string input, Predicate<string> isFunctionCheck)
+    {
+        IEnumerable<string> items = SplitBySpaceWhenNotInQuotes(input);
+        TokenCollection tokens = new();
+        foreach (var item in items)
+        {
+            if (long.TryParse(item, out _))
+            {
+                tokens.Add(new Token(item, TokenType.Constant, typeof(long)));
+            }
+            else if (double.TryParse(item, CultureInfo.InvariantCulture, out _))
+            {
+                tokens.Add(new Token(item, TokenType.Constant, typeof(double)));
+            }
+            else if ((item.StartsWith('\'') && item.EndsWith('\''))
+                || (item.StartsWith('"') && item.EndsWith('"')))
+            {
+                tokens.Add(new Token(item[1..^1], TokenType.Constant, typeof(string)));
+            }
+            else if (item == "true" || item == "false")
+            {
+                tokens.Add(new Token(item, TokenType.Constant, typeof(bool)));
+            }
+            else if (item.Length == 1)
+            {
+                tokens.Add(HandleSingleCharOperator(item[0], -1));
+            }
+            else if (item.Length == 2)
+            {
+                tokens.Add(HandleOperator(item[0], item[1], -1, out _));
+            }
+            else if (IsIdentifier(item[0]) && item.All(IsIdentifier))
+            {
+                tokens.Add(new Token(item, TokenType.Variable));
+            }
+            else if (isFunctionCheck(item))
+            {
+                tokens.Add(new Token(item, TokenType.Function));
+            }
+        }
+        return tokens;
     }
 
     public static TokenCollection Tokenize(string input, Predicate<string> isFunctionCheck)

@@ -50,6 +50,12 @@ public sealed class ExpressionFactory
         return expression;
     }
 
+    public IExpression CreateFromRpn(string input)
+    {
+        TokenCollection tokens = Tokenizer.Tokenize(input, _functionTable.IsFunction);
+        return RpnExpressionFactory.Create(tokens, _functionTable);
+    }
+
     private IExpression ParseAssignmentExpression(TokenCollection tokens)
     {
         if (tokens.Check(FirstMultExp))
@@ -220,7 +226,7 @@ public sealed class ExpressionFactory
         IExpression? exp = null;
         if (tokens.CurrentToken.Type == TokenType.Constant)
         {
-            dynamic value = TypeFactory.CreateType(tokens.CurrentToken.Value, tokens.CurrentToken.Data);
+            dynamic value = TypeFactory.CreateType(tokens.CurrentToken.Value, tokens.CurrentToken.TypeInfo);
             exp = new ConstantExpression(value);
             tokens.Eat(TokenType.Constant);
         }

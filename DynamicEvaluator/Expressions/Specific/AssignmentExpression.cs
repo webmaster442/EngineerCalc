@@ -32,7 +32,7 @@ internal sealed class AssignmentExpression : IExpression
     }
 
     public string ToLatex()
-        => $"{_variable.ToLatex()} = {_expression.ToLatex()}";
+        => $"{_variable.ToLatex()} := {_expression.ToLatex()}";
 
     public override string ToString()
         => $"{_variable} = {_expression}";

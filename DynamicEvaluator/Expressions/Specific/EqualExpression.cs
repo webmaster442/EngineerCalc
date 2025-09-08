@@ -33,6 +33,6 @@ internal sealed class EqualExpression : BinaryExpression
     {
         return emitLatex
             ? $"{{ {Left.ToLatex()} = {Right.ToLatex()} }}"
-            : $"({Left} = {Right})";
+            : $"({Left} == {Right})";
     }
 }

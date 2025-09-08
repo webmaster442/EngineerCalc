@@ -3,16 +3,16 @@ namespace DynamicEvaluator.Expressions;
 
 internal readonly struct Token
 {
-    public Token(string value, TokenType type, object? data = null)
+    public Token(string value, TokenType type, Type? typeInfo = null)
     {
         Value = value;
         Type = type;
-        Data = data;
+        TypeInfo = typeInfo;
     }
-    public object? Data { get; }
+    public Type? TypeInfo { get; }
     public string Value { get; }
     public TokenType Type { get; }
 
     public override string ToString()
-        => $"{Value} | {Type} | {Data}";
+        => $"{Value} | {Type} | {TypeInfo}";
 }
