@@ -10,6 +10,16 @@ Returns the absolute value of a given number.
 
      A number, whose absolute value will be returned.
 
+# Avg
+
+Returns the average value from the given parameters. 
+
+`avg(parameters)`
+
+## Parameters
+
+   This function accepts variable ammount of parameters, but at least one must be provided.
+
 # Bin
 
 Parses a binary (base-2) string and converts it into a long integer. The string must consist only of characters 0 and 1. Throws an exception if the string is not a valid binary representation.

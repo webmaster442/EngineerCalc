@@ -165,8 +165,8 @@ public static class Functions
     public static double Floor(double x)
         => Math.Floor(x);
 
-    public static double Round(double x, int digits)
-        => Math.Round(x, digits);
+    public static double Round(double x, long digits)
+        => Math.Round(x, (int)digits);
 
     public static dynamic Min(params dynamic[] numbers)
         => numbers.Min() ?? throw new InvalidOperationException("Invalid types for function Min()");
@@ -181,6 +181,17 @@ public static class Functions
 
         return items.Length;
     }
+
+    public static dynamic Avg(params dynamic[] numbers)
+    {
+        dynamic sum = 0;
+        for (int i=0; i < numbers.Length; i++)
+        {
+            sum += numbers[i];
+        }
+        return (double)sum / numbers.Length;
+    }
+
 
     public static int Bits(long number)
         => Integers.Bits(number);
