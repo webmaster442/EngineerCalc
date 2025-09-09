@@ -47,6 +47,10 @@ internal sealed class CommandRunner
             config
                 .AddCommand<Commands.PostFixCommand>(".postfix")
                 .WithDescription("Sets the expression parse mode to postfix");
+
+            config
+                .AddCommand<Commands.UnsetCommand>(".unset")
+                .WithDescription("Unsets a variable");
         });
     }
 

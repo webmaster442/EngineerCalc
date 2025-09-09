@@ -1,4 +1,5 @@
 ﻿using DynamicEvaluator;
+using DynamicEvaluator.Types;
 
 using EngineerCalc;
 using EngineerCalc.Api;
@@ -103,7 +104,10 @@ static void EvaluateExpression(State appState,
         _ => throw new InvalidOperationException("Unknown parse mode."),
     };
     dynamic result = expression.Evaluate(evaluatorApi.VariablesAndConstants);
-    evaluatorApi.VariablesAndConstants["ans"] = result;
+
+    if (result is not NoResult)
+        evaluatorApi.VariablesAndConstants["ans"] = result;
+
     string resultString = ResultFormatter.Format(result, appState.Culture);
     AnsiConsole.MarkupLine(resultString);
 }
