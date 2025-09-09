@@ -14,6 +14,8 @@ internal sealed class CommandRunner
         App = new CommandApp(new TypeRegistrar(services));
         App.Configure(config =>
         {
+            config.SetApplicationName(string.Empty);
+
             config
                 .AddCommand<Commands.IntroCommand>(".intro")
                 .WithDescription("Displays introductory information")

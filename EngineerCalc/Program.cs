@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.Design;
-using System.Globalization;
-
-using DynamicEvaluator;
+﻿using DynamicEvaluator;
 
 using EngineerCalc;
 using EngineerCalc.Api;
@@ -49,17 +46,7 @@ while (true)
             case CommandState.Empty:
                 continue;
             case CommandState.NotACommand:
-                IExpression expression;
-                if (appState.ParseMode == ParseMode.Infix)
-                    expression = expressionFactory.Create(line);
-                else if (appState.ParseMode == ParseMode.Postfix)
-                    expression = expressionFactory.CreateFromRpn(line);
-                else
-                    throw new InvalidOperationException("Unknown parse mode.");
-
-                dynamic result = expression.Evaluate(evaluatorApi.VariablesAndConstants);
-                string resultString = ResultFormatter.Format(result, appState.Culture);
-                AnsiConsole.MarkupLine(resultString);
+                EvaluateExpression(appState, expressionFactory, evaluatorApi, line);
                 break;
             case CommandState.KnownCommand:
                 await runner.RunAsync(tokens);
@@ -102,4 +89,21 @@ static CommandState IdentifyState(IEnumerable<string> commands, IReadOnlyList<st
     }
 
     return CommandState.NotACommand;
+}
+
+static void EvaluateExpression(State appState,
+                               ExpressionFactory expressionFactory,
+                               EvaluatorApi evaluatorApi,
+                               string line)
+{
+    IExpression expression = appState.ParseMode switch
+    {
+        ParseMode.Infix => expressionFactory.Create(line),
+        ParseMode.Postfix => expressionFactory.CreateFromRpn(line),
+        _ => throw new InvalidOperationException("Unknown parse mode."),
+    };
+    dynamic result = expression.Evaluate(evaluatorApi.VariablesAndConstants);
+    evaluatorApi.VariablesAndConstants["ans"] = result;
+    string resultString = ResultFormatter.Format(result, appState.Culture);
+    AnsiConsole.MarkupLine(resultString);
 }
