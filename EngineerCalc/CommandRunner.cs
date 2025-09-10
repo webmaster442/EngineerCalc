@@ -51,6 +51,10 @@ internal sealed class CommandRunner
             config
                 .AddCommand<Commands.UnsetCommand>(".unset")
                 .WithDescription("Unsets a variable");
+
+            config
+                .AddCommand<Commands.DetailsCommand>(".details")
+                .WithDescription("Shows details about the expression evaluation result");
         });
     }
 

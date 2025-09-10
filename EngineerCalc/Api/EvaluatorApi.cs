@@ -13,9 +13,10 @@ internal class EvaluatorApi : IEvaluatorApi
     }
 
     public IExpression Parse(string expression)
-    {
-        return _expressionFactory.Create(expression);
-    }
+        => _expressionFactory.Create(expression);
+
+    public IExpression ParseRpn(string expression)
+        => _expressionFactory.CreateFromRpn(expression);
 
     public VariablesAndConstantsCollection VariablesAndConstants { get; }
 }
