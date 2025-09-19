@@ -1,0 +1,18 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Others/">
+    <File Path=".editorconfig" />
+    <File Path=".github/workflows/dotnet.yml" />
+    <File Path="Readme.md" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="DynamicEvaluator.Tests/DynamicEvaluator.Tests.csproj" />
+    <Project Path="EngineerCalc.Tests/EngineerCalc.Tests.csproj" />
+  </Folder>
+  <Project Path="DynamicEvaluator/DynamicEvaluator.csproj" />
+  <Project Path="EngineerCalc/EngineerCalc.csproj" />
+</Solution>
