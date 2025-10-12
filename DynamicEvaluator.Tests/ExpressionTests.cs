@@ -63,7 +63,7 @@ public class ExpressionTests
     [TestCase("-x + y", "(y - x)")]
     //and
     [TestCase("true & true", "True")]
-    [TestCase("true & false",  "False")]
+    [TestCase("true & false", "False")]
     [TestCase("false & true", "False")]
     [TestCase("false & false", "False")]
     [TestCase("true & x", "x")]
@@ -205,11 +205,11 @@ public class ExpressionTests
     {
         IExpression parsed = _expressionFactory.Create(expression);
         bool result = parsed.TrySimplfyAsLogicExpression(out var simplified);
-        Assert.Multiple(() =>
+        using (Assert.EnterMultipleScope())
         {
             Assert.That(result, Is.True);
             Assert.That(simplified?.ToString(), Is.EqualTo(expected));
-        });
+        }
     }
 
     [TestCase("1:2")]
@@ -263,6 +263,7 @@ public class ExpressionTests
     [TestCase("(1/2).Denominator", 2)]
     [TestCase("(x/y).Numerator", 1)]
     [TestCase("(x/y).Denominator", 2)]
+    [TestCase("10-4-2", 4)]
     public void EnsureThat_Evaluate_Works_Integers(string expression, long expected)
     {
         IExpression parsed = _expressionFactory.Create(expression);
@@ -272,11 +273,11 @@ public class ExpressionTests
             { "y", 2L },
         };
         dynamic result = parsed.Evaluate(variables);
-        Assert.Multiple(() =>
+        using (Assert.EnterMultipleScope())
         {
             Assert.That(result, Is.TypeOf<long>());
             Assert.That(result, Is.EqualTo(expected));
-        });
+        }
     }
 
     [TestCase("x/y", typeof(Fraction))]
@@ -323,11 +324,11 @@ public class ExpressionTests
             { "y", 2L },
         };
         dynamic result = parsed.Evaluate(variables);
-        Assert.Multiple(() =>
+        using (Assert.EnterMultipleScope())
         {
             Assert.That(result, Is.TypeOf<bool>());
             Assert.That(result, Is.EqualTo(expected));
-        });
+        }
     }
 
     [TestCase("1.1", 1.1d)]
@@ -357,6 +358,11 @@ public class ExpressionTests
     [TestCase("gradtorad(200)", Math.PI)]
     [TestCase("Cplx(11, 22).Imaginary", 22d)]
     [TestCase("Cplx(11, 22).Real * 2", 22d)]
+    [TestCase("2^3+1", 9d)]
+    [TestCase("2^3-1", 7d)]
+    [TestCase("2^3/2", 4d)]
+    [TestCase("2^3*2", 16d)]
+    [TestCase("2^3^2", 512d)]
     public void EnsureThat_Evaluate_Works_Doubles(string expression, double expected)
     {
         IExpression parsed = _expressionFactory.Create(expression);
@@ -366,11 +372,11 @@ public class ExpressionTests
             { "y", 2d },
         };
         dynamic result = parsed.Evaluate(variables);
-        Assert.Multiple(() =>
+        using (Assert.EnterMultipleScope())
         {
             Assert.That(result, Is.TypeOf<double>());
             Assert.That(result, Is.EqualTo(expected).Within(0.001));
-        });
+        }
     }
 
     [TestCase("'foo'", "foo")]
@@ -387,11 +393,11 @@ public class ExpressionTests
             { "foo", "foo" },
         };
         dynamic result = parsed.Evaluate(variables);
-        Assert.Multiple(() =>
+        using (Assert.EnterMultipleScope())
         {
             Assert.That(result, Is.TypeOf<string>());
             Assert.That(result, Is.EqualTo(expected));
-        });
+        }
     }
 
     [TestCase("22/11", 2, 1)]
@@ -407,12 +413,12 @@ public class ExpressionTests
             { "y", 2L },
         };
         dynamic result = parsed.Evaluate(variables);
-        Assert.Multiple(() =>
+        using (Assert.EnterMultipleScope())
         {
             Assert.That(result, Is.TypeOf<Fraction>());
             Assert.That(result.Numerator, Is.EqualTo(numerator));
             Assert.That(result.Denominator, Is.EqualTo(denominator));
-        });
+        }
     }
 
     [TestCase("false&false", false)]
@@ -434,17 +440,18 @@ public class ExpressionTests
         IExpression parsed = _expressionFactory.Create(expression);
         VariablesAndConstantsCollection variables = new();
         dynamic result = parsed.Evaluate(variables);
-        Assert.Multiple(() =>
+        using (Assert.EnterMultipleScope())
         {
             Assert.That(result, Is.TypeOf<bool>());
             Assert.That(result, Is.EqualTo(expected));
-        });
+        }
     }
 
     [TestCase("foo=11", 11, "foo")]
     [TestCase("bar=33", 33, "bar")]
     [TestCase("comp=(11+22)*2", 66, "comp")]
     [TestCase("seted=x*4", 16, "seted")]
+    [TestCase("right=2^(3^2)+7", 519, "right")]
     public void EnsureThat_Assignment_Works(string expression, double valueToAssign, string expectedVariable)
     {
         IExpression parsed = _expressionFactory.Create(expression);
@@ -453,11 +460,11 @@ public class ExpressionTests
             { "x", 4d },
         };
         dynamic result = parsed.Evaluate(variables);
-        Assert.Multiple(() =>
+        using (Assert.EnterMultipleScope())
         {
             Assert.That(result, Is.TypeOf<NoResult>());
             Assert.That(variables[expectedVariable], Is.EqualTo(valueToAssign));
-        });
+        }
     }
 
     [TestCase("random()", 0, long.MaxValue)]
@@ -467,12 +474,12 @@ public class ExpressionTests
         IExpression parsed = _expressionFactory.Create(expression);
         VariablesAndConstantsCollection variables = new();
         dynamic result = parsed.Evaluate(variables);
-        Assert.Multiple(() =>
+        using (Assert.EnterMultipleScope())
         {
             Assert.That(result, Is.TypeOf<long>());
             Assert.That(result, Is.GreaterThanOrEqualTo(minValue));
             Assert.That(result, Is.LessThan(maxValue));
-        });
+        }
     }
 
     [TestCase("1+1", "{ { 1 } + { 1 } }")]

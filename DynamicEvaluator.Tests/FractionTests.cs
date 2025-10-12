@@ -65,22 +65,22 @@ internal class FractionTests
     public void EnsureThat_Operator_Increment_Wokrs()
     {
         Fraction fraction = new Fraction(3, 2);
-        Assert.Multiple(() =>
+        using (Assert.EnterMultipleScope())
         {
             Assert.That(++fraction, Is.EqualTo(new Fraction(5, 2)));
             Assert.That(fraction++, Is.EqualTo(new Fraction(5, 2)));
-        });
+        }
     }
 
     [Test]
     public void EnsureThat_Operator_Decrement_Wokrs()
     {
         Fraction fraction = new Fraction(3, 2);
-        Assert.Multiple(() =>
+        using (Assert.EnterMultipleScope())
         {
             Assert.That(--fraction, Is.EqualTo(new Fraction(1, 2)));
             Assert.That(fraction--, Is.EqualTo(new Fraction(1, 2)));
-        });
+        }
     }
 
 
@@ -89,12 +89,12 @@ internal class FractionTests
     {
         Fraction fraction1 = new Fraction(3, 2);
         Fraction fraction2 = new Fraction(-3, 2);
-        Assert.Multiple(() =>
+        using (Assert.EnterMultipleScope())
         {
             Assert.That(-fraction1, Is.EqualTo(new Fraction(-3, 2)));
             Assert.That(+fraction2, Is.EqualTo(new Fraction(-3, 2)));
 
-        });
+        }
     }
 
     [Test]
@@ -102,11 +102,11 @@ internal class FractionTests
     {
         Fraction fraction1 = new Fraction(1, 2);
         Fraction fraction2 = new Fraction(3, 2);
-        Assert.Multiple(() =>
+        using (Assert.EnterMultipleScope())
         {
             Assert.That(fraction1 < fraction2, Is.EqualTo(true));
             Assert.That(fraction2 > fraction1, Is.EqualTo(true));
 
-        });
+        }
     }
 }

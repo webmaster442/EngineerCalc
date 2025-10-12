@@ -167,7 +167,7 @@ public sealed class ExpressionFactory
                 {
                     throw new InvalidOperationException("Expected expression after exponent");
                 }
-                var right = ParseUnaryExpression(tokens);
+                var right = ParseExpExpression(tokens);
 
                 exp = opType switch
                 {

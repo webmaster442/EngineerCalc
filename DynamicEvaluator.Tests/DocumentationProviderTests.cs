@@ -39,10 +39,10 @@ public class DocumentationProviderTests
 
         string doc = _documentationProvider.GetDocumentation(function);
 
-        Assert.Multiple(() =>
+        using (Assert.EnterMultipleScope())
         {
             Assert.That(_documentationProvider.FunctionNames, Contains.Item(function).Using((IEqualityComparer<string>)StringComparer.OrdinalIgnoreCase));
             Assert.That(doc, Has.Length.GreaterThan(0));
-        });
+        }
     }
 }
