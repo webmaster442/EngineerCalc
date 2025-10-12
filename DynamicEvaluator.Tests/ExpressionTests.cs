@@ -264,6 +264,10 @@ public class ExpressionTests
     [TestCase("(x/y).Numerator", 1)]
     [TestCase("(x/y).Denominator", 2)]
     [TestCase("10-4-2", 4)]
+    [TestCase("true?5:2", 5)]
+    [TestCase("false?5:2", 2)]
+    [TestCase("3>2?1:0", 1)]
+    [TestCase("3<2?1:0", 0)]
     public void EnsureThat_Evaluate_Works_Integers(string expression, long expected)
     {
         IExpression parsed = _expressionFactory.Create(expression);
@@ -313,6 +317,7 @@ public class ExpressionTests
     [TestCase("x==x", true)]
     [TestCase("12<=12", true)]
     [TestCase("12>=12", true)]
+    [TestCase("(2^2*3)>=12?false:true", false)]
     [TestCase("random()>-1", true)]
     [TestCase("random(10, 15) >= 10 & random(10, 15) < 15", true)]
     public void EnsureThat_Evaluate_Works_Comparision(string expression, bool expected)

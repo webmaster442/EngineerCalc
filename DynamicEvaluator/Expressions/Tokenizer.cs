@@ -322,6 +322,8 @@ internal static class Tokenizer
             ',' => new Token(",", TokenType.ArgumentDivider),
             '.' => new Token(".", TokenType.MemberAccess),
             '=' => new Token("=", TokenType.Assignment),
+            '?' => new Token("?", TokenType.TennaryIf),
+            ':' => new Token(":", TokenType.TennaryElse),
             _ => throw new InvalidOperationException($"Invalid operator `{current}` at position {position}"),
         };
     }

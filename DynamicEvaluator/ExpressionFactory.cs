@@ -37,7 +37,7 @@ public sealed class ExpressionFactory
         if (!tokens.Next())
             throw new InvalidOperationException("Can't create an expression from an empty input");
 
-        var expression = ParseAssignmentExpression(tokens);
+        var expression = ParseTennaryExpression(tokens);
         var leftover = new StringBuilder();
         while (tokens.CurrentToken.Type != TokenType.Eof)
         {
@@ -54,6 +54,27 @@ public sealed class ExpressionFactory
     {
         TokenCollection tokens = Tokenizer.Tokenize(input, _functionTable.IsFunction);
         return RpnExpressionFactory.Create(tokens, _functionTable);
+    }
+
+
+    private IExpression ParseTennaryExpression(TokenCollection tokens)
+    {
+        var condition = ParseAssignmentExpression(tokens);
+
+        if (tokens.Check(new TokenSet(TokenType.TennaryIf)))
+        {
+            tokens.Eat(TokenType.TennaryIf);
+
+            var ifTrue = ParseAssignmentExpression(tokens);
+
+            tokens.Eat(TokenType.TennaryElse);
+
+            var ifFalse = ParseAssignmentExpression(tokens);
+
+            return new TennaryExpression(condition, ifTrue, ifFalse);
+        }
+
+        return condition;
     }
 
     private IExpression ParseAssignmentExpression(TokenCollection tokens)
