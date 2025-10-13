@@ -5,19 +5,18 @@ namespace DynamicEvaluator.Tests;
 [TestFixture]
 internal class ValueUnitTests
 {
-    private ValueUnit V1 = new ValueUnit(10, "Meter");
-    private ValueUnit V2 = new ValueUnit(10, "Foot");
-    private ValueUnit V3 = new ValueUnit(2, "Second");
+    private readonly ValueUnit _v1 = new ValueUnit(10, "Meter");
+    private readonly ValueUnit _v2 = new ValueUnit(10, "Foot");
 
     [Test]
     public void Ensure_That_Operations_Work_ValueUnit_ValueUnit()
     {
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(V1 + V2, Is.EqualTo(new ValueUnit(13.04800, "Meter")));
-            Assert.That(V1 - V2, Is.EqualTo(new ValueUnit(6.95200, "Meter")));
-            Assert.That(V1 * V2, Is.EqualTo(new ValueUnit(30.48, "SquareMeter")));
-            Assert.That(V1 / V2, Is.EqualTo(new ValueUnit(3.2808398950131233595800524934383, "")));
+            Assert.That(_v1 + _v2, Is.EqualTo(new ValueUnit(13.04800, "Meter")));
+            Assert.That(_v1 - _v2, Is.EqualTo(new ValueUnit(6.95200, "Meter")));
+            Assert.That(_v1 * _v2, Is.EqualTo(new ValueUnit(30.48, "SquareMeter")));
+            Assert.That(_v1 / _v2, Is.EqualTo(new ValueUnit(3.2808398950131233595800524934383, "")));
         }
     }
 
@@ -26,10 +25,10 @@ internal class ValueUnitTests
     {
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(V1 + 10, Is.EqualTo(new ValueUnit(20, "Meter")));
-            Assert.That(V1 - 5, Is.EqualTo(new ValueUnit(5, "Meter")));
-            Assert.That(V1 * 2, Is.EqualTo(new ValueUnit(20, "Meter")));
-            Assert.That(V1 / 2, Is.EqualTo(new ValueUnit(5, "Meter")));
+            Assert.That(_v1 + 10, Is.EqualTo(new ValueUnit(20, "Meter")));
+            Assert.That(_v1 - 5, Is.EqualTo(new ValueUnit(5, "Meter")));
+            Assert.That(_v1 * 2, Is.EqualTo(new ValueUnit(20, "Meter")));
+            Assert.That(_v1 / 2, Is.EqualTo(new ValueUnit(5, "Meter")));
         }
     }
 }

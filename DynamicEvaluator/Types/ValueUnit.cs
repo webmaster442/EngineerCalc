@@ -28,6 +28,10 @@ public sealed class ValueUnit :
         _quantity = quantity;
     }
 
+    public string Unit => _quantity.Unit.ToString();
+
+    public double Value => _quantity.Value;
+
     public ValueUnit(double value, string unit)
     {
         if (string.IsNullOrEmpty(unit))

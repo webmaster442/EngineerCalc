@@ -64,7 +64,7 @@ internal class DetailsCommand : Command<DetailsCommand.Settings>
         return ExitCodes.Success;
     }
 
-    private byte[] GetBytes(dynamic result)
+    private static byte[] GetBytes(dynamic result)
     {
         if (result is float f)
             return BitConverter.GetBytes(f);

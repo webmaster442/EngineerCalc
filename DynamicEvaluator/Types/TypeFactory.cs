@@ -13,7 +13,7 @@ internal sealed class TypeFactory
         return new Fraction(l1, l2);
     }
 
-    public static bool DynamicConvert<TTarget>(dynamic source, [NotNullWhen(true)] out TTarget? result)
+    internal static bool DynamicConvert<TTarget>(dynamic source, [NotNullWhen(true)] out TTarget? result)
     {
         if (source is TTarget directMatch)
         {

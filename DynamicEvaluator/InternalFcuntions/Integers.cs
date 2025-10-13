@@ -48,7 +48,7 @@ internal static class Integers
         }
     }
 
-    internal static int Bits(long number)
+    public static int Bits(long number)
     {
         int bits = 1;
         if (number < 0)
@@ -63,5 +63,35 @@ internal static class Integers
             number >>= 1;
         }
         return bits;
+    }
+
+    public static IEnumerable<long> GetPrimeFactors(long number)
+    {
+        if (number < 0)
+        {
+            number = -number;
+            yield return -1;
+        }
+
+        if (number < 2)
+            yield break;
+
+        while ((number & 1) == 0)
+        {
+            yield return 2;
+            number >>= 1; // equivalent to n /= 2, but faster
+        }
+
+        for (long i = 3; i * i <= number; i += 2)
+        {
+            while (number % i == 0)
+            {
+                yield return i;
+                number /= i;
+            }
+        }
+
+        if (number > 1)
+            yield return number;
     }
 }

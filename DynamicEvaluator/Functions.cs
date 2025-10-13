@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Text;
 
 using DynamicEvaluator.InternalFcuntions;
 using DynamicEvaluator.Types;
@@ -185,7 +186,7 @@ public static class Functions
     public static dynamic Avg(params dynamic[] numbers)
     {
         dynamic sum = 0;
-        for (int i=0; i < numbers.Length; i++)
+        for (int i = 0; i < numbers.Length; i++)
         {
             sum += numbers[i];
         }
@@ -195,6 +196,26 @@ public static class Functions
 
     public static int Bits(long number)
         => Integers.Bits(number);
+
+    public static string PrimeFactors(long number)
+    {
+        var primes = Integers.GetPrimeFactors(number).GroupBy(x => x);
+
+        StringBuilder sb = new();
+        foreach (var g in primes)
+        {
+            var count = g.Count();
+            if (sb.Length > 0)
+                sb.Append(" * ");
+
+            sb.Append(g.Key);
+            if (count > 1)
+                sb.Append('^').Append(count);
+        }
+
+        return sb.ToString();
+
+    }
 
     public static ValueUnit ValueUnit(dynamic value, string unit)
     {
