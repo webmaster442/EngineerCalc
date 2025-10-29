@@ -32,4 +32,12 @@ internal abstract class BinaryExpression : IExpression
 
     public override string ToString()
         => Render(emitLatex: false);
+
+    public bool Equals(IExpression? other)
+    {
+        return other is BinaryExpression otherBinary
+            && GetType() == otherBinary.GetType()
+            && Left.Equals(otherBinary.Left)
+            && Right.Equals(otherBinary.Right);
+    }
 }

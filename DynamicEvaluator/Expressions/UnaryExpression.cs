@@ -29,4 +29,11 @@ internal abstract class UnaryExpression : IExpression
 
     public override string ToString()
         => Render(emitLatex: false);
+
+    public bool Equals(IExpression? other)
+    {
+        return other is UnaryExpression otherUnary
+            && GetType() == otherUnary.GetType()
+            && Child.Equals(otherUnary.Child);
+    }
 }

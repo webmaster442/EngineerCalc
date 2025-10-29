@@ -73,4 +73,10 @@ internal sealed class VariableExpression : IExpression
 
     public override string ToString()
         => Identifier;
+
+    public bool Equals(IExpression? other)
+    {
+        return other is VariableExpression variableExpression
+            && variableExpression.Identifier == Identifier;
+    }
 }

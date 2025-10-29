@@ -79,6 +79,33 @@ internal sealed class MultiplyExpression : BinaryExpression
             // -x * -y
             return new MultiplyExpression(leftNegate.Child, rightNegate.Child);
         }
+
+        var leftVar = newLeft as VariableExpression;
+        var rightVar = newRight as VariableExpression;
+        var leftExponent = newLeft as ExponentExpression;
+        var rightExponent = newRight as ExponentExpression;
+
+        // x * x = x^2
+        if (leftVar != null && rightVar != null && leftVar.Equals(rightVar))
+        {
+            return new ExponentExpression(newLeft, new ConstantExpression(2L));
+        }
+
+        // x*x^2
+        if (rightExponent?.Left is VariableExpression rightExpVar
+            && rightExponent.Right is ConstantExpression rightExpConst
+            && leftVar?.Identifier == rightExpVar.Identifier)
+        {
+            return SimplifyHelpers.MakeExponentMultiplyConstant(leftVar, rightExpConst.Value + 1L);
+        }
+        // x^2*x
+        if (leftExponent?.Left is VariableExpression leftExpVar
+            && leftExponent.Right is ConstantExpression leftExpConst
+            && rightVar?.Identifier == leftExpVar.Identifier)
+        {
+            return SimplifyHelpers.MakeExponentMultiplyConstant(rightVar, leftExpConst.Value + 1L);
+        }
+
         // x * y
         return new MultiplyExpression(newLeft, newRight);
     }

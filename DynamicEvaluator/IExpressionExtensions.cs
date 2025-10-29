@@ -1,16 +1,29 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Resources;
 
 using DynamicEvaluator.Expressions;
 using DynamicEvaluator.Expressions.Specific;
 using DynamicEvaluator.Logic;
 
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
 namespace DynamicEvaluator;
 
 public static class IExpressionExtensions
 {
+    public static bool IsCacheable(this IExpression expression, VariablesAndConstantsCollection varaiblesConstants)
+    {
+        var flatted = expression.Flatten();
+        var variables = flatted.OfType<VariableExpression>();
+
+        foreach (var variable in variables)
+        {
+            if (!varaiblesConstants.IsConstant(variable.Identifier))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     private static IEnumerable<IExpression> Flatten(this IExpression expression)
     {
         Stack<IExpression> expressions = new Stack<IExpression>();

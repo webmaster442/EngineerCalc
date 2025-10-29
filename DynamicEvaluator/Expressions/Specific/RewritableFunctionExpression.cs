@@ -25,4 +25,10 @@ internal abstract class RewritableFunctionExpression : IExpression
 
     public override string ToString()
         => _rewritten.ToString();
+
+    public bool Equals(IExpression? other)
+    {
+        return other is RewritableFunctionExpression otherRewritable
+            && _rewritten.Equals(otherRewritable._rewritten);
+    }
 }

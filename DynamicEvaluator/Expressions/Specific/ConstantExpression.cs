@@ -14,6 +14,12 @@ internal sealed class ConstantExpression : IExpression
     public IExpression Differentiate(string byVariable)
         => new ConstantExpression(0L);
 
+    public bool Equals(IExpression? other)
+    {
+        return other is ConstantExpression otherConst
+            && Value == otherConst.Value;
+    }
+
     public dynamic Evaluate(VariablesAndConstantsCollection variables) 
         => Value;
 

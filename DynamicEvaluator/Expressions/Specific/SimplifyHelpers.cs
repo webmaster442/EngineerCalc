@@ -1,6 +1,7 @@
-﻿namespace DynamicEvaluator.Expressions.Specific;
+﻿
+namespace DynamicEvaluator.Expressions.Specific;
 
-internal static class Extensions
+internal static class SimplifyHelpers
 {
     public static bool IsIntegerMultupleOfPi(this IExpression expression)
     {
@@ -29,4 +30,31 @@ internal static class Extensions
         }
         return false;
     }
+
+    internal static IExpression MakeVariableMultplyConstant(VariableExpression variable, dynamic value)
+    {
+        if (value == 1)
+        {
+            return variable;
+        }
+        else if (value == 0)
+        {
+            return new ConstantExpression(0L);
+        }
+        return new MultiplyExpression(variable, new ConstantExpression(value));
+    }
+
+    internal static IExpression MakeExponentMultiplyConstant(VariableExpression variable, dynamic value)
+    {
+        if (value == 1)
+        {
+            return variable;
+        }
+        else if (value == 0)
+        {
+            return new ConstantExpression(1L);
+        }
+        return new ExponentExpression(variable, new ConstantExpression(value));
+    }
+
 }

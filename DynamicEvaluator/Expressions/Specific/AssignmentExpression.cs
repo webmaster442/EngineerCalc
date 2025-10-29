@@ -19,6 +19,13 @@ internal sealed class AssignmentExpression : IExpression
     public IExpression Differentiate(string byVariable)
         => throw new InvalidOperationException("Assignment expressions cannot be differentiated.");
 
+    public bool Equals(IExpression? other)
+    {
+        return other is AssignmentExpression otherAssign
+            && _variable.Equals(otherAssign._variable)
+            && _expression.Equals(otherAssign._expression);
+    }
+
     public dynamic Evaluate(VariablesAndConstantsCollection variables)
     {
         variables[_variable.Identifier] = _expression.Simplify().Evaluate(variables);

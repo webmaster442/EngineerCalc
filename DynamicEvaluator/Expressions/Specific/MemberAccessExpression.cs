@@ -61,4 +61,11 @@ internal sealed class MemberAccessExpression : IExpression
 
     public override string ToString()
         => $"{_expression.ToString()}.{_memberName}";
+
+    public bool Equals(IExpression? other)
+    {
+        return other is MemberAccessExpression otherMember
+            && _memberName == otherMember._memberName
+            && _expression.Equals(otherMember._expression);
+    }
 }

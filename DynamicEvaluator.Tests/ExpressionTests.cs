@@ -183,6 +183,39 @@ public class ExpressionTests
     [TestCase("1==2", "False")]
     [TestCase("1!=2", "True")]
     [TestCase("1!=1", "False")]
+    //Variables & constants
+    [TestCase("x/x", "1")]
+    [TestCase("x+0", "x")]
+    [TestCase("0+x", "x")]
+    [TestCase("x-0", "x")]
+    [TestCase("x*1", "x")]
+    [TestCase("1*x", "x")]
+    [TestCase("x+x", "(x * 2)")]
+    [TestCase("(2*x)+x", "(x * 3)")]
+    [TestCase("(x*2)+x", "(x * 3)")]
+    [TestCase("x+(2*x)", "(x * 3)")]
+    [TestCase("x+(x*2)", "(x * 3)")]
+    [TestCase("x-x", "0")]
+    [TestCase("(2*x)-x", "x")]
+    [TestCase("(x*2)-x", "x")]
+    [TestCase("x-(2*x)", "(x * -1)")]
+    [TestCase("x-(x*2)", "(x * -1)")]
+    [TestCase("(3*x)-x", "(x * 2)")]
+    [TestCase("(x*3)-x", "(x * 2)")]
+    [TestCase("x-(3*x)", "(x * -2)")]
+    [TestCase("x-(x*3)", "(x * -2)")]
+    [TestCase("x+x+x-x", "(x * 2)")]
+    [TestCase("x*0", "0")]
+    [TestCase("0*x", "0")]
+    [TestCase("x*x", "(x ^ 2)")]
+    [TestCase("x^1", "x")]
+    [TestCase("x^2*x", "(x ^ 3)")]
+    [TestCase("x*x^2", "(x ^ 3)")]
+    [TestCase("x^2/x", "x")]
+    [TestCase("x^3/x", "(x ^ 2)")]
+    [TestCase("x^-1/x", "(x ^ -2)")]
+    [TestCase("x/1", "x")]
+    [TestCase("x/x^2", "(x ^ -1)")]
     //Member access
     [TestCase("(1/2).Numerator", "1")]
     [TestCase("(1/2).Denominator", "2")]
@@ -191,6 +224,41 @@ public class ExpressionTests
     {
         IExpression simplified = _expressionFactory.Create(expression).Simplify();
         Assert.That(simplified.ToString(), Is.EqualTo(expected));
+    }
+
+    [TestCase("x+x")]
+    [TestCase("x-x")]
+    [TestCase("x*y")]
+    [TestCase("x/y")]
+    [TestCase("x^y")]
+    [TestCase("x&y")]
+    [TestCase("x|y")]
+    [TestCase("!x")]
+    [TestCase("-x")]
+    [TestCase("x>y")]
+    [TestCase("x>=y")]
+    [TestCase("x<y")]
+    [TestCase("x<=y")]
+    [TestCase("x==y")]
+    [TestCase("x!=y")]
+    [TestCase("x=y")]
+    [TestCase("x?y:z")]
+    [TestCase("x%y")]
+    [TestCase("root(x,2)")]
+    [TestCase("sin(x)")]
+    [TestCase("cos(x)")]
+    [TestCase("tan(x)")]
+    [TestCase("ctg(x)")]
+    [TestCase("ln(x)")]
+    [TestCase("1")]
+    [TestCase("true")]
+    [TestCase("false")]
+
+    public void EnsureThat_Equals_Works(string expression)
+    {
+        IExpression expr1 = _expressionFactory.Create(expression);
+        IExpression expr2 = _expressionFactory.Create(expression);
+        Assert.That(expr1, Is.EqualTo(expr2));
     }
 
     [TestCase("false", "False")]

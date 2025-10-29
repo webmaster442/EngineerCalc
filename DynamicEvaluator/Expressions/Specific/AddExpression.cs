@@ -43,6 +43,53 @@ internal sealed class AddExpression : BinaryExpression
             // -x + y
             return new SubtractExpression(newRight, leftNegate.Child);
         }
+
+        var leftVar = newLeft as VariableExpression;
+        var rightVar = newRight as VariableExpression;
+        var leftMultiply = newLeft as MultiplyExpression;
+        var rightMultiply = newRight as MultiplyExpression;
+
+        if (leftVar != null)
+        {
+            // x + x  =>  2 * x
+            if (leftVar.Identifier == rightVar?.Identifier)
+            {
+                return new MultiplyExpression(leftVar, new ConstantExpression(2));
+            }
+            // x + (2 * x)  =>  3 * x
+            if (rightMultiply?.Right is VariableExpression rightMulVar
+                && rightMultiply.Left is ConstantExpression rightMulConst
+                && leftVar.Identifier == rightMulVar.Identifier)
+            {
+                return SimplifyHelpers.MakeVariableMultplyConstant(leftVar, rightMulConst.Value + 1);
+            }
+            // x + (x * 2)  =>  3 * x
+            if (rightMultiply?.Left is VariableExpression rightMulVar2
+                && rightMultiply.Right is ConstantExpression rightMulConst2
+                && leftVar.Identifier == rightMulVar2.Identifier)
+            {
+                return SimplifyHelpers.MakeVariableMultplyConstant(leftVar, rightMulConst2.Value + 1);
+            }
+        }
+
+        if (rightVar != null)
+        {
+            // (2 * x) + x  =>  3 * x
+            if (leftMultiply?.Right is VariableExpression leftMulVar
+                && leftMultiply.Left is ConstantExpression leftMulConst
+                && rightVar.Identifier == leftMulVar.Identifier)
+            {
+                return SimplifyHelpers.MakeVariableMultplyConstant(rightVar, leftMulConst.Value + 1);
+            }
+            // (x * 2) + x  =>  3 * x
+            if (leftMultiply?.Left is VariableExpression leftMulVar2
+                && leftMultiply.Right is ConstantExpression leftMulConst2
+                && rightVar.Identifier == leftMulVar2.Identifier)
+            {
+                return SimplifyHelpers.MakeVariableMultplyConstant(rightVar, leftMulConst2.Value + 1);
+            }
+        }
+
         // x + y;  no simplification
         return new AddExpression(newLeft, newRight);
     }

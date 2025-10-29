@@ -72,6 +72,35 @@ internal sealed class DivideExpression : BinaryExpression
             // -x / -y
             return new DivideExpression(leftNegate.Child, rightNegate.Child);
         }
+
+        var leftVar = newLeft as VariableExpression;
+        var rightVar = newRight as VariableExpression;
+        var leftExponent = newLeft as ExponentExpression;
+        var rightExponent = newRight as ExponentExpression;
+
+        if (leftVar != null 
+            && rightVar != null 
+            && leftVar.Identifier == rightVar.Identifier)
+        {
+            // x / x
+            return new ConstantExpression(1L);
+        }
+
+        // x/x^2
+        if (rightExponent?.Left is VariableExpression rightExpVar
+            && rightExponent.Right is ConstantExpression rightExpConst
+            && leftVar?.Identifier == rightExpVar.Identifier)
+        {
+            return SimplifyHelpers.MakeExponentMultiplyConstant(leftVar, 1L - rightExpConst.Value);
+        }
+        // x^2/x
+        if (leftExponent?.Left is VariableExpression leftExpVar
+            && leftExponent.Right is ConstantExpression leftExpConst
+            && rightVar?.Identifier == leftExpVar.Identifier)
+        {
+            return SimplifyHelpers.MakeExponentMultiplyConstant(rightVar, leftExpConst.Value - 1L);
+        }
+
         // x / y;  no simplification
         return new DivideExpression(newLeft, newRight);
     }

@@ -21,6 +21,14 @@ internal sealed class GenericFunctionExpression : IExpression
     public IExpression Differentiate(string byVariable)
         => throw new InvalidOperationException($"Expression with {_method.Name} can't be differentiated");
 
+    public bool Equals(IExpression? other)
+    {
+        return other is GenericFunctionExpression otherFunc
+            && _method == otherFunc._method
+            && _isParams == otherFunc._isParams
+            && _parameters.SequenceEqual(otherFunc._parameters);
+    }
+
     public dynamic Evaluate(VariablesAndConstantsCollection variables)
     {
         dynamic[] args = new dynamic[_parameters.Count];

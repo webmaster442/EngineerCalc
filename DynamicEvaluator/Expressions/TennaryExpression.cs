@@ -18,6 +18,14 @@ internal sealed class TennaryExpression : IExpression
     public IExpression Differentiate(string byVariable)
         => throw new InvalidOperationException("Cannot differentiate a tennary expression");
 
+    public bool Equals(IExpression? other)
+    {
+        return other is TennaryExpression otherTennary
+            && Condition.Equals(otherTennary.Condition)
+            && IfTrue.Equals(otherTennary.IfTrue)
+            && IfFalse.Equals(otherTennary.IfFalse);
+    }
+
     public dynamic Evaluate(VariablesAndConstantsCollection variables)
     {
         dynamic cond = Condition.Evaluate(variables);

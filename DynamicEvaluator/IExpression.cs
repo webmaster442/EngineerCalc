@@ -1,6 +1,6 @@
 ﻿namespace DynamicEvaluator;
 
-public interface IExpression
+public interface IExpression : IEquatable<IExpression>
 {
     /// <summary>
     /// Evaluate an expression
