@@ -121,6 +121,16 @@ public static class Functions
         if (TypeFactory.DynamicConvert<double>(x, out double d1)
             & TypeFactory.DynamicConvert<double>(y, out double d2))
         {
+            if (d2 - Math.Truncate(d2) == 0 
+                && d2 < 15)
+            {
+                double result = d1;
+                for (int i = 1; i < d2; i++)
+                    result *= d1;
+
+                return result;
+            }
+
             return Math.Pow(d1, d2);
         }
 
