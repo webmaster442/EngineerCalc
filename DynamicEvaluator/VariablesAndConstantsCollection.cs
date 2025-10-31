@@ -1,11 +1,14 @@
 ﻿using System.Collections;
+using System.Collections.Specialized;
 
 namespace DynamicEvaluator;
 
-public sealed class VariablesAndConstantsCollection : IEnumerable<KeyValuePair<string, object>>
+public sealed class VariablesAndConstantsCollection : IEnumerable<KeyValuePair<string, object>>, INotifyCollectionChanged
 {
     private readonly Dictionary<string, dynamic> _variables;
     private readonly Dictionary<string, dynamic> _constants;
+
+    public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
     public VariablesAndConstantsCollection()
     {
@@ -40,6 +43,9 @@ public sealed class VariablesAndConstantsCollection : IEnumerable<KeyValuePair<s
         };
     }
 
+    private void OnCollectionChanged(NotifyCollectionChangedAction action, object? item = null)
+        => CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(action, item));
+
     public bool IsConstant(string key)
         => _constants.ContainsKey(key);
 
@@ -56,13 +62,24 @@ public sealed class VariablesAndConstantsCollection : IEnumerable<KeyValuePair<s
 
         var keyToUse = key.ToLower();
         _variables[keyToUse] = value;
+        OnCollectionChanged(NotifyCollectionChangedAction.Add, key);
     }
 
     public void Clear()
-        => _variables.Clear();
+    {
+        _variables.Clear();
+        OnCollectionChanged(NotifyCollectionChangedAction.Reset);
+    }
 
     public bool Remove(string key)
-        => _variables.Remove(key);
+    {
+        if (_variables.Remove(key))
+        {
+            OnCollectionChanged(NotifyCollectionChangedAction.Remove, key);
+            return true;
+        }
+        return false;
+    }
 
     public dynamic this[string key]
     {

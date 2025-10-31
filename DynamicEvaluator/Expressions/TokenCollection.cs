@@ -1,6 +1,6 @@
 ﻿namespace DynamicEvaluator.Expressions;
 
-internal class TokenCollection
+internal sealed class TokenCollection
 {
     private readonly List<Token> _tokens;
     private int _index;
