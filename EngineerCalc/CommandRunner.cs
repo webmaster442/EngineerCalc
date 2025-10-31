@@ -55,6 +55,10 @@ internal sealed class CommandRunner
             config
                 .AddCommand<Commands.DetailsCommand>(".details")
                 .WithDescription("Shows details about the expression evaluation result");
+
+            config
+                .AddCommand<Commands.SimplifyCommand>(".simplify")
+                .WithDescription("Simplifies an expression");
         });
     }
 

@@ -1,67 +1,18 @@
-﻿using System.ComponentModel;
-using System.Globalization;
+﻿using System.Globalization;
+
+using DynamicEvaluator;
 
 using EngineerCalc.Api;
+using EngineerCalc.Commands.Abstraction;
 
 using Spectre.Console;
-using Spectre.Console.Cli;
 
 namespace EngineerCalc.Commands;
 
-internal class DetailsCommand : Command<DetailsCommand.Settings>
+internal sealed class DetailsCommand : ExpressionCommand
 {
-    private readonly IEvaluatorApi _api;
-    private readonly State _state;
-
-    public class Settings : CommandSettings
+    public DetailsCommand(IEvaluatorApi api, State state) : base(api, state)
     {
-        [CommandArgument(0, "<expression>")]
-        [Description("The expression to evaluate.")]
-        public string Expression { get; set; } = string.Empty;
-
-        public override ValidationResult Validate()
-        {
-            return string.IsNullOrWhiteSpace(Expression)
-                ? ValidationResult.Error("Expression cannot be empty.") 
-                : ValidationResult.Success();
-        }
-    }
-
-    public DetailsCommand(IEvaluatorApi api, State state)
-    {
-        _api = api;
-        _state = state;
-    }
-
-    public override int Execute(CommandContext context, Settings settings)
-    {
-        try
-        {
-            dynamic result = _state.ParseMode == ParseMode.Infix
-                ? _api.Parse(settings.Expression).Evaluate(_api.VariablesAndConstants)
-                : _api.ParseRpn(settings.Expression).Evaluate(_api.VariablesAndConstants);
-
-            byte[] bytes = GetBytes(result);
-
-            Table table = new();
-            for (int i = bytes.Length-1; i >= 0; i--)
-            {
-                table.AddColumn($"Byte {i}");
-            }
-            table.AddRow(bytes.Reverse().Select(b => b.ToString("D", CultureInfo.InvariantCulture).PadLeft(9, ' ')).ToArray());
-            table.AddRow(bytes.Reverse().Select(b => $"0x{b.ToString("X2", CultureInfo.InvariantCulture)}".PadLeft(9, ' ')).ToArray());
-            table.AddRow(bytes.Reverse().Select(b => $"{Convert.ToString(b, 2)}b".PadLeft(9, '0')).ToArray());
-            AnsiConsole.Write(table);
-
-        }
-        catch (Exception ex)
-        {
-            AnsiConsole.MarkupLineInterpolated($"[red]Error:[/] {ex.Message}[/]");
-            return ExitCodes.GeneralError;
-        }
-
-
-        return ExitCodes.Success;
     }
 
     private static byte[] GetBytes(dynamic result)
@@ -96,5 +47,21 @@ internal class DetailsCommand : Command<DetailsCommand.Settings>
             return System.Text.Encoding.UTF8.GetBytes(str);
 
         throw new InvalidOperationException("Unsupported type.");
+    }
+
+    protected override void ProcessExpression(IExpression expression)
+    {
+        dynamic result = expression.Evaluate(_api.VariablesAndConstants);
+        byte[] bytes = GetBytes(result);
+
+        Table table = new();
+        for (int i = bytes.Length - 1; i >= 0; i--)
+        {
+            table.AddColumn($"Byte {i}");
+        }
+        table.AddRow(bytes.Reverse().Select(b => b.ToString("D", CultureInfo.InvariantCulture).PadLeft(9, ' ')).ToArray());
+        table.AddRow(bytes.Reverse().Select(b => $"0x{b.ToString("X2", CultureInfo.InvariantCulture)}".PadLeft(9, ' ')).ToArray());
+        table.AddRow(bytes.Reverse().Select(b => $"{Convert.ToString(b, 2)}b".PadLeft(9, '0')).ToArray());
+        AnsiConsole.Write(table);
     }
 }
