@@ -5,7 +5,7 @@ namespace EngineerCalc.Commands;
 
 internal sealed class IntroCommand : Command
 {
-    public override int Execute(CommandContext context)
+    public override int Execute(CommandContext context, CancellationToken cancellationToken)
     {
         AnsiConsole.WriteLine("EngineerCalc - A versatile engineering calculator.");
         AnsiConsole.MarkupLine("Type [bold red].commands[/] to see available commands, [bold red].exit[/] to exit");

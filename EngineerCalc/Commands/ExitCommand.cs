@@ -13,7 +13,7 @@ internal sealed class ExitCommand : Command
         _api = api;
     }
 
-    public override int Execute(CommandContext context)
+    public override int Execute(CommandContext context, CancellationToken cancellationToken)
     {
         _api.Exit(0);
         return ExitCodes.Success;

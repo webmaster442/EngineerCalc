@@ -13,7 +13,7 @@ internal sealed class ClearCommand : Command
         _api = api;
     }
 
-    public override int Execute(CommandContext context)
+    public override int Execute(CommandContext context, CancellationToken cancellationToken)
     {
         _api.Clear();
         return ExitCodes.Success;

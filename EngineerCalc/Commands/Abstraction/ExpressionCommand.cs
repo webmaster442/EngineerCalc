@@ -18,7 +18,7 @@ internal abstract class ExpressionCommand : Command<ExpressionCommandSettings>
         _state = state;
     }
 
-    public override int Execute(CommandContext context, ExpressionCommandSettings settings)
+    public override int Execute(CommandContext context, ExpressionCommandSettings settings, CancellationToken cancellationToken)
     {
         try
         {

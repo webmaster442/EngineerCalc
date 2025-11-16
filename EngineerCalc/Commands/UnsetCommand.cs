@@ -32,7 +32,7 @@ internal sealed class UnsetCommand : Command<UnsetCommand.Settings>
         _api = api;
     }
 
-    public override int Execute(CommandContext context, Settings settings)
+    public override int Execute(CommandContext context, Settings settings, CancellationToken cancellationToken)
     {
         if (_api.VariablesAndConstants.IsConstant(settings.Name))
         {

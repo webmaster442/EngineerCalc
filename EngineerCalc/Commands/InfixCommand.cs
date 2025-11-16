@@ -11,7 +11,7 @@ internal sealed class InfixCommand : Command
         _state = state;
     }
 
-    public override int Execute(CommandContext context)
+    public override int Execute(CommandContext context, CancellationToken cancellationToken)
     {
         _state.ParseMode = ParseMode.Infix;
         return ExitCodes.Success;
