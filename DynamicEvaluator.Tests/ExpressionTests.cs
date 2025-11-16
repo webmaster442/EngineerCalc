@@ -18,6 +18,8 @@ public class ExpressionTests
     [TestCase("3", "0")]
     [TestCase("99", "0")]
     [TestCase("360", "0")]
+    [TestCase("e", "0")]
+    [TestCase("pi", "0")]
     //1st order
     [TestCase("x", "1")]
     [TestCase("3x", "3")]
@@ -143,8 +145,6 @@ public class ExpressionTests
     [TestCase("x-0", "x")]
     [TestCase("x--y", "(x + y)")]
     [TestCase("x-y", "(x - y)")]
-    //Root
-    [TestCase("root(2, 2)", "1")]
     [TestCase("root(x, 0)", "1")]
     [TestCase("root(x, 1)", "x")]
     [TestCase("root(x, y)", "(x ^ (1 / y))")]
@@ -436,6 +436,10 @@ public class ExpressionTests
     [TestCase("2^3/2", 4d)]
     [TestCase("2^3*2", 16d)]
     [TestCase("2^3^2", 512d)]
+    [TestCase("root(2, 2)", "1.4142135623730951")]
+    [TestCase("111^0", "1")]
+    [TestCase("0.12^0", "1")]
+    [TestCase("root(2, 1)", "2")]
     public void EnsureThat_Evaluate_Works_Doubles(string expression, double expected)
     {
         IExpression parsed = _expressionFactory.Create(expression);
