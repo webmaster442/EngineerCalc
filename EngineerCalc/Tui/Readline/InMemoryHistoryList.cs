@@ -1,17 +1,18 @@
 ﻿namespace EngineerCalc.Tui.Readline;
 
-internal sealed class HistoryState
+internal sealed class InMemoryHistoryList : IHistory
 {
     public List<string> Entries { get; }
     public int CurrentIndex { get; set; }
 
-    public HistoryState()
+    public InMemoryHistoryList()
     {
         Entries = new List<string>();
         CurrentIndex = Entries.Count - 1;
     }
 
-    public void ResetIndex() => CurrentIndex = Entries.Count - 1;
+    public void ResetIndex()
+        => CurrentIndex = Entries.Count - 1;
 
     public void Add(string entry)
     {

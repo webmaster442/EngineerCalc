@@ -5,26 +5,26 @@ namespace EngineerCalc.Tui.Readline;
 internal sealed class LineReader
 {
     private readonly CompleterState _completerState;
-    private readonly HistoryState _history;
+    private readonly IHistory? _history;
     private readonly IConsoleDriver _console;
     private readonly StringBuilder _buffer;
     private Position _currentPosition;
     private Position _startPosition;
 
-    public LineReader(IConsoleDriver consoleDriver, ICompleter? completer = null)
+    public LineReader(IConsoleDriver consoleDriver,
+                      IHistory? history = null,
+                      ICompleter? completer = null)
     {
         _console = consoleDriver;
         _buffer = new StringBuilder(_console.WindowWidth);
         _completerState = new(completer);
-        _history = new HistoryState();
+        _history = history;
         _currentPosition = new Position(0, 0);
     }
 
-    public LineReader(ICompleter? completer = null) : this(new SystemConsoleDriver(), completer)
+    public LineReader(ICompleter? completer = null) : this(new SystemConsoleDriver(), new InMemoryHistoryList(), completer)
     {
     }
-
-    public IList<string> History => _history.Entries;
 
     public string ReadLine(string prompt)
     {
@@ -32,7 +32,7 @@ internal sealed class LineReader
         _console.Write(prompt);
         _startPosition = new Position(0, _console.CursorLeft);
         _currentPosition = new Position(0, _console.CursorLeft);
-        _history.ResetIndex();
+        _history?.ResetIndex();
         do
         {
             current = _console.ReadKey(intercept: true);
@@ -69,7 +69,7 @@ internal sealed class LineReader
         while (current.Key != ConsoleKey.Enter);
         _console.WriteLine();
         string line = _buffer.ToString();
-        _history.Add(line);
+        _history?.Add(line);
         _buffer.Clear();
         return line;
     }
@@ -131,12 +131,12 @@ internal sealed class LineReader
 
     private void OnDownArrow()
     {
-        if (_history.Count <= 0)
+        if (_history == null || _history.Count <= 0)
             return;
 
         if (_history.Count == 1)
         {
-            RewriteText(History[0]);
+            RewriteText(_history.Entries[0]);
         }
         else if (_history.CurrentIndex + 1 < _history.Count)
         {
@@ -147,12 +147,12 @@ internal sealed class LineReader
 
     private void OnUparrow()
     {
-        if (_history.Count <= 0)
+        if (_history == null || _history.Count <= 0)
             return;
 
-        if (History.Count == 1)
+        if (_history.Count == 1)
         {
-            RewriteText(History[0]);
+            RewriteText(_history.Entries[0]);
         }
         else if (_history.CurrentIndex - 1 >= 0)
         {
@@ -187,7 +187,7 @@ internal sealed class LineReader
             _console.Write(_buffer[_buffer.Length - 1]);
             return;
         }
-        
+      
         _console.CursorLeft = _startPosition.ScreenPosition;
         _console.Write(_buffer.ToString());
         _console.CursorLeft = _currentPosition.ScreenPosition;
