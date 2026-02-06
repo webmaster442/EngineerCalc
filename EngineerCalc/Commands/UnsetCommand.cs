@@ -15,9 +15,15 @@ internal sealed class UnsetCommand : Command<UnsetCommand.Settings>
         [Description("Name of the variable to unset")]
         public string Name { get; set; } = string.Empty;
 
+        [CommandOption("--all")]
+        public bool All { get; set; }
+
         public override ValidationResult Validate()
         {
-            if (string.IsNullOrWhiteSpace(Name))
+            if (All && !string.IsNullOrWhiteSpace(Name))
+                return ValidationResult.Error("Cannot specify both --all and a name");
+
+            if (string.IsNullOrWhiteSpace(Name) && !All)
                 return ValidationResult.Error("Name cannot be empty");
 
             return ValidationResult.Success();
@@ -34,6 +40,12 @@ internal sealed class UnsetCommand : Command<UnsetCommand.Settings>
 
     public override int Execute(CommandContext context, Settings settings, CancellationToken cancellationToken)
     {
+        if (settings.All)
+        {
+            _api.VariablesAndConstants.Clear();
+            return ExitCodes.Success;
+        }
+
         if (_api.VariablesAndConstants.IsConstant(settings.Name))
         {
             AnsiConsole.MarkupLineInterpolated($"[red]Cannot unset constant '{settings.Name}'.[/]");
