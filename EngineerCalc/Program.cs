@@ -34,7 +34,7 @@ await runner.RunAsync([".intro"]);
 while (true)
 {
     Prompt.DoPrompt(appState);
-    string line = readline.ReadLine("> ");
+    string line = readline.ReadLine("╚═> ");
     if (string.IsNullOrWhiteSpace(line))
         continue;
 

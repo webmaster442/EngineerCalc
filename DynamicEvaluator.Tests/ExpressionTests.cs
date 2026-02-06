@@ -195,6 +195,7 @@ public class ExpressionTests
     [TestCase("(x*2)+x", "(x * 3)")]
     [TestCase("x+(2*x)", "(x * 3)")]
     [TestCase("x+(x*2)", "(x * 3)")]
+    [TestCase("3x+3x", "(x * 6)")]
     [TestCase("x-x", "0")]
     [TestCase("(2*x)-x", "x")]
     [TestCase("(x*2)-x", "x")]

@@ -59,6 +59,14 @@ internal sealed class CommandRunner
             config
                 .AddCommand<Commands.SimplifyCommand>(".simplify")
                 .WithDescription("Simplifies an expression");
+
+            config
+                .AddCommand<Commands.PlotCommand>(".plot")
+                .WithDescription("Plots a mathematical function");
+
+            config
+                .AddCommand<Commands.KeysCommand>(".keys")
+                .WithDescription("Show key mappings");
         });
     }
 

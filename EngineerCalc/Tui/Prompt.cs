@@ -6,10 +6,8 @@ internal static class Prompt
 {
     public static void DoPrompt(State state)
     {
-        var rule = new Rule($"[bold yellow]{state.Culture.ThreeLetterISOLanguageName}[/] | [green]{state.ParseMode}[/] | [orangered1]{DateTime.Now.ToShortTimeString().EscapeMarkup()}[/]")
-        {
-            Justification = Justify.Left
-        };
-        AnsiConsole.Write(rule);
+        var text = $"[bold yellow]{state.Culture.ThreeLetterISOLanguageName}[/] | [green]{state.ParseMode}[/] | [orangered1]{DateTime.Now.ToShortTimeString().EscapeMarkup()}[/]";
+        AnsiConsole.Write("╔═══ ");
+        AnsiConsole.MarkupLine(text);
     }
 }

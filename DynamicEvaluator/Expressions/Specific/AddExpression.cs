@@ -90,6 +90,46 @@ internal sealed class AddExpression : BinaryExpression
             }
         }
 
+        //3x + 3x  =>  6x
+        if (leftMultiply != null)
+        {
+            if (rightMultiply != null)
+            {
+                VariableExpression? leftVarInMul = null;
+                ConstantExpression? leftConstInMul = null;
+                if (leftMultiply.Left is VariableExpression lvm && leftMultiply.Right is ConstantExpression lcm)
+                {
+                    leftVarInMul = lvm;
+                    leftConstInMul = lcm;
+                }
+                else if (leftMultiply.Right is VariableExpression lvm2 && leftMultiply.Left is ConstantExpression lcm2)
+                {
+                    leftVarInMul = lvm2;
+                    leftConstInMul = lcm2;
+                }
+                VariableExpression? rightVarInMul = null;
+                ConstantExpression? rightConstInMul = null;
+                if (rightMultiply.Left is VariableExpression rvm && rightMultiply.Right is ConstantExpression rcm)
+                {
+                    rightVarInMul = rvm;
+                    rightConstInMul = rcm;
+                }
+                else if (rightMultiply.Right is VariableExpression rvm2 && rightMultiply.Left is ConstantExpression rcm2)
+                {
+                    rightVarInMul = rvm2;
+                    rightConstInMul = rcm2;
+                }
+                if (leftVarInMul != null && rightVarInMul != null
+                    && leftConstInMul != null && rightConstInMul != null
+                    && leftVarInMul.Identifier == rightVarInMul.Identifier)
+                {
+                    return SimplifyHelpers.MakeVariableMultplyConstant(
+                        leftVarInMul,
+                        leftConstInMul.Value + rightConstInMul.Value);
+                }
+            }
+        }
+
         // x + y;  no simplification
         return new AddExpression(newLeft, newRight);
     }
