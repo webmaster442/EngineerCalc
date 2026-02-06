@@ -38,6 +38,12 @@
           "Spectre.Console": "0.53.1"
         }
       },
+      "Webmaster442.WindowsTerminal": {
+        "type": "Direct",
+        "requested": "[4.1.1, )",
+        "resolved": "4.1.1",
+        "contentHash": "0z1y6nFmpAhHP0x/aus62qIS+MDwntC8JYvkqEm5v9QyszzmyQG5Jp01a6FYacaXZ7CsvQgV7TzhA6G6p6MTSA=="
+      },
       "Microsoft.Extensions.DependencyInjection.Abstractions": {
         "type": "Transitive",
         "resolved": "10.0.2",

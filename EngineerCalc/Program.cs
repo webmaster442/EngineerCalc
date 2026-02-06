@@ -1,4 +1,6 @@
-﻿using DynamicEvaluator;
+﻿using Webmaster442.WindowsTerminal;
+
+using DynamicEvaluator;
 using DynamicEvaluator.Types;
 
 using EngineerCalc;
@@ -33,8 +35,11 @@ await runner.RunAsync([".intro"]);
 
 while (true)
 {
+    Terminal.ShellIntegration.StartOfPrompt();
     Prompt.DoPrompt(appState);
+    Terminal.ShellIntegration.CommandStart();
     string line = readline.ReadLine("╚═> ");
+    Terminal.ShellIntegration.CommandExecuted();
     if (string.IsNullOrWhiteSpace(line))
         continue;
 
@@ -56,12 +61,14 @@ while (true)
                 AnsiConsole.WriteLine($"Unknown command: {tokens[0]}");
                 break;
         }
+        Terminal.ShellIntegration.CommandFinished(0);
     }
     catch (Exception ex)
     {
         if (ex is InvalidOperationException or OverflowException)
         {
             AnsiConsole.MarkupLineInterpolated($"[red]{ex.Message}[/]");
+            Terminal.ShellIntegration.CommandFinished(-1);
             continue;
         }
 
