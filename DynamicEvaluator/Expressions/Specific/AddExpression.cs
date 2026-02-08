@@ -140,7 +140,7 @@ internal sealed class AddExpression : BinaryExpression
     protected override string Render(bool emitLatex)
     {
         return emitLatex ?
-            $"{{ {Left.ToLatex()} + {Right.ToLatex()} }}" 
+            $"{{ {Left.ToLatex()} + {Right.ToLatex()} }}"
             : $"({Left} + {Right})";
     }
 }

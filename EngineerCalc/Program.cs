@@ -1,6 +1,4 @@
-﻿using Webmaster442.WindowsTerminal;
-
-using DynamicEvaluator;
+﻿using DynamicEvaluator;
 using DynamicEvaluator.Types;
 
 using EngineerCalc;
@@ -11,6 +9,8 @@ using EngineerCalc.Tui.Readline;
 using Microsoft.Extensions.DependencyInjection;
 
 using Spectre.Console;
+
+using Webmaster442.WindowsTerminal;
 
 var appState = new State();
 var expressionFactory = new ExpressionFactory();

@@ -45,7 +45,7 @@ internal sealed class ModuloExpression : BinaryExpression
         {
             return new ConstantExpression(0L);
         }
-        
+
         return new ModuloExpression(newLeft, newRight);
     }
 

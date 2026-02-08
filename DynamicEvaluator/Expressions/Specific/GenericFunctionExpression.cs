@@ -32,14 +32,14 @@ internal sealed class GenericFunctionExpression : IExpression
     public dynamic Evaluate(VariablesAndConstantsCollection variables)
     {
         dynamic[] args = new dynamic[_parameters.Count];
-        for (int i=0; i<args.Length; i++)
+        for (int i = 0; i < args.Length; i++)
         {
             args[i] = _parameters[i].Evaluate(variables);
         }
 
         if (_isParams)
         {
-           args = new dynamic[] { args };
+            args = new dynamic[] { args };
         }
 
         return _method.Invoke(null, args) ?? throw new InvalidOperationException($"Method invoke failed: {_method.Name}");

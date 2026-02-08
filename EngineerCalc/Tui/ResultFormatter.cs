@@ -7,6 +7,7 @@ using DynamicEvaluator.Types;
 using Spectre.Console;
 
 namespace EngineerCalc.Tui;
+
 internal static class ResultFormatter
 {
     private static string PropertyName(string name)
@@ -115,7 +116,7 @@ internal static class ResultFormatter
                 .Append("[/]");
         }
         else if (result is NoResult)
-        { 
+        {
         }
         else
         {

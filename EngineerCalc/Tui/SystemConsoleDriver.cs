@@ -9,10 +9,10 @@ public sealed class SystemConsoleDriver : IConsoleDriver
 
     public int CursorLeft
     {
-        get => Console.CursorLeft; 
+        get => Console.CursorLeft;
         set => Console.CursorLeft = value;
     }
-    
+
     public void Write(string text)
         => AnsiConsole.Write(text);
 
@@ -21,7 +21,7 @@ public sealed class SystemConsoleDriver : IConsoleDriver
 
     public void WriteLine()
         => AnsiConsole.WriteLine();
-    
+
     public ConsoleKeyInfo ReadKey(bool intercept)
         => Console.ReadKey(intercept);
 

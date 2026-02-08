@@ -131,8 +131,8 @@ internal sealed class PlotCommand : Command<PlotCommand.Settings>
             using (var stream = File.Create(settings.FileName))
             {
                 var exporter = new SvgExporter
-                { 
-                    Width = 1920, 
+                {
+                    Width = 1920,
                     Height = 1080,
                 };
                 exporter.Export(model, stream);

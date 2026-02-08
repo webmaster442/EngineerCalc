@@ -21,10 +21,10 @@ internal sealed class TokenSet
         }
     }
 
-    public static TokenSet operator +(TokenSet t1, TokenSet t2) 
+    public static TokenSet operator +(TokenSet t1, TokenSet t2)
         => new TokenSet(t1._tokens | t2._tokens);
 
-    public static TokenSet operator +(TokenSet t1, TokenType t2) 
+    public static TokenSet operator +(TokenSet t1, TokenType t2)
         => new TokenSet(t1._tokens | (uint)t2);
 
     public bool Contains(TokenType type)

@@ -15,7 +15,7 @@ internal sealed class NotEqualExpression : BinaryExpression
         var newLeft = Left.Simplify();
         var newRight = Right.Simplify();
 
-        if (newLeft is ConstantExpression leftConst 
+        if (newLeft is ConstantExpression leftConst
             && newRight is ConstantExpression rightConst)
         {
             return new ConstantExpression(Evaluate(leftConst.Value, rightConst.Value));

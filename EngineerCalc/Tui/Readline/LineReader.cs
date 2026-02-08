@@ -187,7 +187,7 @@ internal sealed class LineReader
             _console.Write(_buffer[_buffer.Length - 1]);
             return;
         }
-      
+
         _console.CursorLeft = _startPosition.ScreenPosition;
         _console.Write(_buffer.ToString());
         _console.CursorLeft = _currentPosition.ScreenPosition;

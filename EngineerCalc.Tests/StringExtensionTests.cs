@@ -21,6 +21,6 @@ public class StringExtensionTests
     public void ToWordIndexTest(string input, int position, int expected)
     {
         int returnValue = input.ToWordIndex(position);
-        Assert.That(returnValue, Is.EqualTo(expected),  $"Expected ToWordIndex('{input}', {position}) to return {expected}, but got {returnValue}.");
+        Assert.That(returnValue, Is.EqualTo(expected), $"Expected ToWordIndex('{input}', {position}) to return {expected}, but got {returnValue}.");
     }
 }

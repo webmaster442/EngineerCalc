@@ -4,5 +4,5 @@ namespace EngineerCalc.Api;
 
 internal interface ICommandRunnerApi
 {
-    IDictionary<string , Command> KnownCommands { get; }
+    IDictionary<string, Command> KnownCommands { get; }
 }

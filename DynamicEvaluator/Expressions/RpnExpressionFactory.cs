@@ -63,7 +63,7 @@ internal static class RpnExpressionFactory
                     break;
                 case TokenType.Function:
                     List<IExpression> parameters = new();
-                    for (int i=0; i <= exprStack.Count; i++)
+                    for (int i = 0; i <= exprStack.Count; i++)
                     {
                         parameters.Add(exprStack.Pop());
                     }

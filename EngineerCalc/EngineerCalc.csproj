@@ -8,10 +8,26 @@
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     <PackAsTool>True</PackAsTool>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>EngineerCalc</Title>
+    <Description>An engineering calculator</Description>
+    <PackageProjectUrl>https://github.com/webmaster442/EngineerCalc</PackageProjectUrl>
+    <PackageReadmeFile>Readme.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/webmaster442/EngineerCalc</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>expression;evaluator;calculator;command;line;tool</PackageTags>
+    <Version>$([System.DateTime]::UtcNow.ToString("yyyy")).$([System.DateTime]::UtcNow.ToString("MM")).$([System.DateTime]::UtcNow.ToString("dd")).0</Version>
+    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
   </PropertyGroup>
 
   <ItemGroup>
     <InternalsVisibleTo Include="EngineerCalc.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\Readme.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

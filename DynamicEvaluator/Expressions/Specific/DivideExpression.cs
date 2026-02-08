@@ -78,8 +78,8 @@ internal sealed class DivideExpression : BinaryExpression
         var leftExponent = newLeft as ExponentExpression;
         var rightExponent = newRight as ExponentExpression;
 
-        if (leftVar != null 
-            && rightVar != null 
+        if (leftVar != null
+            && rightVar != null
             && leftVar.Identifier == rightVar.Identifier)
         {
             // x / x

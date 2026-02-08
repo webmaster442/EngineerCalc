@@ -126,10 +126,10 @@ internal static class Tokenizer
                 break;
             }
         }
-        
+
         string identifier = sb.ToString();
         newIndex = index;
-        switch(identifier)
+        switch (identifier)
         {
             case "true":
             case "false":
@@ -139,8 +139,8 @@ internal static class Tokenizer
             default:
                 {
                     bool isFunction = isFunctionCheck.Invoke(identifier);
-                    return isFunction 
-                        ? new Token(identifier, TokenType.Function) 
+                    return isFunction
+                        ? new Token(identifier, TokenType.Function)
                         : new Token(identifier, TokenType.Variable);
                 }
         }
@@ -269,7 +269,7 @@ internal static class Tokenizer
                 }
 
                 char current = input[index];
-                char next = index +1 < input.Length ? input[index + 1] : '\0';
+                char next = index + 1 < input.Length ? input[index + 1] : '\0';
                 Token @operator = HandleOperator(current, next, index, out newIndex);
                 tokens.Add(@operator);
                 index = newIndex;

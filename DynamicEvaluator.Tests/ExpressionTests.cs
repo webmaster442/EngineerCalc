@@ -6,7 +6,7 @@ namespace DynamicEvaluator.Tests;
 
 public class ExpressionTests
 {
-    private ExpressionFactory _expressionFactory;
+    private ExpressionFactory? _expressionFactory;
 
     [SetUp]
     public void Setup()

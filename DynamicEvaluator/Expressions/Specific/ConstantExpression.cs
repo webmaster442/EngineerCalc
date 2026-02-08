@@ -20,7 +20,7 @@ internal sealed class ConstantExpression : IExpression
             && Value == otherConst.Value;
     }
 
-    public dynamic Evaluate(VariablesAndConstantsCollection variables) 
+    public dynamic Evaluate(VariablesAndConstantsCollection variables)
         => Value;
 
     public IExpression Simplify()

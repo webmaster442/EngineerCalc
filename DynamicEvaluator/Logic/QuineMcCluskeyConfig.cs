@@ -17,10 +17,10 @@ internal sealed class QuineMcCluskeyConfig
     /// </summary>
     public string[] VariableNamesToUse { get; set; }
 
-    public QuineMcCluskeyConfig() 
+    public QuineMcCluskeyConfig()
     {
         VariableNamesToUse = new string[26];
-        for (int i =0; i< VariableNamesToUse.Length; i++)
+        for (int i = 0; i < VariableNamesToUse.Length; i++)
         {
             VariableNamesToUse[i] = $"{Convert.ToChar(65 + i)}";
         }
