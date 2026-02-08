@@ -27,6 +27,8 @@ internal sealed class LineReader
         _currentPosition = new Position(0, 0);
     }
 
+    public event EventHandler<KeyDownEventArgs>? KeyWasPressed;
+
     public LineReader(ICompleter? completer = null) : this(new SystemConsoleDriver(), new InMemoryHistoryList(), completer)
     {
     }
@@ -69,7 +71,8 @@ internal sealed class LineReader
                     _completerState.Reset();
                     break;
             }
-
+            var eventArgs = new KeyDownEventArgs(current);
+            KeyWasPressed?.Invoke(this, eventArgs);
         }
         while (current.Key != ConsoleKey.Enter);
         _console.WriteLine();

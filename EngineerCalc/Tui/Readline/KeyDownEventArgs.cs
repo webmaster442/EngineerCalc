@@ -5,12 +5,14 @@
 
 namespace EngineerCalc.Tui.Readline;
 
-internal interface IHistory
+internal sealed class KeyDownEventArgs : EventArgs
 {
-    int Count { get; }
-    string Current { get; }
-    int CurrentIndex { get; set; }
-    List<string> Entries { get; }
-    void Add(string entry);
-    void ResetIndex();
+    public KeyDownEventArgs(ConsoleKeyInfo current)
+    {
+        Key = current.Key;
+        Modifiers = current.Modifiers;
+    }
+
+    public ConsoleKey Key { get; }
+    public ConsoleModifiers Modifiers { get;  }
 }
