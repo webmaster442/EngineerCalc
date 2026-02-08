@@ -1,4 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿//-----------------------------------------------------------------------------
+// (c) 2024-2026 Ruzsinszki Gábor
+// This code is licensed under MIT license (see LICENSE for details)
+//-----------------------------------------------------------------------------
+
+using System.Diagnostics.CodeAnalysis;
 
 using DynamicEvaluator.Expressions;
 using DynamicEvaluator.Expressions.Specific;

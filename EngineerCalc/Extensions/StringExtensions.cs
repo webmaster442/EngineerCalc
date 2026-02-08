@@ -1,4 +1,9 @@
-﻿namespace EngineerCalc.Extensions;
+﻿//-----------------------------------------------------------------------------
+// (c) 2024-2026 Ruzsinszki Gábor
+// This code is licensed under MIT license (see LICENSE for details)
+//-----------------------------------------------------------------------------
+
+namespace EngineerCalc.Extensions;
 
 internal static class StringExtensions
 {

@@ -1,4 +1,9 @@
-﻿namespace EngineerCalc.Tui.Readline;
+﻿//-----------------------------------------------------------------------------
+// (c) 2024-2026 Ruzsinszki Gábor
+// This code is licensed under MIT license (see LICENSE for details)
+//-----------------------------------------------------------------------------
+
+namespace EngineerCalc.Tui.Readline;
 
 internal sealed class CompleterState
 {

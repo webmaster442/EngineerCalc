@@ -1,4 +1,9 @@
-﻿using System.Text.RegularExpressions;
+﻿//-----------------------------------------------------------------------------
+// (c) 2024-2026 Ruzsinszki Gábor
+// This code is licensed under MIT license (see LICENSE for details)
+//-----------------------------------------------------------------------------
+
+using System.Text.RegularExpressions;
 
 using EngineerCalc.Api;
 using EngineerCalc.Commands.Abstraction;

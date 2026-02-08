@@ -1,4 +1,9 @@
-﻿using DynamicEvaluator;
+﻿//-----------------------------------------------------------------------------
+// (c) 2024-2026 Ruzsinszki Gábor
+// This code is licensed under MIT license (see LICENSE for details)
+//-----------------------------------------------------------------------------
+
+using DynamicEvaluator;
 
 using EngineerCalc.Api;
 using EngineerCalc.Commands.Abstraction;

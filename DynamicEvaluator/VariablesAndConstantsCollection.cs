@@ -1,4 +1,9 @@
-﻿using System.Collections;
+﻿//-----------------------------------------------------------------------------
+// (c) 2024-2026 Ruzsinszki Gábor
+// This code is licensed under MIT license (see LICENSE for details)
+//-----------------------------------------------------------------------------
+
+using System.Collections;
 using System.Collections.Specialized;
 
 namespace DynamicEvaluator;

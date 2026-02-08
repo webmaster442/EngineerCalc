@@ -1,4 +1,9 @@
-﻿using System.ComponentModel;
+﻿//-----------------------------------------------------------------------------
+// (c) 2024-2026 Ruzsinszki Gábor
+// This code is licensed under MIT license (see LICENSE for details)
+//-----------------------------------------------------------------------------
+
+using System.ComponentModel;
 
 using Spectre.Console;
 using Spectre.Console.Cli;

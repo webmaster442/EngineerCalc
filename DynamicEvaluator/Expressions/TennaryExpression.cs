@@ -1,4 +1,9 @@
-﻿using DynamicEvaluator.Expressions.Specific;
+﻿//-----------------------------------------------------------------------------
+// (c) 2024-2026 Ruzsinszki Gábor
+// This code is licensed under MIT license (see LICENSE for details)
+//-----------------------------------------------------------------------------
+
+using DynamicEvaluator.Expressions.Specific;
 
 namespace DynamicEvaluator.Expressions;
 

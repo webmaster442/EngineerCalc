@@ -1,4 +1,9 @@
-﻿namespace DynamicEvaluator.Expressions.Specific.SpecialFunctions;
+﻿//-----------------------------------------------------------------------------
+// (c) 2024-2026 Ruzsinszki Gábor
+// This code is licensed under MIT license (see LICENSE for details)
+//-----------------------------------------------------------------------------
+
+namespace DynamicEvaluator.Expressions.Specific.SpecialFunctions;
 
 internal sealed class ArcCosExpression : UnaryExpression
 {

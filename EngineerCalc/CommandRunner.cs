@@ -1,4 +1,9 @@
-﻿using EngineerCalc.DependencyInjection;
+﻿//-----------------------------------------------------------------------------
+// (c) 2024-2026 Ruzsinszki Gábor
+// This code is licensed under MIT license (see LICENSE for details)
+//-----------------------------------------------------------------------------
+
+using EngineerCalc.DependencyInjection;
 
 using Microsoft.Extensions.DependencyInjection;
 
