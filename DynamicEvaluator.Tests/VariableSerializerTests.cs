@@ -7,7 +7,7 @@ namespace DynamicEvaluator.Tests;
 [TestFixture]
 public class SerializerTests
 {
-    private VariablesAndConstantsCollection? _collection;
+    private VariablesAndConstantsCollection _collection;
 
     [SetUp]
     public void Setup()

@@ -5,8 +5,8 @@ namespace DynamicEvaluator.Tests;
 [TestFixture]
 public class DocumentationProviderTests
 {
-    private DocumentationProvider? _documentationProvider;
-    private HashSet<string>? _skip;
+    private DocumentationProvider _documentationProvider;
+    private HashSet<string> _skip;
 
     [OneTimeSetUp]
     public void Setup()
