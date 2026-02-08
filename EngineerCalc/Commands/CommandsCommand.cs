@@ -8,6 +8,8 @@ using System.Text.RegularExpressions;
 using EngineerCalc.Api;
 using EngineerCalc.Commands.Abstraction;
 
+using Spectre.Console;
+
 namespace EngineerCalc.Commands;
 
 internal sealed class CommandsCommand : TableCommand<KeyValuePair<string, string>>
@@ -30,4 +32,10 @@ internal sealed class CommandsCommand : TableCommand<KeyValuePair<string, string
 
     protected override string[] ToTableRow(KeyValuePair<string, string> data)
         => [data.Key, data.Value];
+
+    protected override void AfterTable()
+    {
+        AnsiConsole.WriteLine("Use the --help option to display command help.");
+        AnsiConsole.MarkupLine("Example: [gray].details --help[/]");
+    }
 }

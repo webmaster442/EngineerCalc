@@ -33,10 +33,14 @@ internal abstract class TableCommand<TDataSet> : Command<TableCommandArgs>
         {
             table.AddRow(ToTableRow(data));
         }
+
         AnsiConsole.Write(table);
+        AfterTable();
 
         return ExitCodes.Success;
     }
+
+    protected virtual void AfterTable() { }
 
     protected abstract string[] ToTableRow(TDataSet data);
 

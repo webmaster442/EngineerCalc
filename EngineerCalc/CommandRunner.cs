@@ -72,6 +72,10 @@ internal sealed class CommandRunner
             config
                 .AddCommand<Commands.KeysCommand>(".keys")
                 .WithDescription("Show key mappings");
+
+            config
+                .AddCommand<Commands.VersionCommand>(".version")
+                .WithDescription("Print program version");
         });
     }
 
