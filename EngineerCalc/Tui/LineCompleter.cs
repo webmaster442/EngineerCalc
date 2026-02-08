@@ -11,9 +11,9 @@ namespace EngineerCalc.Tui;
 internal sealed class LineCompleter : ICompleter
 {
     private readonly IEnumerable<string> _functions;
-    private readonly IEnumerable<string> _commands;
+    private readonly IDictionary<string, IReadOnlyList<string>> _commands;
 
-    public LineCompleter(IEnumerable<string> functions, IEnumerable<string> commands)
+    public LineCompleter(IEnumerable<string> functions, IDictionary<string, IReadOnlyList<string>> commands)
     {
         _functions = functions;
         _commands = commands;
@@ -24,8 +24,15 @@ internal sealed class LineCompleter : ICompleter
         string[] words = line.Split(' ');
         int wordIndex = line.ToWordIndex(currentPosition);
 
-        if (words[wordIndex].StartsWith('.'))
-            return _commands.Where(f => f.StartsWith(words[wordIndex]));
+        if (wordIndex == 0 && words[wordIndex].StartsWith('.'))
+            return _commands.Where(c => c.Key.StartsWith(words[wordIndex])).Select(c => c.Key);
+
+        if (wordIndex > 0 && words[0].StartsWith('.'))
+        {
+            string cmd = words[0];
+            if (_commands.TryGetValue(cmd, out var args))
+                return args.Where(a => a.StartsWith(words[wordIndex]));
+        }
 
         return _functions.Where(f => f.StartsWith(words[wordIndex]));
     }

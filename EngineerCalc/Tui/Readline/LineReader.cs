@@ -83,7 +83,7 @@ internal sealed class LineReader
     {
         if (_completerState.TryGetNext(_buffer.ToString(), _currentPosition.StringPosition, out string completion))
         {
-            RewriteText(completion);
+            ReplaceCurrentWord(completion);
         }
     }
 
@@ -91,8 +91,43 @@ internal sealed class LineReader
     {
         if (_completerState.TryGetPrevious(_buffer.ToString(), _currentPosition.StringPosition, out string completion))
         {
-            RewriteText(completion);
+            ReplaceCurrentWord(completion);
         }
+    }
+
+    private void ReplaceCurrentWord(string completion)
+    {
+        int wordStart = _currentPosition.StringPosition;
+        while (wordStart > 0 
+               && !char.IsWhiteSpace(_buffer[wordStart - 1]))
+        {
+            wordStart--;
+        }
+
+        int wordEnd = _currentPosition.StringPosition;
+        while (wordEnd < _buffer.Length 
+               && !char.IsWhiteSpace(_buffer[wordEnd]))
+        {
+            wordEnd++;
+        }
+
+        int wordLength = wordEnd - wordStart;
+
+        // Remove the old word and insert the completion
+        if (wordLength > 0)
+        {
+            _buffer.Remove(wordStart, wordLength);
+        }
+        _buffer.Insert(wordStart, completion);
+
+        _currentPosition = new Position(
+            wordStart + completion.Length,
+            _startPosition.ScreenPosition + wordStart + completion.Length
+        );
+
+        ClearLine();
+        RewriteText();
+        _console.CursorLeft = _currentPosition.ScreenPosition;
     }
 
     private void OnTextInput(ConsoleKeyInfo current)
