@@ -10,7 +10,7 @@ namespace EngineerCalc.Commands;
 
 internal class VersionCommand : Command
 {
-    public override int Execute(CommandContext context, CancellationToken cancellationToken)
+    protected override int Execute(CommandContext context, CancellationToken cancellationToken)
     {
         var assemblyVersion = typeof(VersionCommand).Assembly.GetName().Version;
         if (assemblyVersion == null)

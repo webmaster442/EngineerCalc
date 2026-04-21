@@ -81,7 +81,7 @@ internal sealed class PlotCommand : Command<PlotCommand.Settings>
         _api = api;
     }
 
-    public override int Execute(CommandContext context, Settings settings, CancellationToken cancellationToken)
+    protected override int Execute(CommandContext context, Settings settings, CancellationToken cancellationToken)
     {
         try
         {

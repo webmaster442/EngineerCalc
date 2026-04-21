@@ -19,7 +19,7 @@ internal abstract class TableCommand<TDataSet> : Command<TableCommandArgs>
             : "^" + Regex.Escape(pattern).Replace("\\*", ".*").Replace("\\?", ".") + "$";
     }
 
-    public override int Execute(CommandContext context, TableCommandArgs settings, CancellationToken cancellationToken)
+    protected override int Execute(CommandContext context, TableCommandArgs settings, CancellationToken cancellationToken)
     {
         var filter = !settings.Regex
             ? new Regex(RewriteToRegex(settings.Filter), settings.IgnoreCase ? RegexOptions.IgnoreCase : RegexOptions.None)

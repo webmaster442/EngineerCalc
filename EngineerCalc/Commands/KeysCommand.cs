@@ -10,7 +10,7 @@ namespace EngineerCalc.Commands;
 
 internal class KeysCommand : Command
 {
-    public override int Execute(CommandContext context, CancellationToken cancellationToken)
+    protected override int Execute(CommandContext context, CancellationToken cancellationToken)
     {
         var table = new Table();
         table.AddColumns("Key", "Description");
