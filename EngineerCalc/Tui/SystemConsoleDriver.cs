@@ -18,14 +18,16 @@ public sealed class SystemConsoleDriver : IConsoleDriver
         set => Console.CursorLeft = value;
     }
 
+#pragma warning disable Spectre1000 // Use AnsiConsole instead of System.Console
     public void Write(string text)
-        => AnsiConsole.Write(text);
+        => Console.Write(text);
 
     public void Write(char c)
-        => AnsiConsole.Write(c);
+        => Console.Write(c);
 
     public void WriteLine()
-        => AnsiConsole.WriteLine();
+        => Console.WriteLine();
+#pragma warning restore Spectre1000 // Use AnsiConsole instead of System.Console
 
     public ConsoleKeyInfo ReadKey(bool intercept)
         => Console.ReadKey(intercept);

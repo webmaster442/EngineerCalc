@@ -1,4 +1,3 @@
 #!/bin/bash
-
-dotnet restore
-dotnet build --no-restore -c Release --self-contained true -r linux-x64 -o ./publish
+docker build -t webmaster442/engineeringcalc .
+docker run -it -e TERM=xterm-256color -e LANG=C.UTF-8 webmaster442/engineeringcalc:latest
