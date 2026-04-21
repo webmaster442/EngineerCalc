@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Spectre.Console.Cli;
 
-namespace EngineerCalc.DependencyInjection;
+namespace EngineerCalc.Infrastructure;
 
 internal sealed class TypeRegistrar : ITypeRegistrar
 {
