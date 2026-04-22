@@ -4,6 +4,9 @@ namespace EngineerCalc.Api;
 
 internal sealed class FileSystem : IFileSystem
 {
+    public bool FileExists(string filePath)
+        => File.Exists(filePath);
+
     public IEnumerable<FolderItem> GetDirectoryNames(string fullPath)
     {
         var di = new DirectoryInfo(fullPath);
@@ -31,4 +34,10 @@ internal sealed class FileSystem : IFileSystem
             };
         }
     }
+
+    public Stream OpenRead(string fullPath)
+        => File.OpenRead(fullPath);
+
+    public void SetCurrentDirectory(string fullPath)
+        => Directory.SetCurrentDirectory(fullPath);
 }

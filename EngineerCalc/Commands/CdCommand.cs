@@ -1,12 +1,13 @@
-﻿using Spectre.Console;
+﻿using EngineerCalc.Api;
+using EngineerCalc.Commands.Abstraction;
+
+using Spectre.Console;
 using Spectre.Console.Cli;
 
 namespace EngineerCalc.Commands;
 
-internal sealed class CdCommand : Command<CdCommand.Arguments>
+internal sealed class CdCommand : FileSystemCommand<CdCommand.Arguments>
 {
-    private readonly State _state;
-
     internal sealed class Arguments : CommandSettings
     {
         [CommandArgument(0, "<path>")]
@@ -22,26 +23,20 @@ internal sealed class CdCommand : Command<CdCommand.Arguments>
         }
     }
 
-    public CdCommand(State state)
+    public CdCommand(IFileSystem fileSystem, State state) : base(fileSystem, state)
     {
-        _state = state;
     }
 
-    protected override int Execute(CommandContext context, Arguments settings, CancellationToken cancellationToken)
+    protected override async Task<int> ExecuteAsync(CommandContext context,
+                                                    Arguments settings,
+                                                    CancellationToken cancellationToken)
     {
         try
         {
-            if (Path.IsPathFullyQualified(settings.Path))
-            {
-                Directory.SetCurrentDirectory(settings.Path);
-                _state.CurrentDirectory = settings.Path;
-            }
-            else
-            {
-                var newPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), settings.Path));
-                Directory.SetCurrentDirectory(newPath);
-                _state.CurrentDirectory = newPath;
-            }
+            var pathToSet = GetFullPath(settings.Path);
+            Directory.SetCurrentDirectory(pathToSet);
+            _state.CurrentDirectory = pathToSet;
+
             return ExitCodes.Success;
         }
         catch (Exception ex)

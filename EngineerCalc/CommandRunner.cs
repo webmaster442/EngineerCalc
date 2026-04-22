@@ -94,6 +94,10 @@ internal sealed class CommandRunner
                 .AddCommand<Commands.LsCommand>(".ls")
                 .WithAlias(".dir")
                 .WithDescription("Lists the contents of the current directory");
+
+            config
+                .AddCommand<Commands.HashCommand>(".hash")
+                .WithDescription("Calculates the hash of a file");
         });
     }
 
