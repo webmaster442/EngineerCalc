@@ -23,5 +23,12 @@ internal class EvaluatorApi : IEvaluatorApi
     public IExpression ParseRpn(string expression)
         => _expressionFactory.CreateFromRpn(expression);
 
+    public IEnumerable<string> VariableNames()
+    {
+        var variables = VariablesAndConstants.Variables().Select(v => v.Key);
+        var constants = VariablesAndConstants.Constants().Select(c => c.Key);
+        return variables.Concat(constants);
+    }
+
     public VariablesAndConstantsCollection VariablesAndConstants { get; }
 }

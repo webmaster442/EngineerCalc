@@ -3,8 +3,6 @@
 // This code is licensed under MIT license (see LICENSE for details)
 //-----------------------------------------------------------------------------
 
-using Spectre.Console;
-
 namespace EngineerCalc.Tui;
 
 public sealed class SystemConsoleDriver : IConsoleDriver

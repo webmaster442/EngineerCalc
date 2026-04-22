@@ -42,8 +42,13 @@ internal sealed class CommandRunner
                 .AddCommand<Commands.CommandsCommand>(".commands")
                 .WithDescription("List known commands");
 
-            config.AddCommand<Commands.CultureCommand>(".culture")
+            config
+                .AddCommand<Commands.CultureCommand>(".culture")
                 .WithDescription("Sets the current culture");
+
+            config
+                .AddCommand<Commands.CulturesCommand>(".cultures")
+                .WithDescription("Lists available cultures");
 
             config
                 .AddCommand<Commands.InfixCommand>(".infix")

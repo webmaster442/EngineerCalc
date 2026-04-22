@@ -3,6 +3,7 @@
 // This code is licensed under MIT license (see LICENSE for details)
 //-----------------------------------------------------------------------------
 
+using EngineerCalc.Api;
 using EngineerCalc.Extensions;
 using EngineerCalc.Tui.Readline;
 
@@ -12,11 +13,16 @@ internal sealed class LineCompleter : ICompleter
 {
     private readonly IEnumerable<string> _functions;
     private readonly IDictionary<string, IReadOnlyList<string>> _commands;
+    private readonly IEvaluatorApi _evaluator;
 
-    public LineCompleter(IEnumerable<string> functions, IDictionary<string, IReadOnlyList<string>> commands)
+    public LineCompleter(
+        IEnumerable<string> functions,
+        IDictionary<string, IReadOnlyList<string>> commands,
+        IEvaluatorApi evaluator)
     {
         _functions = functions;
         _commands = commands;
+        _evaluator = evaluator;
     }
 
     public IEnumerable<string> GetCompletion(string line, int currentPosition)
@@ -31,9 +37,12 @@ internal sealed class LineCompleter : ICompleter
         {
             string cmd = words[0];
             if (_commands.TryGetValue(cmd, out var args))
-                return args.Where(a => a.StartsWith(words[wordIndex]));
+                return args.Where(a => a.StartsWith(words[wordIndex], StringComparison.InvariantCultureIgnoreCase));
         }
 
-        return _functions.Where(f => f.StartsWith(words[wordIndex]));
+        var functions = _functions.Where(f => f.StartsWith(words[wordIndex], StringComparison.InvariantCultureIgnoreCase));
+        var variables = _evaluator.VariableNames().Where(v => v.StartsWith(words[wordIndex], StringComparison.InvariantCultureIgnoreCase));
+
+        return functions.Concat(variables).Order();
     }
 }

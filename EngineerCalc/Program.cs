@@ -32,7 +32,8 @@ var runner = new CommandRunner(services);
 
 await commandRunnerApi.Init(runner);
 
-var readline = new LineReader(new LineCompleter(expressionFactory.KnownFunctions, commandRunnerApi.GetAutocompleteData()));
+var lineCompleter = new LineCompleter(expressionFactory.KnownFunctions, commandRunnerApi.GetAutocompleteData(), evaluatorApi);
+var readline = new LineReader(lineCompleter);
 
 AnsiConsole.Clear();
 
