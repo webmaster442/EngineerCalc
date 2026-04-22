@@ -13,9 +13,12 @@ internal sealed class State
 
     public ParseMode ParseMode { get; set; }
 
+    public string CurrentDirectory { get; set; }
+
     public State()
     {
         ParseMode = ParseMode.Infix;
         Culture = CultureInfo.CurrentUICulture;
+        CurrentDirectory = Environment.CurrentDirectory;
     }
 }

@@ -27,6 +27,9 @@ services.AddSingleton(appState);
 services.AddSingleton<IApplicationApi, ApplicationApi>();
 services.AddSingleton<IEvaluatorApi>(evaluatorApi);
 services.AddSingleton<ICommandRunnerApi>(commandRunnerApi);
+services.AddSingleton<IFileSystem, FileSystem>();
+
+Console.OutputEncoding = System.Text.Encoding.UTF8;
 
 var runner = new CommandRunner(services);
 
@@ -44,7 +47,7 @@ while (true)
     Terminal.ShellIntegration.StartOfPrompt();
     Prompt.DoPrompt(appState);
     Terminal.ShellIntegration.CommandStart();
-    string line = readline.ReadLine("╚═> ");
+    string line = readline.ReadLine(" ─> ");
     Terminal.ShellIntegration.CommandExecuted();
     if (string.IsNullOrWhiteSpace(line))
         continue;

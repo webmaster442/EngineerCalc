@@ -81,6 +81,19 @@ internal sealed class CommandRunner
             config
                 .AddCommand<Commands.VersionCommand>(".version")
                 .WithDescription("Print program version");
+
+            config
+                .AddCommand<Commands.PwdCommand>(".pwd")
+                .WithDescription("Prints the current working directory");
+
+            config
+                .AddCommand<Commands.CdCommand>(".cd")
+                .WithDescription("Changes the current working directory");
+
+            config
+                .AddCommand<Commands.LsCommand>(".ls")
+                .WithAlias(".dir")
+                .WithDescription("Lists the contents of the current directory");
         });
     }
 

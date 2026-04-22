@@ -10,7 +10,7 @@ using Spectre.Console.Cli;
 
 namespace EngineerCalc.Commands.Abstraction;
 
-internal abstract class TableCommand<TDataSet> : Command<TableCommandArgs>
+internal abstract class TableCommand<TDataSetItem> : Command<TableCommandArgs>
 {
     private static string RewriteToRegex(string pattern)
     {
@@ -42,9 +42,9 @@ internal abstract class TableCommand<TDataSet> : Command<TableCommandArgs>
 
     protected virtual void AfterTable() { }
 
-    protected abstract string[] ToTableRow(TDataSet data);
+    protected abstract string[] ToTableRow(TDataSetItem data);
 
-    protected abstract IEnumerable<TDataSet> GetDataSet(Regex filter);
+    protected abstract IEnumerable<TDataSetItem> GetDataSet(Regex filter);
 
     protected abstract string[] GetTableHeaders();
 }
