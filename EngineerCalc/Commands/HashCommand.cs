@@ -14,9 +14,11 @@ internal sealed class HashCommand : FileSystemCommand<HashCommand.Arguments>
     internal sealed class Arguments : CommandSettings
     {
         [CommandArgument(0, "<file>")]
+        [Description("The file to calculate the hash for.")]
         public string File { get; set; } = string.Empty;
 
         [CommandOption("-a|--algorithm")]
+        [Description("The hash algorithm to use.")]
         public string HashAlgorithm { get; set; } = string.Empty;
 
         public override ValidationResult Validate()
@@ -33,7 +35,8 @@ internal sealed class HashCommand : FileSystemCommand<HashCommand.Arguments>
         }
     }
 
-    public HashCommand(IFileSystem fileSystem, State state) : base(fileSystem, state)
+    public HashCommand(IFileSystem fileSystem, State state) 
+        : base(fileSystem, state)
     {
     }
 
