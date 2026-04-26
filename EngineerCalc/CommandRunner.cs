@@ -98,6 +98,10 @@ internal sealed class CommandRunner
             config
                 .AddCommand<Commands.HashCommand>(".hash")
                 .WithDescription("Calculates the hash of a file");
+
+            config
+                .AddCommand<Commands.FunctionsCommand>(".functions")
+                .WithDescription("Lists available functions or shows details about a specific function");
         });
     }
 

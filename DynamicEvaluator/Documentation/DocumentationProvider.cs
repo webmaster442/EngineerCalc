@@ -3,11 +3,12 @@
 // This code is licensed under MIT license (see LICENSE for details)
 //-----------------------------------------------------------------------------
 
+using System.Collections;
 using System.Text.Json;
 
 namespace DynamicEvaluator.Documentation;
 
-public sealed class DocumentationProvider
+public sealed class DocumentationProvider : IEnumerable<Docmodel>
 {
     private readonly Dictionary<string, Docmodel> _documents;
 
@@ -31,4 +32,12 @@ public sealed class DocumentationProvider
 
     public Docmodel GetDocumentation(string function)
         => _documents[function];
+
+    public IEnumerator<Docmodel> GetEnumerator()
+        => _documents.Values.GetEnumerator();
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
 }
