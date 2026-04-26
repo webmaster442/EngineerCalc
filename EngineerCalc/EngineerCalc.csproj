@@ -21,6 +21,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Tui\FigletFonts\Ansi_Shadow.flf" />
+  </ItemGroup>
+
+  <ItemGroup>
     <InternalsVisibleTo Include="EngineerCalc.Tests" />
   </ItemGroup>
 
