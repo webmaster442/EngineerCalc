@@ -70,7 +70,7 @@ internal static class Integers
         return bits;
     }
 
-    public static IEnumerable<long> GetPrimeFactors(long number)
+    public static IEnumerable<double> GetPrimeFactors(long number)
     {
         if (number < 0)
         {

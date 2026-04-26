@@ -8,17 +8,19 @@
     <VersionSuffix>build$(Date:yyyyMMdd)</VersionSuffix>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Documentation\documentation.json" />
+  </ItemGroup>
  
   <ItemGroup>
     <InternalsVisibleTo Include="DynamicEvaluator.Tests" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Doc.md" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="UnitsNet" Version="6.0.0-pre017" />
   </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties documentation_4documentation_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>

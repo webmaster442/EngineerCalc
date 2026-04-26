@@ -125,7 +125,7 @@ internal static class ResultFormatter
             resultBuilder
                 .Append("([fuchsia]NumberArray[/]) ")
                 .Append("[italic green]")
-                .Append($"[{string.Join(", ", numberArray)}]")
+                .Append($"[{string.Join(", ", numberArray)}]".EscapeMarkup())
                 .Append("[/]");
         }
         else if (result is NoResult)

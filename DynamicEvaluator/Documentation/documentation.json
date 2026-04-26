@@ -1,0 +1,525 @@
+﻿[
+  {
+    "functionName": "abs",
+    "examples": [
+      "abs(value)"
+    ],
+    "description": "Returns the absolute value of a given number.",
+    "arguments": [
+      {
+        "name": "value",
+        "description": "A number, whose absolute value will be returned."
+      }
+    ]
+  },
+  {
+    "functionName": "array",
+    "description": "Creates an array from the given parameters. The parameters can be of any type, but they must be convertible to double.",
+    "examples": [
+      "array(parameters)"
+    ],
+    "arguments": [
+      {
+        "name": "parameters",
+        "description": "This function accepts variable ammount of parameters, but at least one must be provided. If no parameters are provided an empty array is created."
+      }
+    ]
+  },
+  {
+    "functionName": "avg",
+    "description": "Calculates the average of the given numbers.",
+    "examples": [
+      "avg(parameters)",
+      "avg(array)"
+    ],
+    "arguments": [
+      {
+        "name": "parameters",
+        "description": "This function accepts variable ammount of parameters, but at least one must be provided."
+      },
+      {
+        "name": "array",
+        "description": "An array of numbers, whose average will be calculated."
+      }
+    ]
+  },
+  {
+    "functionName": "bin",
+    "description": "Parses a binary (base-2) string and converts it into a long integer. The string must consist only of characters 0 and 1. Throws an exception if the string is not a valid binary representation.",
+    "examples": [
+      "bin(binaryString)"
+    ],
+    "arguments": [
+      {
+        "name": "binaryString",
+        "description": "The binary string to convert. Should only contain '0' and '1' characters and no prefix like 0b."
+      }
+    ]
+  },
+  {
+    "functionName": "bits",
+    "description": "Couns the number of bits needed to represent the given integer in binary form.",
+    "examples": [
+      "bits(value)"
+    ],
+    "arguments": [
+      {
+        "name": "value",
+        "description": "A number whose bit count is to be determined. If the number is zero, the function returns 1. For negative numbers, the function counts the bits in the absolute value and adds one additional bit for the sign."
+      }
+    ]
+  },
+  {
+    "functionName": "arccos",
+    "description": "Returns the angle whose cosine is the specified number.",
+    "examples": [
+      "arccos(value)"
+    ],
+    "arguments": [
+      {
+        "name": "value",
+        "description": "A number representing a cosine, where value must be greater than or equal to -1, but less than or equal to 1."
+      }
+    ]
+  },
+  {
+    "functionName": "arcsin",
+    "description": "Returns the angle whose sine is the specified number.",
+    "examples": [
+      "arcsin(value)"
+    ],
+    "arguments": [
+      {
+        "name": "value",
+        "description": "A number representing a sine, where value must be greater than or equal to -1, but less than or equal to 1."
+      }
+    ]
+  },
+  {
+    "functionName": "arctan",
+    "description": "Returns the angle whose tangent is the specified number.",
+    "examples": [
+      "arctan(value)"
+    ],
+    "arguments": [
+      {
+        "name": "value",
+        "description": "A number representing a tangent."
+      }
+    ]
+  },
+  {
+    "functionName": "arcctg",
+    "description": "Returns the angle whose cotangent is the specified number.",
+    "examples": [
+      "arcctg(value)"
+    ],
+    "arguments": [
+      {
+        "name": "value",
+        "description": "A number representing a cotangent."
+      }
+    ]
+  },
+  {
+    "functionName": "ceiling",
+    "description": "Returns the smallest integral value that is greater than or equal to the specified double-precision floating-point number. Note that this method returns a double instead of an integral type.",
+    "examples": [
+      "ceiling(value)"
+    ],
+    "arguments": [
+      {
+        "name": "value",
+        "description": "A double-precision floating-point number."
+      }
+    ]
+  },
+  {
+    "functionName": "cos",
+    "description": "Returns the cosine of the specified angle. The angle is specified in radians. Supports both double and Complex types. If the input is neither, an Exception is thrown.",
+    "examples": [
+      "cos(angle)"
+    ],
+    "arguments": [
+      {
+        "name": "angle",
+        "description": "An angle in radians."
+      }
+    ]
+  },
+  {
+    "functionName": "count",
+    "description": "Returns the number of elements passed to the function. If it has been called with a single parameter that is a string or an array, it will return the length of the string or array.",
+    "examples": [
+      "count(arguments)",
+      "count(string)",
+      "count(array)"
+    ],
+    "arguments": [
+      {
+        "name": "arguments",
+        "description": "This function accepts variable ammount of parameters, but at least one must be provided."
+      },
+      {
+        "name": "string",
+        "description": "A string whose length is to be returned."
+      },
+      {
+        "name": "array",
+        "description": "An array whose length is to be returned."
+      }
+    ]
+  },
+  {
+    "functionName": "cplx",
+    "description": "Creates a complex number from the given real and imaginary parts.",
+    "examples": [
+      "cplx(real, imaginary)"
+    ],
+    "arguments": [
+      {
+        "name": "real",
+        "description": "The real part of the complex number."
+      },
+      {
+        "name": "imaginary",
+        "description": "The imaginary part of the complex number."
+      }
+    ]
+  },
+  {
+    "functionName": "ctg",
+    "description": "Returns the cotangent of the specified angle. The angle is specified in radians.  Supports both double and Complex types. If the input is neither, an Exception is thrown.",
+    "examples": [
+      "ctg(angle)"
+    ],
+    "arguments": [
+      {
+        "name": "angle",
+        "description": "An angle in radians."
+      }
+    ]
+  },
+  {
+    "functionName": "deg",
+    "description": "Converts an angle measured in radians to an approximately equivalent angle measured in degrees.",
+    "examples": [
+      "deg(radians)"
+    ],
+    "arguments": [
+      {
+        "name": "radians",
+        "description": "An angle in radians."
+      }
+    ]
+  },
+  {
+    "functionName": "degtorad",
+    "description": "Converts an angle measured in degrees to an approximately equivalent angle measured in radians.",
+    "examples": [
+      "degtorad(degrees)"
+    ],
+    "arguments": [
+      {
+        "name": "degrees",
+        "description": "An angle in degrees."
+      }
+    ]
+  },
+  {
+    "functionName": "floor",
+    "description": "Returns the largest integral value that is less than or equal to the specified double-precision floating-point number. Note that this method returns a double instead of an integral type.",
+    "examples": [
+      "floor(value)"
+    ],
+    "arguments": [
+      {
+        "name": "value",
+        "description": "A double-precision floating-point number."
+      }
+    ]
+  },
+  {
+    "functionName": "grad",
+    "description": "Converts an angle measured in radians to an approximately equivalent angle measured in gradians.",
+    "examples": [
+      "grad(radians)"
+    ],
+    "arguments": [
+      {
+        "name": "radians",
+        "description": "An angle in radians."
+      }
+    ]
+  },
+  {
+    "functionName": "gradtorad",
+    "description": "Converts an angle measured in gradians to an approximately equivalent angle measured in radians.",
+    "examples": [
+      "gradtorad(gradians)"
+    ],
+    "arguments": [
+      {
+        "name": "gradians",
+        "description": "An angle in gradians."
+      }
+    ]
+  },
+  {
+    "functionName": "hex",
+    "description": "Parses a hexadecimal string and converts it into a long integer. Supports both uppercase and lowercase hexadecimal digits. Throws an exception if the string is not a valid hexadecimal representation.",
+    "examples": [
+      "hex(hexString)"
+    ],
+    "arguments": [
+      {
+        "name": "hexString",
+        "description": "A string representing a hexadecimal number. Must not include prefixes like 0x."
+      }
+    ]
+  },
+  {
+    "functionName": "lcm",
+    "description": "Calculate the Least Common Multiple (LCM) of two integers. The LCM of two integers is the smallest positive integer that is divisible by both numbers.",
+    "examples": [
+      "lcm(a, b)"
+    ],
+    "arguments": [
+      {
+        "name": "a",
+        "description": "The first integer."
+      },
+      {
+        "name": "b",
+        "description": "The second integer."
+      }
+    ]
+  },
+  {
+    "functionName": "ln",
+    "description": "Returns the natural logarithm (base e) of a given number. Supports both real and complex numbers. If the input is neither, an Exception is thrown.",
+    "examples": [
+      "ln(value)"
+    ],
+    "arguments": [
+      {
+        "name": "value",
+        "description": "A real or complex number."
+      }
+    ]
+  },
+  {
+    "functionName": "log",
+    "description": "Computes the logarithm of a number (number) with a specified base (@base). Supports both double and Complex types. If the input is neither, an Exception is thrown.",
+    "examples": [
+      "log(number, base)"
+    ],
+    "arguments": [
+      {
+        "name": "number",
+        "description": "The number for which to calculate the logarithm. Must be a positive real or complex number."
+      },
+      {
+        "name": "base",
+        "description": "The base of the logarithm. The base of the logarithm. Must be convertible to a double and cannot be 1."
+      }
+    ]
+  },
+  {
+    "functionName": "min",
+    "description": "Returns the smallest of the given numbers. This function accepts variable ammount of parameters, but at least one must be provided.",
+    "examples": [
+      "min(parameters)",
+      "min(array)"
+    ],
+    "arguments": [
+      {
+        "name": "parameters",
+        "description": "This function accepts variable ammount of parameters, but at least one must be provided."
+      },
+      {
+        "name": "array",
+        "description": "An array of numbers, from which the smallest will be returned."
+      }
+    ]
+  },
+  {
+    "functionName": "max",
+    "description": "Returns the largest of the given numbers. This function accepts variable ammount of parameters, but at least one must be provided.",
+    "examples": [
+      "max(parameters)",
+      "max(array)"
+    ],
+    "arguments": [
+      {
+        "name": "parameters",
+        "description": "This function accepts variable ammount of parameters, but at least one must be provided."
+      },
+      {
+        "name": "array",
+        "description": "An array of numbers, from which the largest will be returned."
+      }
+    ]
+  },
+  {
+    "functionName": "primefactors",
+    "description": "Returns an array containing the prime factors of the given integer. The prime factors are returned in ascending order, and if a prime factor appears multiple times in the factorization, it will be included in the array multiple times.",
+    "examples": [
+      "primefactors(value)"
+    ],
+    "arguments": [
+      {
+        "name": "value",
+        "description": "An integer to be factored into its prime factors. Must be greater than 1."
+      }
+    ]
+  },
+  {
+    "functionName": "random",
+    "description": "Generates a non negative random number. If called without parameters, the value will be between 0 and (2^63) - 1. If called with parameters, then the value that is generated will be in the specified interval by the parameters. If called with parameters and the specified min value is greater than the specified max value an exception will be thrown.",
+    "examples": [
+      "random()",
+      "random(min, max)"
+    ],
+    "arguments": [
+      {
+        "name": "min",
+        "description": "The minimum value of the generated random number. Must be non negative."
+      },
+      {
+        "name": "max",
+        "description": "The maximum value of the generated random number. Must be non negative."
+      }
+    ]
+  },
+  {
+    "functionName": "root",
+    "description": "Returns the nth root of a number, where n is specified by the degree parameter. Supports both double and Complex types. If the input is neither, an Exception is thrown.",
+    "examples": [
+      "root(number, degree)"
+    ],
+    "arguments": [
+      {
+        "name": "number",
+        "description": "The number for which to calculate the root. Can be a real or complex number."
+      },
+      {
+        "name": "degree",
+        "description": "The degree of the root. Must be a positive integer."
+      }
+    ]
+  },
+  {
+    "functionName": "round",
+    "description": "Rounds a double-precision floating-point value to a specified number of fractional digits, and rounds midpoint values to the nearest even number.",
+    "examples": [
+      "round(value, digits)"
+    ],
+    "arguments": [
+      {
+        "name": "value",
+        "description": "The value to be rounded."
+      },
+      {
+        "name": "digits",
+        "description": "The number of fractional digits in the return value. Must be a non-negative integer."
+      }
+    ]
+  },
+  {
+    "functionName": "sin",
+    "description": "Returns the sine of the specified angle. The angle is specified in radians. Supports both double and Complex types. If the input is neither, an Exception is thrown.",
+    "examples": [ 
+      "sin(angle)"
+    ],
+    "arguments": [
+      {
+        "name": "angle",
+        "description": "An angle in radians."
+      }
+    ]
+  },
+  {
+    "functionName": "tan",
+    "description": "Returns the tangent of the specified angle. The angle is specified in radians. Supports both double and Complex types. If the input is neither, an Exception is thrown.",
+    "examples": [
+      "tan(angle)"
+    ],
+    "arguments": [
+      {
+        "name": "angle",
+        "description": "An angle in radians."
+      }
+    ]
+  },
+  {
+    "functionName": "tobin",
+    "description": "Converts a long integer into its binary (base-2) string representation. The resulting string consists only of characters 0 and 1, and does not include any prefixes.",
+    "examples": [
+      "tobin(value)"
+    ],
+    "arguments": [
+      {
+        "name": "value",
+        "description": "The long integer to convert to binary string."
+      }
+    ]
+  },
+  {
+    "functionName": "tohex",
+    "description": "Converts a long integer into its hexadecimal (base-16) string representation. The resulting string consists of hexadecimal digits (0-9 and A-F) and does not include any prefixes.",
+    "examples": [
+      "tohex(value)"
+    ],
+    "arguments": [
+      {
+        "name": "value",
+        "description": "The long integer to convert to hexadecimal string."
+      }
+    ]
+  },
+  {
+    "functionName": "valueunit",
+    "description": "Create a value with a unit. The unit is represented as a string. The value must be a double type. Basic operations between values with units are supported, but the units must be compatible.",
+    "examples": [
+      "valueunit(value, unit)"
+    ],
+    "arguments": [
+      {
+        "name": "value",
+        "description": "The numeric value. Must be a double."
+      },
+      {
+        "name": "unit",
+        "description": "The unit of the value. Must be a string."
+      }
+    ]
+  },
+  {
+    "functionName": "vect",
+    "description": "Create a vector from the given parameters. The parameters can be of any type, but they must be convertible to double. Parameter number can be 2, 3, or 4. If more than 4 or less than 1 parameters are provided, an exception will be thrown.",
+    "examples":[
+      "vect(x, y)",
+      "vect(x, y, z)",
+      "vect(x, y, z, w)"
+    ],
+    "arguments": [
+      {
+        "name": "x",
+        "description": "The x component of the vector."
+      },
+      {
+        "name": "y",
+        "description": "The y component of the vector."
+      },
+      {
+        "name": "z",
+        "description": "The z component of the vector. Optional. If not provided, the vector will be 2D."
+      },
+      {
+        "name": "w",
+        "description": "The w component of the vector. Optional. If not provided, the vector will be 3D."
+      }
+    ]
+  }
+]

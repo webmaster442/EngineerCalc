@@ -220,6 +220,9 @@ public static class Functions
 
     public static dynamic Avg(params dynamic[] numbers)
     {
+        if (numbers.Length == 1 && numbers[0] is NumberArray numberArray)
+            return numberArray.Average();
+
         dynamic sum = 0;
         for (int i = 0; i < numbers.Length; i++)
         {
@@ -232,24 +235,10 @@ public static class Functions
     public static int Bits(long number)
         => Integers.Bits(number);
 
-    public static string PrimeFactors(long number)
+    public static NumberArray PrimeFactors(long number)
     {
-        var primes = Integers.GetPrimeFactors(number).GroupBy(x => x);
-
-        StringBuilder sb = new();
-        foreach (var g in primes)
-        {
-            var count = g.Count();
-            if (sb.Length > 0)
-                sb.Append(" * ");
-
-            sb.Append(g.Key);
-            if (count > 1)
-                sb.Append('^').Append(count);
-        }
-
-        return sb.ToString();
-
+        var primes = Integers.GetPrimeFactors(number).Order().ToArray();
+        return new NumberArray(primes);
     }
 
     public static ValueUnit ValueUnit(dynamic value, string unit)

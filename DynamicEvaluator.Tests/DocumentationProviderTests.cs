@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+﻿using DynamicEvaluator.Documentation;
 
 namespace DynamicEvaluator.Tests;
 
@@ -37,12 +37,14 @@ public class DocumentationProviderTests
             return;
         }
 
-        string doc = _documentationProvider.GetDocumentation(function);
+        var doc = _documentationProvider.GetDocumentation(function);
 
         using (Assert.EnterMultipleScope())
         {
             Assert.That(_documentationProvider.FunctionNames, Contains.Item(function).Using((IEqualityComparer<string>)StringComparer.OrdinalIgnoreCase));
-            Assert.That(doc, Has.Length.GreaterThan(0));
+            Assert.That(doc, Is.Not.Null);
+            Assert.That(doc.Examples, Has.Length.GreaterThan(0));
+            Assert.That(doc.Description, Is.Not.WhiteSpace);
         }
     }
 }
