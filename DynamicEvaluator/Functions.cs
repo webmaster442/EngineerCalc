@@ -192,13 +192,26 @@ public static class Functions
         => Math.Round(x, (int)digits);
 
     public static dynamic Min(params dynamic[] numbers)
-        => numbers.Min() ?? throw new InvalidOperationException("Invalid types for function Min()");
+    {
+        if (numbers.Length == 1 && numbers[0] is NumberArray numberArray)
+            return numberArray.Min();
+
+        return numbers.Min() ?? throw new InvalidOperationException("Invalid types for function Min()");
+    }
 
     public static dynamic Max(params dynamic[] numbers)
-        => numbers.Max() ?? throw new InvalidOperationException("Invalid types for function Max()");
+    {
+        if (numbers.Length == 1 && numbers[0] is NumberArray numberArray)
+            return numberArray.Max();
+
+        return numbers.Max() ?? throw new InvalidOperationException("Invalid types for function Max()");
+    }
 
     public static dynamic Count(params dynamic[] items)
     {
+        if (items.Length == 1 && items[0] is NumberArray numberArray)
+            return numberArray.Length;
+
         if (items.Length == 1 && items[0] is string str)
             return str.Length;
 
@@ -246,6 +259,20 @@ public static class Functions
             return new ValueUnit(d, unit);
         }
         throw new InvalidOperationException($"Can't create ValueUnit from type {value.GetType()}");
+    }
+
+    public static NumberArray Array(params dynamic[] values)
+    {
+        List<double> items = new List<double>();
+        foreach (var value in values)
+        {
+            if (!TypeFactory.DynamicConvert<double>(value, out double parsed))
+            {
+                throw new InvalidOperationException($"can't convert {value} to double");
+            }
+            items.Add(parsed);
+        }
+        return new NumberArray(items);
     }
 
     public static dynamic Vect(params dynamic[] values)

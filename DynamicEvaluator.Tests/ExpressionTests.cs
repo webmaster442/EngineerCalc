@@ -646,4 +646,33 @@ public class ExpressionTests
         IExpression parsed = _expressionFactory.CreateFromRpn(expression);
         Assert.That(parsed.ToString(), Is.EqualTo(expected));
     }
+
+    [TestCase("1 2 + +")]
+    [TestCase("1 2")]
+    [TestCase("1 +")]
+    [TestCase("1 2 3 +")]
+    [TestCase("1 2 + 3")]
+    [TestCase("1 2 + 3 + +")]
+    public void EnsureThat_CreateFromRpn_Throws_ForInvalidExpression(string expression)
+    {
+        Assert.Throws<InvalidOperationException>(() =>
+        {
+            IExpression parsed = _expressionFactory.CreateFromRpn(expression);
+        });
+    }
+
+    [TestCase("array(1, 2, 3)", "[1, 2, 3]")]
+    [TestCase("array()", "[]")]
+    [TestCase("count(array(1, 2, 3))", "3")]
+    [TestCase("array(1, 2, 3).Length", "3")]
+    [TestCase("Max(array(1, 2, 3))", "3")]
+    [TestCase("min(array(1, 2, 3))", "1")]
+    public void EnsureThat_Array_Expressions_Work(string expression, string expected)
+    {
+        VariablesAndConstantsCollection variables = new();
+        IExpression arrayExpr = _expressionFactory.Create(expression);
+        dynamic result = arrayExpr.Evaluate(variables).ToString();
+
+        Assert.That(result, Is.EqualTo(expected));
+    }
 }

@@ -120,6 +120,14 @@ internal static class ResultFormatter
                 .Append(vector4.W)
                 .Append("[/]");
         }
+        else if (result is NumberArray numberArray)
+        {
+            resultBuilder
+                .Append("([fuchsia]NumberArray[/]) ")
+                .Append("[italic green]")
+                .Append($"[{string.Join(", ", numberArray)}]")
+                .Append("[/]");
+        }
         else if (result is NoResult)
         {
         }
@@ -128,7 +136,7 @@ internal static class ResultFormatter
             resultBuilder
                 .Append($"([fuchsia]{result.GetType()}[/]) ")
                 .Append("[italic green]")
-                .Append(result.ToString() ?? string.Empty)
+                .Append(result.ToString().EscapeMarkup() ?? string.Empty)
                 .Append("[/]");
         }
 

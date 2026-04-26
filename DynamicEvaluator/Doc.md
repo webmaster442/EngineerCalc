@@ -10,6 +10,16 @@ Returns the absolute value of a given number.
 
      A number, whose absolute value will be returned.
 
+# Array
+
+Creates an array from the given parameters. The parameters can be of any type, but they must be convertible to double.
+
+`Array(parameters)`
+
+## Parameters
+
+This function accepts variable ammount of parameters, but at least one must be provided. If no parameters are provided an empty array is created.
+
 # Avg
 
 Returns the average value from the given parameters. 
@@ -122,6 +132,7 @@ Returns the number of elements passed to the function. If it has been called wit
 
 `Count(numbers)`
 `Count(string)`
+`Count(array)`
 
 ## Parameters
 
@@ -132,6 +143,10 @@ Returns the number of elements passed to the function. If it has been called wit
 * string
 
     A string. The function will return the length of the string.
+
+* array
+
+    An array. The function will return the number of elements in the array.
 
 # Cplx
 
@@ -283,20 +298,30 @@ Computes the logarithm of a number (number) with a specified base (@base). Suppo
 Returns the minimum value from the given parameters.
 
 `min(parameters)`
+`min(array)`
 
 ## Parameters
 
    This function accepts variable ammount of parameters, but at least one must be provided.
+
+* array
+
+    An array of numbers. The function will return the minimum value from the array.
 
 # Max
 
 Returns the maximum value from the given parameters. 
 
 `max(parameters)`
+`max(array)`
 
 ## Parameters
 
    This function accepts variable ammount of parameters, but at least one must be provided.
+
+* array
+
+    An array of numbers. The function will return the minimum value from the array.
 
 # Primefactors
 

@@ -76,6 +76,10 @@ internal static class RpnExpressionFactory
                     break;
             }
         }
+
+        if (exprStack.Count != 1)
+            throw new InvalidOperationException("Invalid RPN expression: more than one expression left in stack");
+
         return exprStack.Pop();
     }
 
