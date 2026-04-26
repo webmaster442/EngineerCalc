@@ -1,8 +1,6 @@
-﻿using System;
-using System.Buffers;
-using System.Collections.Generic;
+﻿using System.Buffers;
+using System.IO.Hashing;
 using System.Security.Cryptography;
-using System.Text;
 
 using EngineerCalc.Api;
 
@@ -35,7 +33,10 @@ internal abstract class FileSystemCommand<TArguments> : AsyncCommand<TArguments>
     protected byte[] AllocateBuffer()
         => ArrayPool<byte>.Shared.Rent(BufferSize);
 
-    protected HashAlgorithm CreateAlgorithm(Models.HashAlgorithm algorithm)
+    protected bool IsCryptoHashAlgorithm(Models.HashAlgorithm algorithm)
+        => algorithm <= Models.HashAlgorithm.Sha3_512;
+
+    protected HashAlgorithm CreateCryptoHashAlgorithm(Models.HashAlgorithm algorithm)
         => algorithm switch
         {
             Models.HashAlgorithm.Md5 => MD5.Create(),
@@ -46,6 +47,19 @@ internal abstract class FileSystemCommand<TArguments> : AsyncCommand<TArguments>
             Models.HashAlgorithm.Sha3_256 => SHA3_256.Create(),
             Models.HashAlgorithm.Sha3_384 => SHA3_384.Create(),
             Models.HashAlgorithm.Sha3_512 => SHA3_512.Create(),
+            _ => throw new InvalidOperationException($"Unsupported hash algorithm: {algorithm}")
+        };
+
+    protected NonCryptographicHashAlgorithm CreateNonCryptoHashAlgorithm(Models.HashAlgorithm algorithm)
+        => algorithm switch
+        {
+            Models.HashAlgorithm.Crc32 => new Crc32(),
+            Models.HashAlgorithm.Crc64 => new Crc64(),
+            Models.HashAlgorithm.Adler32 => new Adler32(),
+            Models.HashAlgorithm.XXHash32 => new XxHash32(),
+            Models.HashAlgorithm.XXHash3 => new XxHash3(),
+            Models.HashAlgorithm.XXHash64 => new XxHash64(),
+            Models.HashAlgorithm.XXHash128 => new XxHash128(),
             _ => throw new InvalidOperationException($"Unsupported hash algorithm: {algorithm}")
         };
 }

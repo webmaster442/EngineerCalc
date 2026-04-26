@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.IO.Hashing;
 
 using EngineerCalc.Api;
 using EngineerCalc.Commands.Abstraction;
@@ -40,6 +41,59 @@ internal sealed class HashCommand : FileSystemCommand<HashCommand.Arguments>
     {
     }
 
+    private async Task<byte[]> CryptoHash(System.Security.Cryptography.HashAlgorithm algo,
+                                          Stream stream,
+                                          ProgressTask task,
+                                          CancellationToken cancellationToken)
+    {
+        byte[] buffer = AllocateBuffer();
+        int bytesRead = 0;
+        long size = stream.Length;
+        byte[] readAheadBuffer = AllocateBuffer();
+
+        int readAheadBytesRead = await stream.ReadAsync(readAheadBuffer, cancellationToken);
+        task.Increment(readAheadBytesRead);
+
+        do
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            bytesRead = readAheadBytesRead;
+            Array.Copy(readAheadBuffer, buffer, buffer.Length); // buffer = readAheadBuffer;
+            Array.Clear(readAheadBuffer); //readAheadBuffer = new byte[BufferSize];
+            readAheadBytesRead = await stream.ReadAsync(readAheadBuffer, cancellationToken);
+
+            task.Increment(readAheadBytesRead);
+
+            if (readAheadBytesRead == 0)
+                algo.TransformFinalBlock(buffer, 0, bytesRead);
+            else
+                algo.TransformBlock(buffer, 0, bytesRead, buffer, 0);
+
+        }
+        while (readAheadBytesRead != 0);
+
+        return algo.Hash ?? throw new InvalidOperationException("Hash calculation failed.");
+    }
+
+    private async Task<byte[]> NonCryptoHash(NonCryptographicHashAlgorithm algo,
+                                     Stream stream,
+                                     ProgressTask task,
+                                     CancellationToken cancellationToken)
+    {
+        byte[] buffer = AllocateBuffer();
+        int bytesRead = 0;
+        do
+        {
+            bytesRead = await stream.ReadAsync(buffer, cancellationToken);
+            algo.Append(buffer.AsSpan(0, bytesRead));
+            task.Increment(bytesRead);
+        }
+        while (bytesRead > 0);
+
+        return algo.GetCurrentHash();
+
+    }
+
     protected override async Task<int> ExecuteAsync(CommandContext context, Arguments settings, CancellationToken cancellationToken)
     {
         var filePath = GetFullPath(settings.File);
@@ -49,40 +103,30 @@ internal sealed class HashCommand : FileSystemCommand<HashCommand.Arguments>
         }
 
         using var stream = _fileSystem.OpenRead(filePath);
-        byte[] buffer = AllocateBuffer();
-        int bytesRead = 0;
-        long size = stream.Length;
-        byte[] readAheadBuffer = AllocateBuffer();
+        var hashAlgorithm = Enum.Parse<HashAlgorithm>(settings.HashAlgorithm, true);
 
-        using var algo = CreateAlgorithm(Enum.Parse<HashAlgorithm>(settings.HashAlgorithm, true));
-
-        await AnsiConsole.Progress().StartAsync(async ctx =>
+        HashResult result;
+        if (IsCryptoHashAlgorithm(hashAlgorithm))
         {
-            var task = ctx.AddTask("Calculating hash...", maxValue: stream.Length);
-
-            int readAheadBytesRead = await stream.ReadAsync(readAheadBuffer, cancellationToken);
-            task.Increment(readAheadBytesRead);
-
-            do
+            using var algo = CreateCryptoHashAlgorithm(hashAlgorithm);
+            await AnsiConsole.Progress().StartAsync(async ctx =>
             {
-                cancellationToken.ThrowIfCancellationRequested();
-                bytesRead = readAheadBytesRead;
-                Array.Copy(readAheadBuffer, buffer, buffer.Length); // buffer = readAheadBuffer;
-                Array.Clear(readAheadBuffer); //readAheadBuffer = new byte[BufferSize];
-                readAheadBytesRead = await stream.ReadAsync(readAheadBuffer, cancellationToken);
+                ProgressTask task = ctx.AddTask("Calculating hash...", maxValue: stream.Length);
+                await CryptoHash(algo, stream, task, cancellationToken);
+            });
+            result = new(algo.Hash);
+        }
+        else
+        {
+            var algo = CreateNonCryptoHashAlgorithm(hashAlgorithm);
+            await AnsiConsole.Progress().StartAsync(async ctx =>
+            {
+                ProgressTask task = ctx.AddTask("Calculating hash...", maxValue: stream.Length);
+                await NonCryptoHash(algo, stream, task, cancellationToken);
+            });
+            result = new(algo.GetCurrentHash());
+        }
 
-                task.Increment(readAheadBytesRead);
-
-                if (readAheadBytesRead == 0)
-                    algo.TransformFinalBlock(buffer, 0, bytesRead);
-                else
-                    algo.TransformBlock(buffer, 0, bytesRead, buffer, 0);
-
-            }
-            while (readAheadBytesRead != 0);
-        });
-
-        HashResult result = new(algo.Hash);
         AnsiConsole.MarkupLine($"{result.ToString()}");
 
         return ExitCodes.Success;

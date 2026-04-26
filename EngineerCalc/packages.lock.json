@@ -4,11 +4,11 @@
     "net10.0": {
       "Microsoft.Extensions.DependencyInjection": {
         "type": "Direct",
-        "requested": "[10.0.6, )",
-        "resolved": "10.0.6",
-        "contentHash": "poUvwtf92bEs8uBH3aRRs/ZgiAw+Z485EU7TtVPBt//MmD0uMPERe7+v3Ur7lpD8XgIEDL9sDoTBcW1LMG97CQ==",
+        "requested": "[11.0.0-preview.3.26207.106, )",
+        "resolved": "11.0.0-preview.3.26207.106",
+        "contentHash": "aq5Lc0SLQiJGRauG829dTpoMygFLpuelBspnnNi4rRKa8C8eqruxdrCIzJ0po2NQlpgoNprHlC0vQsT0fDxH4w==",
         "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.6"
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "11.0.0-preview.3.26207.106"
         }
       },
       "OxyPlot.Core": {
@@ -41,6 +41,12 @@
           "Spectre.Console": "0.55.0"
         }
       },
+      "System.IO.Hashing": {
+        "type": "Direct",
+        "requested": "[11.0.0-preview.3.26207.106, )",
+        "resolved": "11.0.0-preview.3.26207.106",
+        "contentHash": "SDNSzpfSLNZXetvp8vb3nP5PqeOx3FGrPoVSUAk+scC1ydsm0UNKCktZupwEN8PN1DNnWOTGdi4+3zGyf3kHAg=="
+      },
       "Webmaster442.WindowsTerminal": {
         "type": "Direct",
         "requested": "[4.1.1, )",
@@ -49,8 +55,8 @@
       },
       "Microsoft.Extensions.DependencyInjection.Abstractions": {
         "type": "Transitive",
-        "resolved": "10.0.6",
-        "contentHash": "w+dX4SIr1X9yegX2yX2dU1XtP4JAUVNdvOG/Evn+H+ndn96YzfIPX52FALXChrRNWFR9l77FQyg1mB7WQo6iOA=="
+        "resolved": "11.0.0-preview.3.26207.106",
+        "contentHash": "+gJnv1/kfXLXPv21R3iluhKqfXdf2zPWUaHBiSvlJurThv2D5HRUfU5z5SpmBII4I0JSpuprX9DlHrKz/1wCXA=="
       },
       "Spectre.Console.Ansi": {
         "type": "Transitive",
