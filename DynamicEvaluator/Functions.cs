@@ -231,6 +231,18 @@ public static class Functions
         return (double)sum / numbers.Length;
     }
 
+    public static dynamic Sum(params dynamic[] numbers)
+    {
+        if (numbers.Length == 1 && numbers[0] is NumberArray numberArray)
+            return numberArray.Sum();
+
+        dynamic sum = 0;
+        for (int i = 0; i < numbers.Length; i++)
+        {
+            sum += numbers[i];
+        }
+        return sum;
+    }
 
     public static int Bits(long number)
         => Integers.Bits(number);

@@ -498,7 +498,7 @@
   {
     "functionName": "vect",
     "description": "Create a vector from the given parameters. The parameters can be of any type, but they must be convertible to double. Parameter number can be 2, 3, or 4. If more than 4 or less than 1 parameters are provided, an exception will be thrown.",
-    "examples":[
+    "examples": [
       "vect(x, y)",
       "vect(x, y, z)",
       "vect(x, y, z, w)"
@@ -519,6 +519,24 @@
       {
         "name": "w",
         "description": "The w component of the vector. Optional. If not provided, the vector will be 3D."
+      }
+    ]
+  },
+  {
+    "functionName": "sum",
+    "description": "Calculates the sum of the given numbers.",
+    "examples": [
+      "sum(parameters)",
+      "sum(array)"
+    ],
+    "arguments": [
+      {
+        "name": "parameters",
+        "description": "This function accepts variable ammount of parameters, but at least one must be provided."
+      },
+      {
+        "name": "array",
+        "description": "An array of numbers, whose average will be calculated."
       }
     ]
   }

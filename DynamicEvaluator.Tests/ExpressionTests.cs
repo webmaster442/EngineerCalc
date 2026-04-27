@@ -665,8 +665,6 @@ public class ExpressionTests
     [TestCase("array()", "[]")]
     [TestCase("count(array(1, 2, 3))", "3")]
     [TestCase("array(1, 2, 3).Length", "3")]
-    [TestCase("Max(array(1, 2, 3))", "3")]
-    [TestCase("min(array(1, 2, 3))", "1")]
     public void EnsureThat_Array_Expressions_Work(string expression, string expected)
     {
         VariablesAndConstantsCollection variables = new();
@@ -674,5 +672,28 @@ public class ExpressionTests
         dynamic result = arrayExpr.Evaluate(variables).ToString();
 
         Assert.That(result, Is.EqualTo(expected));
+    }
+
+    [TestCase("min(1, 2, 3)", 1)]
+    [TestCase("max(1, 2, 3)", 3)]
+    [TestCase("avg(1, 2, 3)", 2)]
+    [TestCase("sum(1, 2, 3)", 6)]
+    [TestCase("count(1, 2, 3)", 3)]
+    [TestCase("min(array(1, 2, 3))", 1)]
+    [TestCase("max(array(1, 2, 3))", 3)]
+    [TestCase("avg(array(1, 2, 3))", 2)]
+    [TestCase("sum(array(1, 2, 3))", 6)]
+    [TestCase("count(array(1, 2, 3))", 3)]
+    public void EnsureThat_Statistic_Expressions_Work(string expression, double expected)
+    {
+        VariablesAndConstantsCollection variables = new()
+        {
+            { "x", 1d },
+            { "y", 2d },
+            { "z", 3d },
+        };
+        IExpression statExpr = _expressionFactory.Create(expression);
+        dynamic result = statExpr.Evaluate(variables);
+        Assert.That(result, Is.EqualTo(expected).Within(0.001));
     }
 }
