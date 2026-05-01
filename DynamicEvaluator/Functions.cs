@@ -4,6 +4,7 @@
 //-----------------------------------------------------------------------------
 
 using System.Numerics;
+using System.Reflection.Emit;
 using System.Text;
 
 using DynamicEvaluator.InternalFcuntions;
@@ -175,6 +176,9 @@ public static class Functions
 
     public static Complex Cplx(double x, double y)
         => new Complex(x, y);
+
+    public static Complex CplxPlr(double magnitude, double phase)
+        => Complex.FromPolarCoordinates(magnitude, phase);
 
     public static long Random()
         => System.Random.Shared.NextInt64();

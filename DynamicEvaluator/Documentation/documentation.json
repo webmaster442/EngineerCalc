@@ -188,6 +188,23 @@
     ]
   },
   {
+    "functionName": "cplxplr",
+    "description": "Creates a complex number from polar coordinates",
+    "examples": [
+      "cplx(magnitue, phase)"
+    ],
+    "arguments": [
+      {
+        "name": "magnitude",
+        "description": "The magnitude of the complex number."
+      },
+      {
+        "name": "phase",
+        "description": "The phase angle in radians."
+      }
+    ]
+  },
+  {
     "functionName": "ctg",
     "description": "Returns the cotangent of the specified angle. The angle is specified in radians.  Supports both double and Complex types. If the input is neither, an Exception is thrown.",
     "examples": [
@@ -429,7 +446,7 @@
   {
     "functionName": "sin",
     "description": "Returns the sine of the specified angle. The angle is specified in radians. Supports both double and Complex types. If the input is neither, an Exception is thrown.",
-    "examples": [ 
+    "examples": [
       "sin(angle)"
     ],
     "arguments": [
