@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Numerics;
 
 using DynamicEvaluator.TypeSystem.Internals;
@@ -8,9 +7,13 @@ using DynamicEvaluator.TypeSystem.InternalTypes;
 namespace DynamicEvaluator.TypeSystem;
 
 public sealed class Result :
-    IEquatable<Result>,
     IComparable<Result>,
-    IFormattable
+    IEquatable<Result>,
+    IFormattable,
+    IAdditionOperators<Result, Result, Result>,
+    ISubtractionOperators<Result, Result, Result>,
+    IMultiplyOperators<Result, Result, Result>,
+    IDivisionOperators<Result, Result, Result>
 {
     private readonly object _value;
     public TypeState TypeState { get; }
@@ -119,9 +122,43 @@ public sealed class Result :
 
     public bool Equals(Result? other)
     {
-        return other is not null
-            && TypeState == other.TypeState
-            && _value.Equals(other._value);
+        ResultTypeState resultType = TypeHelper.GetResultTypeState(TypeState, other?.TypeState ?? TypeState.NoResult);
+
+        return resultType switch
+        {
+            ResultTypeState.Incompatible => false,
+            ResultTypeState.NoResult => true,
+            ResultTypeState.Integer => CastToBigInteger() == other!.CastToBigInteger(),
+            ResultTypeState.Double => CastToDouble() == other!.CastToDouble(),
+            ResultTypeState.Fraction => CastToFraction() == other!.CastToFraction(),
+            ResultTypeState.Complex => CastToComplex() == other!.CastToComplex(),
+            ResultTypeState.Array => CastToArray().SequenceEqual(other!.CastToArray()),
+            ResultTypeState.String => CastToString() == other!.CastToString(),
+            ResultTypeState.Boolean => CastToBoolean() == other!.CastToBoolean(),
+            _ => false,
+        };
+    }
+
+    public int CompareTo(Result? other)
+    {
+        if (other == null)
+            return 1;
+
+        ResultTypeState resultType = TypeHelper.GetResultTypeState(TypeState, other?.TypeState ?? TypeState.NoResult);
+
+        return resultType switch
+        {
+            ResultTypeState.Incompatible => -1,
+            ResultTypeState.NoResult => 0,
+            ResultTypeState.Integer => CastToBigInteger().CompareTo(other.CastToBigInteger()),
+            ResultTypeState.Double => CastToDouble().CompareTo(other.CastToDouble()),
+            ResultTypeState.Fraction => CastToFraction().CompareTo(other.CastToFraction()),
+            ResultTypeState.Complex => throw new InvalidOperationException("Cannot compare complex numbers."),
+            ResultTypeState.Array => throw new InvalidOperationException("Cannot compare arrays."),
+            ResultTypeState.String => string.Compare(CastToString(), other.CastToString(), StringComparison.Ordinal),
+            ResultTypeState.Boolean => CastToBoolean().CompareTo(other.CastToBoolean()),
+            _ => throw new InvalidOperationException("Unknown result type state.")
+        };
     }
 
     public override bool Equals(object? obj)
@@ -144,17 +181,97 @@ public sealed class Result :
     public override string ToString()
         => ToString(CultureInfo.InvariantCulture);
 
-    public int CompareTo(Result? other)
+    public static bool operator <(Result left, Result right)
+        => left.CompareTo(right) < 0;
+
+    public static bool operator <=(Result left, Result right)
+        => left.CompareTo(right) <= 0;
+
+    public static bool operator >(Result left, Result right)
+        => left.CompareTo(right) > 0;
+
+    public static bool operator >=(Result left, Result right)
+        => left.CompareTo(right) >= 0;
+
+    public static bool operator ==(Result? left, Result? right)
+        => EqualityComparer<Result>.Default.Equals(left, right);
+
+    public static bool operator !=(Result? left, Result? right)
+        => !(left == right);
+
+    public static Result operator +(Result left, Result right)
     {
-        if (other is null)
-            return 1;
+        ResultTypeState resultType = TypeHelper.GetResultTypeState(left.TypeState, right.TypeState);
 
-        if (other._value is IComparable otherComparable
-            && _value is IComparable comparable)
+        return resultType switch
         {
-            return comparable.CompareTo(otherComparable);
-        }
+            ResultTypeState.Incompatible => throw TypeException.IncompatibleOperator(left.TypeState, right.TypeState, "+"),
+            ResultTypeState.NoResult => NoResult(),
+            ResultTypeState.Integer => FromBigInteger(left.CastToBigInteger() + right.CastToBigInteger()),
+            ResultTypeState.Double => FromDouble(left.CastToDouble() + right.CastToDouble()),
+            ResultTypeState.Fraction => FromFraction(left.CastToFraction() + right.CastToFraction()),
+            ResultTypeState.Complex => FromComplex(left.CastToComplex() + right.CastToComplex()),
+            ResultTypeState.Array => throw TypeException.IncompatibleOperator(left.TypeState, right.TypeState, "+"),
+            ResultTypeState.String => FromString(left.CastToString() + right.CastToString()),
+            ResultTypeState.Boolean => throw TypeException.IncompatibleOperator(left.TypeState, right.TypeState, "+"),
+            _ => throw new InvalidOperationException("Unknown result type state."),
+        };
+    }
 
-        throw TypeException.Incompatible(TypeState, other.TypeState);
+    public static Result operator -(Result left, Result right)
+    {
+        ResultTypeState resultType = TypeHelper.GetResultTypeState(left.TypeState, right.TypeState);
+
+        return resultType switch
+        {
+            ResultTypeState.Incompatible => throw TypeException.IncompatibleOperator(left.TypeState, right.TypeState, "-"),
+            ResultTypeState.NoResult => NoResult(),
+            ResultTypeState.Integer => FromBigInteger(left.CastToBigInteger() - right.CastToBigInteger()),
+            ResultTypeState.Double => FromDouble(left.CastToDouble() - right.CastToDouble()),
+            ResultTypeState.Fraction => FromFraction(left.CastToFraction() - right.CastToFraction()),
+            ResultTypeState.Complex => FromComplex(left.CastToComplex() - right.CastToComplex()),
+            ResultTypeState.Array => throw TypeException.IncompatibleOperator(left.TypeState, right.TypeState, "-"),
+            ResultTypeState.String => throw TypeException.IncompatibleOperator(left.TypeState, right.TypeState, "-"),
+            ResultTypeState.Boolean => throw TypeException.IncompatibleOperator(left.TypeState, right.TypeState, "-"),
+            _ => throw new InvalidOperationException("Unknown result type state."),
+        };
+    }
+
+    public static Result operator * (Result left, Result right)
+    {
+        ResultTypeState resultType = TypeHelper.GetResultTypeState(left.TypeState, right.TypeState);
+
+        return resultType switch
+        {
+            ResultTypeState.Incompatible => throw TypeException.IncompatibleOperator(left.TypeState, right.TypeState, "*"),
+            ResultTypeState.NoResult => NoResult(),
+            ResultTypeState.Integer => FromBigInteger(left.CastToBigInteger() * right.CastToBigInteger()),
+            ResultTypeState.Double => FromDouble(left.CastToDouble() * right.CastToDouble()),
+            ResultTypeState.Fraction => FromFraction(left.CastToFraction() * right.CastToFraction()),
+            ResultTypeState.Complex => FromComplex(left.CastToComplex() * right.CastToComplex()),
+            ResultTypeState.Array => throw TypeException.IncompatibleOperator(left.TypeState, right.TypeState, "*"),
+            ResultTypeState.String => throw TypeException.IncompatibleOperator(left.TypeState, right.TypeState, "*"),
+            ResultTypeState.Boolean => throw TypeException.IncompatibleOperator(left.TypeState, right.TypeState, "*"),
+            _ => throw new InvalidOperationException("Unknown result type state."),
+        };
+    }
+
+    public static Result operator /(Result left, Result right)
+    {
+        ResultTypeState resultType = TypeHelper.GetResultTypeState(left.TypeState, right.TypeState);
+
+        return resultType switch
+        {
+            ResultTypeState.Incompatible => throw TypeException.IncompatibleOperator(left.TypeState, right.TypeState, "/"),
+            ResultTypeState.NoResult => NoResult(),
+            ResultTypeState.Integer => FromBigInteger(left.CastToBigInteger() / right.CastToBigInteger()),
+            ResultTypeState.Double => FromDouble(left.CastToDouble() / right.CastToDouble()),
+            ResultTypeState.Fraction => FromFraction(left.CastToFraction() / right.CastToFraction()),
+            ResultTypeState.Complex => FromComplex(left.CastToComplex() / right.CastToComplex()),
+            ResultTypeState.Array => throw TypeException.IncompatibleOperator(left.TypeState, right.TypeState, "/"),
+            ResultTypeState.String => throw TypeException.IncompatibleOperator(left.TypeState, right.TypeState, "/"),
+            ResultTypeState.Boolean => throw TypeException.IncompatibleOperator(left.TypeState, right.TypeState, "/"),
+            _ => throw new InvalidOperationException("Unknown result type state."),
+        };
     }
 }

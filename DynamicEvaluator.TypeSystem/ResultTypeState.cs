@@ -1,7 +1,8 @@
 ﻿namespace DynamicEvaluator.TypeSystem;
 
-public enum TypeState
+public enum ResultTypeState
 {
+    Incompatible,
     NoResult,
     Boolean,
     Integer,

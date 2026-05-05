@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Diagnostics;
+using System.Numerics;
 
 using DynamicEvaluator.TypeSystem.InternalTypes;
 
@@ -29,75 +30,51 @@ internal static class TypeHelper
             && CanBeInteger(value.Real);
     }
 
-    public static TypeState GetResultTypeState(TypeState left, TypeState right)
+    //              NoResult	    Boolean	        Integer	        Double	        Fraction	    Complex	        Array	        String
+    //  NoResult	NoResult	    Incompatible	Incompatible	Incompatible	Incompatible	Incompatible	Incompatible	Incompatible
+    //  Boolean	    Incompatible	Boolean	        Incompatible	Incompatible	Incompatible	Incompatible	Incompatible	Incompatible
+    //  Ingeger	    Incompatible	Incompatible	Integer	        Double	        Fraction	    Complex	        Incompatible	Incompatible
+    //  Double	    Incompatible	Incompatible	Double	        Double	        Double	        Complex	        Incompatible	Incompatible
+    //  Fraction	Incompatible	Incompatible	Fraction	    Double	        Fraction	    Complex	        Incompatible	Incompatible
+    //  Complex	    Incompatible	Incompatible	Complex	        Complex	        Complex	        Complex	        Incompatible	Incompatible
+    //  Array	    Incompatible	Incompatible	Incompatible	Incompatible	Incompatible	Incompatible	Array	        Incompatible
+    //  String	    Incompatible	Incompatible	Incompatible	Incompatible	Incompatible	Incompatible	Incompatible	String
+    public static ResultTypeState GetResultTypeState(TypeState left, TypeState right)
     {
-        if (left == TypeState.String
-            || left == TypeState.Array
-            || right == TypeState.String
-            || right == TypeState.Array)
-        {
-            throw TypeException.Incompatible(left, right);
-        }
-
-        if ((left == TypeState.NoResult && right != TypeState.NoResult)
-            || (left != TypeState.NoResult && right == TypeState.NoResult))
-        {
-            throw TypeException.Incompatible(left, right);
-        }
-
-        if ((left == TypeState.Boolean && right != TypeState.Boolean)
-            || (left != TypeState.Boolean && right == TypeState.Boolean))
-        {
-            throw TypeException.Incompatible(left, right);
-        }
-
         if (left == right)
-            return left;
+            return ToResultTypeState(left);
 
-        if (left == TypeState.Integer)
+        return (left, right) switch
         {
-            return right switch
-            {
-                TypeState.Double => TypeState.Double,
-                TypeState.Fraction => TypeState.Fraction,
-                TypeState.Complex => TypeState.Complex,
-                _ => throw TypeException.ShouldNotHappen(left, right),
-            };
-        }
+            (TypeState.Integer, TypeState.Double) => ResultTypeState.Double,
+            (TypeState.Integer, TypeState.Fraction) => ResultTypeState.Fraction,
+            (TypeState.Integer, TypeState.Complex) => ResultTypeState.Complex,
+            (TypeState.Double, TypeState.Integer) => ResultTypeState.Double,
+            (TypeState.Double, TypeState.Fraction) => ResultTypeState.Double,
+            (TypeState.Double, TypeState.Complex) => ResultTypeState.Complex,
+            (TypeState.Fraction, TypeState.Integer) => ResultTypeState.Fraction,
+            (TypeState.Fraction, TypeState.Double) => ResultTypeState.Double,
+            (TypeState.Fraction, TypeState.Complex) => ResultTypeState.Complex,
+            (TypeState.Complex, TypeState.Integer) => ResultTypeState.Complex,
+            (TypeState.Complex, TypeState.Double) => ResultTypeState.Complex,
+            (TypeState.Complex, TypeState.Fraction) => ResultTypeState.Complex,
+            (_, _) => ResultTypeState.Incompatible,
+        };
+    }
 
-        if (left == TypeState.Double)
+    private static ResultTypeState ToResultTypeState(TypeState left)
+    {
+        return left switch
         {
-            return right switch
-            {
-                TypeState.Integer => TypeState.Double,
-                TypeState.Fraction => TypeState.Double,
-                TypeState.Complex => TypeState.Complex,
-                _ => throw TypeException.ShouldNotHappen(left, right),
-            };
-        }
-
-        if (left == TypeState.Fraction)
-        {
-            return right switch
-            {
-                TypeState.Integer => TypeState.Fraction,
-                TypeState.Double => TypeState.Double,
-                TypeState.Complex => TypeState.Complex,
-                _ => throw TypeException.ShouldNotHappen(left, right),
-            };
-        }
-
-        if (left == TypeState.Complex)
-        {
-            return right switch
-            {
-                TypeState.Integer => TypeState.Complex,
-                TypeState.Double => TypeState.Complex,
-                TypeState.Fraction => TypeState.Complex,
-                _ => throw TypeException.ShouldNotHappen(left, right),
-            };
-        }
-
-        throw TypeException.ShouldNotHappen(left, right);
+            TypeState.NoResult => ResultTypeState.NoResult,
+            TypeState.Boolean => ResultTypeState.Boolean,
+            TypeState.Integer => ResultTypeState.Integer,
+            TypeState.Double => ResultTypeState.Double,
+            TypeState.Fraction => ResultTypeState.Fraction,
+            TypeState.Complex => ResultTypeState.Complex,
+            TypeState.Array => ResultTypeState.Array,
+            TypeState.String => ResultTypeState.String,
+            _ => throw new UnreachableException($"Unexpected TypeState: {left}"),
+        };
     }
 }

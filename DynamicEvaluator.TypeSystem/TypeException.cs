@@ -17,6 +17,9 @@ public sealed class TypeException : Exception
     public static TypeException Incompatible(TypeState left, TypeState right)
         => new TypeException($"Incompatible types: {left} and {right}.");
 
+    public static TypeException IncompatibleOperator(TypeState left, TypeState right, string symbol)
+        => new TypeException($"Incompatible types: {left} and {right} for operation: {symbol}");
+
     internal static Exception IncompatibleFunction(string functionName, params TypeState[] typeStates)
         => new TypeException($"Incompatible types for function '{functionName}': {string.Join(", ", typeStates)}.");
 
