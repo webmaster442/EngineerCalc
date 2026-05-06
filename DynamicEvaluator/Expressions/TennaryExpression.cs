@@ -4,6 +4,7 @@
 //-----------------------------------------------------------------------------
 
 using DynamicEvaluator.Expressions.Specific;
+using DynamicEvaluator.TypeSystem;
 
 namespace DynamicEvaluator.Expressions;
 
@@ -31,10 +32,10 @@ internal sealed class TennaryExpression : IExpression
             && IfFalse.Equals(otherTennary.IfFalse);
     }
 
-    public dynamic Evaluate(VariablesAndConstantsCollection variables)
+    public Result Evaluate(VariablesAndConstantsCollection variables)
     {
-        dynamic cond = Condition.Evaluate(variables);
-        return cond ? IfTrue.Evaluate(variables) : IfFalse.Evaluate(variables);
+        Result cond = Condition.Evaluate(variables);
+        return cond.CastToBoolean() ? IfTrue.Evaluate(variables) : IfFalse.Evaluate(variables);
     }
 
     public IExpression Simplify()

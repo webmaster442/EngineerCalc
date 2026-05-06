@@ -3,6 +3,8 @@
 // This code is licensed under MIT license (see LICENSE for details)
 //-----------------------------------------------------------------------------
 
+using DynamicEvaluator.TypeSystem;
+
 namespace DynamicEvaluator.Expressions.Specific;
 
 internal sealed class ExponentExpression : BinaryExpression
@@ -27,7 +29,7 @@ internal sealed class ExponentExpression : BinaryExpression
             // f(x) = a^g(x)
             // f'(x) = (ln a) * g'(x) * a^g(x)
             var a = constant.Value;
-            return new MultiplyExpression(new MultiplyExpression(new ConstantExpression(Functions.Ln(a)), Right.Differentiate(byVariable)), new ExponentExpression(simple, Right));
+            return new MultiplyExpression(new MultiplyExpression(new ConstantExpression(TypeFunctions.Ln(a)), Right.Differentiate(byVariable)), new ExponentExpression(simple, Right));
         }
 
         throw new InvalidOperationException("Expression can't be differentiated due to exponent");
@@ -68,8 +70,8 @@ internal sealed class ExponentExpression : BinaryExpression
         return new ExponentExpression(newLeft, newRight);
     }
 
-    protected override dynamic Evaluate(dynamic value1, dynamic value2)
-        => Functions.Pow(value1, value2);
+    protected override Result Evaluate(Result value1, Result value2)
+        => TypeFunctions.Pow(value1, value2);
 
     protected override string Render(bool emitLatex)
     {

@@ -3,6 +3,8 @@
 // This code is licensed under MIT license (see LICENSE for details)
 //-----------------------------------------------------------------------------
 
+using DynamicEvaluator.TypeSystem;
+
 namespace DynamicEvaluator.Expressions.Specific;
 
 internal sealed class NegateExpression : UnaryExpression
@@ -25,7 +27,7 @@ internal sealed class NegateExpression : UnaryExpression
         return new NegateExpression(newChild);
     }
 
-    protected override dynamic Evaluate(dynamic value)
+    protected override Result Evaluate(Result value)
         => -value;
 
     protected override string Render(bool emitLatex)

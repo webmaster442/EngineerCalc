@@ -4,6 +4,8 @@
 //-----------------------------------------------------------------------------
 
 
+using DynamicEvaluator.TypeSystem;
+
 namespace DynamicEvaluator.Expressions.Specific;
 
 internal sealed class AddExpression : BinaryExpression
@@ -139,7 +141,7 @@ internal sealed class AddExpression : BinaryExpression
         return new AddExpression(newLeft, newRight);
     }
 
-    protected override dynamic Evaluate(dynamic value1, dynamic value2)
+    protected override Result Evaluate(Result value1, Result value2)
         => value1 + value2;
 
     protected override string Render(bool emitLatex)

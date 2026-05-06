@@ -8,6 +8,7 @@ using System.Diagnostics.CodeAnalysis;
 using DynamicEvaluator.Expressions;
 using DynamicEvaluator.Expressions.Specific;
 using DynamicEvaluator.Logic;
+using DynamicEvaluator.TypeSystem;
 
 namespace DynamicEvaluator;
 
@@ -84,7 +85,10 @@ public static class IExpressionExtensions
             {
                 variables[variableNames[j]] = pattern[j] == '1' ? true : false;
             }
-            if (expression.Evaluate(variables) is bool b && b == true)
+
+            Result evaluated = expression.Evaluate(variables);
+
+            if (evaluated.TypeState == TypeState.Boolean && evaluated.CastToBoolean())
             {
                 result.Add(i);
             }

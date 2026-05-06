@@ -4,6 +4,7 @@
 //-----------------------------------------------------------------------------
 
 using DynamicEvaluator.Types;
+using DynamicEvaluator.TypeSystem;
 
 namespace DynamicEvaluator.Expressions.Specific;
 
@@ -31,10 +32,10 @@ internal sealed class AssignmentExpression : IExpression
             && _expression.Equals(otherAssign._expression);
     }
 
-    public dynamic Evaluate(VariablesAndConstantsCollection variables)
+    public Result Evaluate(VariablesAndConstantsCollection variables)
     {
         variables[_variable.Identifier] = _expression.Simplify().Evaluate(variables);
-        return new NoResult();
+        return Result.NoResult();
     }
 
     public IExpression Simplify()
