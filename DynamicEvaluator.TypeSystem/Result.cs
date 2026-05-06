@@ -144,7 +144,7 @@ public sealed class Result :
         if (other == null)
             return 1;
 
-        ResultTypeState resultType = TypeHelper.GetResultTypeState(TypeState, other?.TypeState ?? TypeState.NoResult);
+        ResultTypeState resultType = TypeHelper.GetResultTypeState(TypeState, other.TypeState);
 
         return resultType switch
         {
