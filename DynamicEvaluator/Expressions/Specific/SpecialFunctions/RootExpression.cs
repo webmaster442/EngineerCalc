@@ -3,6 +3,8 @@
 // This code is licensed under MIT license (see LICENSE for details)
 //-----------------------------------------------------------------------------
 
+using DynamicEvaluator.TypeSystem;
+
 namespace DynamicEvaluator.Expressions.Specific.SpecialFunctions;
 
 internal sealed class RootExpression : BinaryExpression
@@ -62,8 +64,8 @@ internal sealed class RootExpression : BinaryExpression
         return new ExponentExpression(newLeft, new DivideExpression(new ConstantExpression(1), newRight));
     }
 
-    protected override dynamic Evaluate(dynamic value1, dynamic value2)
-        => Functions.Root(value1, value2);
+    protected override Result Evaluate(Result value1, Result value2)
+        => TypeFunctions.Root(value1, value2);
 
     protected override string Render(bool emitLatex)
     {

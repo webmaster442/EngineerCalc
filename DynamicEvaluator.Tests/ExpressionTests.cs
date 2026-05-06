@@ -1,7 +1,5 @@
 ﻿using System.Numerics;
 
-using DynamicEvaluator.Types;
-
 namespace DynamicEvaluator.Tests;
 
 public class ExpressionTests

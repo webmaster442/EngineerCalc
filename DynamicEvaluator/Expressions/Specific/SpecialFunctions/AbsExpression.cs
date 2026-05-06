@@ -3,6 +3,8 @@
 // This code is licensed under MIT license (see LICENSE for details)
 //-----------------------------------------------------------------------------
 
+using DynamicEvaluator.TypeSystem;
+
 namespace DynamicEvaluator.Expressions.Specific.SpecialFunctions;
 
 internal class AbsExpression : UnaryExpression
@@ -27,8 +29,8 @@ internal class AbsExpression : UnaryExpression
         return new AbsExpression(newChild);
     }
 
-    protected override dynamic Evaluate(dynamic value)
-        => Functions.Abs(value);
+    protected override Result Evaluate(Result value)
+        => TypeFunctions.Abs(value);
 
     protected override string Render(bool emitLatex)
     {

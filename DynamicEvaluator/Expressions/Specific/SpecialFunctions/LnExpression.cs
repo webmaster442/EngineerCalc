@@ -3,6 +3,8 @@
 // This code is licensed under MIT license (see LICENSE for details)
 //-----------------------------------------------------------------------------
 
+using DynamicEvaluator.TypeSystem;
+
 namespace DynamicEvaluator.Expressions.Specific.SpecialFunctions;
 
 internal sealed class LnExpression : UnaryExpression
@@ -31,8 +33,8 @@ internal sealed class LnExpression : UnaryExpression
         return new LnExpression(newChild);
     }
 
-    protected override dynamic Evaluate(dynamic value)
-        => Functions.Ln(value);
+    protected override Result Evaluate(Result value)
+        => TypeFunctions.Ln(value);
 
     protected override string Render(bool emitLatex)
     {

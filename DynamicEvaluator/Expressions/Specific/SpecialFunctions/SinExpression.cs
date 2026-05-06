@@ -3,6 +3,8 @@
 // This code is licensed under MIT license (see LICENSE for details)
 //-----------------------------------------------------------------------------
 
+using DynamicEvaluator.TypeSystem;
+
 namespace DynamicEvaluator.Expressions.Specific.SpecialFunctions;
 
 internal sealed class SinExpression : UnaryExpression
@@ -33,8 +35,8 @@ internal sealed class SinExpression : UnaryExpression
 
 
 
-    protected override dynamic Evaluate(dynamic value)
-        => Functions.Sin(value);
+    protected override Result Evaluate(Result value)
+        => TypeFunctions.Sin(value);
 
     protected override string Render(bool emitLatex)
     {

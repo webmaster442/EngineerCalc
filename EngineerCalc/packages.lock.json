@@ -71,8 +71,12 @@
       "dynamicevaluator": {
         "type": "Project",
         "dependencies": {
+          "DynamicEvaluator.TypeSystem": "[1.0.0-build, )",
           "UnitsNet": "[6.0.0-pre017, )"
         }
+      },
+      "dynamicevaluator.typesystem": {
+        "type": "Project"
       }
     }
   }

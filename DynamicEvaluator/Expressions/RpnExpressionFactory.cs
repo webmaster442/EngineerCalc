@@ -3,8 +3,10 @@
 // This code is licensed under MIT license (see LICENSE for details)
 //-----------------------------------------------------------------------------
 
+using System.Globalization;
+
 using DynamicEvaluator.Expressions.Specific;
-using DynamicEvaluator.Types;
+using DynamicEvaluator.TypeSystem;
 
 namespace DynamicEvaluator.Expressions;
 
@@ -16,7 +18,7 @@ internal static class RpnExpressionFactory
             throw new InvalidOperationException("Not enough expressions in stack for operator");
     }
 
-    public static IExpression Create(TokenCollection tokens, FunctionProvider functionTable)
+    public static IExpression Create(TokenCollection tokens, FunctionFactory functionFactory, CultureInfo culture)
     {
         Stack<IExpression> exprStack = new Stack<IExpression>();
 
@@ -34,7 +36,7 @@ internal static class RpnExpressionFactory
             switch (tokens.CurrentToken.Type)
             {
                 case TokenType.Constant:
-                    dynamic value = TypeFactory.CreateType(tokens.CurrentToken.Value, tokens.CurrentToken.TypeInfo);
+                    Result value = tokens.CurrentToken.CreateResult(culture);
                     exprStack.Push(new ConstantExpression(value));
                     break;
                 case TokenType.Variable:
@@ -72,7 +74,7 @@ internal static class RpnExpressionFactory
                     {
                         parameters.Add(exprStack.Pop());
                     }
-                    exprStack.Push(functionTable.Create(tokens.CurrentToken.Value, parameters));
+                    exprStack.Push(functionFactory.Create(tokens.CurrentToken.Value, [.. parameters]));
                     break;
             }
         }

@@ -3,6 +3,8 @@
 // This code is licensed under MIT license (see LICENSE for details)
 //-----------------------------------------------------------------------------
 
+using DynamicEvaluator.TypeSystem;
+
 namespace DynamicEvaluator.Expressions.Specific;
 
 internal sealed class LogicNegateExpression : UnaryExpression
@@ -20,7 +22,7 @@ internal sealed class LogicNegateExpression : UnaryExpression
         if (newChild is ConstantExpression childConst)
         {
             // child is constant
-            return new ConstantExpression(!childConst.Value);
+            return new ConstantExpression(Result.FromBoolean(!childConst.Value.CastToBoolean()));
         }
         if (newChild is LogicNegateExpression negated)
         {
@@ -43,8 +45,8 @@ internal sealed class LogicNegateExpression : UnaryExpression
         return new LogicNegateExpression(newChild);
     }
 
-    protected override dynamic Evaluate(dynamic value)
-        => !value;
+    protected override Result Evaluate(Result value)
+        => Result.FromBoolean(!value.CastToBoolean());
 
     protected override string Render(bool emitLatex)
     {

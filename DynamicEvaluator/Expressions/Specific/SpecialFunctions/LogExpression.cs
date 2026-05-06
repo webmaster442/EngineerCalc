@@ -3,6 +3,8 @@
 // This code is licensed under MIT license (see LICENSE for details)
 //-----------------------------------------------------------------------------
 
+using DynamicEvaluator.TypeSystem;
+
 namespace DynamicEvaluator.Expressions.Specific.SpecialFunctions;
 
 internal sealed class LogExpression : BinaryExpression
@@ -34,8 +36,8 @@ internal sealed class LogExpression : BinaryExpression
         }
     }
 
-    protected override dynamic Evaluate(dynamic value1, dynamic value2)
-        => Functions.Log(value1, value2);
+    protected override Result Evaluate(Result value1, Result value2)
+        => TypeFunctions.Log(value1, value2);
 
     protected override string Render(bool emitLatex)
     {

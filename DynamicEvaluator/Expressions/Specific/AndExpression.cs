@@ -4,6 +4,8 @@
 //-----------------------------------------------------------------------------
 
 
+using DynamicEvaluator.TypeSystem;
+
 namespace DynamicEvaluator.Expressions.Specific;
 
 internal sealed class AndExpression : BinaryExpression
@@ -33,7 +35,7 @@ internal sealed class AndExpression : BinaryExpression
         if (leftConst != null && rightConst != null)
         {
             // two constants
-            return new ConstantExpression(leftConst.Value & rightConst.Value);
+            return new ConstantExpression(leftConst.Value.CastToBoolean() && rightConst.Value.CastToBoolean());
         }
         if (leftConst != null && newRight is VariableExpression rightVariable)
         {
@@ -52,8 +54,8 @@ internal sealed class AndExpression : BinaryExpression
         return new AndExpression(newLeft, newRight);
     }
 
-    protected override dynamic Evaluate(dynamic value1, dynamic value2)
-        => value1 & value2;
+    protected override Result Evaluate(Result value1, Result value2)
+        => Result.FromBoolean(value1.CastToBoolean() && value2.CastToBoolean());
 
     protected override string Render(bool emitLatex)
     {

@@ -7,42 +7,6 @@ namespace DynamicEvaluator.TypeSystem;
 
 public static class TypeFunctions
 {
-    public static IEnumerable<Func<Result, Result>> GetOneParamFunctions()
-    {
-        yield return Abs;
-        yield return Ln;
-        yield return Sin;
-        yield return ArcSin;
-        yield return Cos;
-        yield return ArcCos;
-        yield return Tan;
-        yield return ArcTan;
-        yield return FromHex;
-        yield return FromBin;
-        yield return ToHex;
-        yield return ToBin;
-        yield return Sqrt;
-    }
-
-    public static IEnumerable<Func<Result, Result, Result>> GetTwoParamFunctions()
-    {
-        yield return Cplx;
-        yield return CplxPlr;
-        yield return Log;
-        yield return Pow;
-        yield return Root;
-        yield return Gcd;
-        yield return Lcm;
-    }
-
-    public static IEnumerable<Func<Result[], Result>> GetVariableArgFunctions()
-    {
-        yield return Max;
-        yield return Min;
-        yield return Sum;
-        yield return Average;
-    }
-
     #region General Functions
     public static Result Abs(Result value)
     {

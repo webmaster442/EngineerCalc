@@ -3,7 +3,7 @@
 // This code is licensed under MIT license (see LICENSE for details)
 //-----------------------------------------------------------------------------
 
-using System.Net.Http.Headers;
+using DynamicEvaluator.TypeSystem;
 
 namespace DynamicEvaluator.Expressions.Specific.SpecialFunctions;
 
@@ -28,13 +28,13 @@ internal sealed class CosExpression : UnaryExpression
         }
         if (newChild.IsIntegerMultupleOfPi())
         {
-            return new ConstantExpression(-1L);
+            return new ConstantExpression(-1);
         }
         return new CosExpression(newChild);
     }
 
-    protected override dynamic Evaluate(dynamic value)
-        => Functions.Cos(value);
+    protected override Result Evaluate(Result value)
+        => TypeFunctions.Cos(value);
 
     protected override string Render(bool emitLatex)
     {

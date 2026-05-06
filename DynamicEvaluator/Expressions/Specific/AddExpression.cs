@@ -4,6 +4,8 @@
 //-----------------------------------------------------------------------------
 
 
+using DynamicEvaluator.TypeSystem;
+
 namespace DynamicEvaluator.Expressions.Specific;
 
 internal sealed class AddExpression : BinaryExpression
@@ -73,7 +75,7 @@ internal sealed class AddExpression : BinaryExpression
                 && rightMultiply.Right is ConstantExpression rightMulConst2
                 && leftVar.Identifier == rightMulVar2.Identifier)
             {
-                return SimplifyHelpers.MakeVariableMultplyConstant(leftVar, rightMulConst2.Value + 1);
+                return SimplifyHelpers.MakeVariableMultplyConstant(leftVar, rightMulConst2.Value + 1L);
             }
         }
 
@@ -84,14 +86,14 @@ internal sealed class AddExpression : BinaryExpression
                 && leftMultiply.Left is ConstantExpression leftMulConst
                 && rightVar.Identifier == leftMulVar.Identifier)
             {
-                return SimplifyHelpers.MakeVariableMultplyConstant(rightVar, leftMulConst.Value + 1);
+                return SimplifyHelpers.MakeVariableMultplyConstant(rightVar, leftMulConst.Value + 1L);
             }
             // (x * 2) + x  =>  3 * x
             if (leftMultiply?.Left is VariableExpression leftMulVar2
                 && leftMultiply.Right is ConstantExpression leftMulConst2
                 && rightVar.Identifier == leftMulVar2.Identifier)
             {
-                return SimplifyHelpers.MakeVariableMultplyConstant(rightVar, leftMulConst2.Value + 1);
+                return SimplifyHelpers.MakeVariableMultplyConstant(rightVar, leftMulConst2.Value + 1L);
             }
         }
 
@@ -139,7 +141,7 @@ internal sealed class AddExpression : BinaryExpression
         return new AddExpression(newLeft, newRight);
     }
 
-    protected override dynamic Evaluate(dynamic value1, dynamic value2)
+    protected override Result Evaluate(Result value1, Result value2)
         => value1 + value2;
 
     protected override string Render(bool emitLatex)

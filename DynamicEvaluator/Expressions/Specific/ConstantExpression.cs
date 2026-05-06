@@ -5,19 +5,31 @@
 
 using System.Globalization;
 
+using DynamicEvaluator.TypeSystem;
+
 namespace DynamicEvaluator.Expressions.Specific;
 
 internal sealed class ConstantExpression : IExpression
 {
-    public ConstantExpression(dynamic value)
+    public ConstantExpression(long value)
+    {
+        Value = Result.FromBigInteger(value);
+    }
+
+    public ConstantExpression(bool value)
+    {
+        Value = Result.FromBoolean(value);
+    }
+
+    public ConstantExpression(Result value)
     {
         Value = value;
     }
 
-    public dynamic Value { get; }
+    public Result Value { get; }
 
     public IExpression Differentiate(string byVariable)
-        => new ConstantExpression(0L);
+        => new ConstantExpression(0);
 
     public bool Equals(IExpression? other)
     {
@@ -25,7 +37,7 @@ internal sealed class ConstantExpression : IExpression
             && Value == otherConst.Value;
     }
 
-    public dynamic Evaluate(VariablesAndConstantsCollection variables)
+    public Result Evaluate(VariablesAndConstantsCollection variables)
         => Value;
 
     public IExpression Simplify()

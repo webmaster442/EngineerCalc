@@ -3,6 +3,7 @@
 // This code is licensed under MIT license (see LICENSE for details)
 //-----------------------------------------------------------------------------
 
+using DynamicEvaluator.TypeSystem;
 
 namespace DynamicEvaluator.Expressions;
 
@@ -19,13 +20,13 @@ internal abstract class UnaryExpression : IExpression
 
     public abstract IExpression Simplify();
 
-    public dynamic Evaluate(VariablesAndConstantsCollection variables)
+    public Result Evaluate(VariablesAndConstantsCollection variables)
     {
-        dynamic child = Child.Evaluate(variables);
+        Result child = Child.Evaluate(variables);
         return Evaluate(child);
     }
 
-    protected abstract dynamic Evaluate(dynamic value);
+    protected abstract Result Evaluate(Result value);
 
     protected abstract string Render(bool emitLatex);
 

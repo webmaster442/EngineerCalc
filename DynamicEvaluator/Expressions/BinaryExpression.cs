@@ -4,6 +4,8 @@
 //-----------------------------------------------------------------------------
 
 
+using DynamicEvaluator.TypeSystem;
+
 namespace DynamicEvaluator.Expressions;
 
 internal abstract class BinaryExpression : IExpression
@@ -21,14 +23,14 @@ internal abstract class BinaryExpression : IExpression
 
     public abstract IExpression Simplify();
 
-    public dynamic Evaluate(VariablesAndConstantsCollection variables)
+    public Result Evaluate(VariablesAndConstantsCollection variables)
     {
-        dynamic l = Left.Evaluate(variables);
-        dynamic r = Right.Evaluate(variables);
+        Result l = Left.Evaluate(variables);
+        Result r = Right.Evaluate(variables);
         return Evaluate(l, r);
     }
 
-    protected abstract dynamic Evaluate(dynamic value1, dynamic value2);
+    protected abstract Result Evaluate(Result value1, Result value2);
 
     protected abstract string Render(bool emitLatex);
 

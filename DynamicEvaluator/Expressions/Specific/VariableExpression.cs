@@ -4,6 +4,8 @@
 //-----------------------------------------------------------------------------
 
 
+using DynamicEvaluator.TypeSystem;
+
 namespace DynamicEvaluator.Expressions.Specific;
 
 internal sealed class VariableExpression : IExpression
@@ -32,7 +34,7 @@ internal sealed class VariableExpression : IExpression
         return new ConstantExpression(0L);
     }
 
-    public dynamic Evaluate(VariablesAndConstantsCollection variables)
+    public Result Evaluate(VariablesAndConstantsCollection variables)
     {
         return variables.IsDefined(Identifier)
             ? variables[Identifier]

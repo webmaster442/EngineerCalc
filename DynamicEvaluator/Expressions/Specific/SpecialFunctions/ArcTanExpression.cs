@@ -3,6 +3,8 @@
 // This code is licensed under MIT license (see LICENSE for details)
 //-----------------------------------------------------------------------------
 
+using DynamicEvaluator.TypeSystem;
+
 namespace DynamicEvaluator.Expressions.Specific.SpecialFunctions;
 
 internal sealed class ArcTanExpression : UnaryExpression
@@ -28,8 +30,8 @@ internal sealed class ArcTanExpression : UnaryExpression
         return new ArcTanExpression(newChild);
     }
 
-    protected override dynamic Evaluate(dynamic value)
-        => Functions.ArcTan(value);
+    protected override Result Evaluate(Result value)
+        => TypeFunctions.ArcTan(value);
 
     protected override string Render(bool emitLatex)
     {

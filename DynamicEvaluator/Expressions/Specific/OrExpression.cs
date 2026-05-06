@@ -4,6 +4,8 @@
 //-----------------------------------------------------------------------------
 
 
+using DynamicEvaluator.TypeSystem;
+
 namespace DynamicEvaluator.Expressions.Specific;
 
 internal sealed class OrExpression : BinaryExpression
@@ -33,27 +35,27 @@ internal sealed class OrExpression : BinaryExpression
         if (leftConst != null && rightConst != null)
         {
             // two constants
-            return new ConstantExpression(leftConst.Value | rightConst.Value);
+            return new ConstantExpression(Result.FromBoolean(leftConst.Value.CastToBoolean() || rightConst.Value.CastToBoolean()));
         }
         if (leftConst != null && newRight is VariableExpression rightVariable)
         {
             if (leftConst.Value == true)
-                return new ConstantExpression(true);
+                return new ConstantExpression(Result.FromBoolean(true));
             if (leftConst.Value == false)
                 return new VariableExpression(rightVariable.Identifier);
         }
         if (rightConst != null && newLeft is VariableExpression leftVariable)
         {
             if (rightConst.Value == true)
-                return new ConstantExpression(true);
+                return new ConstantExpression(Result.FromBoolean(true));
             if (rightConst.Value == false)
                 return new VariableExpression(leftVariable.Identifier);
         }
         return new OrExpression(newLeft, newRight);
     }
 
-    protected override dynamic Evaluate(dynamic value1, dynamic value2)
-        => value1 | value2;
+    protected override Result Evaluate(Result value1, Result value2)
+        => Result.FromBoolean(value1.CastToBoolean() || value2.CastToBoolean());
 
     protected override string Render(bool emitLatex)
     {

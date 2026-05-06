@@ -3,11 +3,14 @@
 // This code is licensed under MIT license (see LICENSE for details)
 //-----------------------------------------------------------------------------
 
+using System.Diagnostics;
 using System.Globalization;
 using System.Numerics;
 using System.Text.RegularExpressions;
 
-using DynamicEvaluator.Types;
+using DynamicEvaluator.Expressions;
+using DynamicEvaluator.TypeSystem;
+using DynamicEvaluator.TypeSystem.InternalTypes;
 
 namespace DynamicEvaluator;
 
@@ -34,119 +37,22 @@ public static partial class Extensions
         }
     }
 
-    public static string FormatToLatex(this object result, CultureInfo cultureInfo)
+    internal static Result CreateResult(this Token token, CultureInfo culture)
     {
-        ResultBuilder resultBuilder = new(cultureInfo);
+        if (!token.TypeState.HasValue)
+            throw new InvalidOperationException($"Can't create a Type from: {token.Value}");
 
-        if (result is string str)
-            return str;
-
-        if (result is long l)
+        return token.TypeState switch
         {
-            return resultBuilder.Append(l).AppendNewLine().Append("{{ ").Append(l).Append(" }}").ToString();
-        }
-
-        if (result is double d)
-        {
-            return resultBuilder.Append(d).AppendNewLine().Append("{{ ").Append(d).Append(" }}").ToString();
-        }
-
-        if (result is Vector2 vector2)
-        {
-            return resultBuilder
-                .Append("X: ")
-                .Append(vector2.X)
-                .Append(", Y: ")
-                .Append(vector2.Y)
-                .AppendNewLine()
-                .Append(@"{{\begin{pmatrix} ")
-                .Append(vector2.X)
-                .Append(" & ")
-                .Append(vector2.Y)
-                .Append(@" \end{pmatrix}}}")
-                .ToString();
-        }
-
-        if (result is Vector3 vector3)
-        {
-            return resultBuilder
-                .Append("X: ")
-                .Append(vector3.X)
-                .Append(", Y: ")
-                .Append(vector3.Y)
-                .Append(", Z: ")
-                .Append(vector3.Z)
-                .AppendNewLine()
-                .Append(@"{{\begin{pmatrix} ")
-                .Append(vector3.X)
-                .Append(" & ")
-                .Append(vector3.Y)
-                .Append(" & ")
-                .Append(vector3.Z)
-                .Append(@" \end{pmatrix}}}")
-                .ToString();
-        }
-
-        if (result is Vector4 vector4)
-        {
-            return resultBuilder
-                .Append("X: ")
-                .Append(vector4.X)
-                .Append(", Y: ")
-                .Append(vector4.Y)
-                .Append(", Z: ")
-                .Append(vector4.Z)
-                .Append(", W: ")
-                .Append(vector4.W)
-                .AppendNewLine()
-                .Append(@"{{\begin{pmatrix} ")
-                .Append(vector4.X)
-                .Append(" & ")
-                .Append(vector4.Y)
-                .Append(" & ")
-                .Append(vector4.Z)
-                .Append(" & ")
-                .Append(vector4.W)
-                .Append(@" \end{pmatrix}}}")
-                .ToString();
-        }
-
-        if (result is Fraction fraction)
-        {
-            if (fraction.Denominator == 1)
-                return resultBuilder.Append(fraction.Numerator).ToString();
-
-            return resultBuilder.Append(fraction.ToString())
-                .AppendNewLine()
-                .Append("{{{ ")
-                .Append(fraction.Numerator)
-                .Append(" \\over ")
-                .Append(fraction.Denominator)
-                .Append("} \\sim ")
-                .Append((double)fraction)
-                .Append(" }}")
-                .ToString();
-        }
-
-        if (result is Complex complex)
-        {
-            return resultBuilder
-                .Append(complex.Real)
-                .Append(" + i")
-                .Append(complex.Imaginary)
-                .AppendNewLine()
-                .Append("{{ ")
-                .Append(complex.Real)
-                .Append(" + i")
-                .Append(complex.Imaginary)
-                .Append(" ~~ |Z|: ")
-                .Append(complex.Magnitude)
-                .Append(" ~~ \\phi: ")
-                .Append(complex.Phase)
-                .Append(" }}")
-                .ToString();
-        }
-
-        return result.ToString() ?? "[null]";
+            TypeState.NoResult => Result.NoResult(),
+            TypeState.Boolean => Result.FromBoolean(bool.Parse(token.Value)),
+            TypeState.Integer => Result.FromBigInteger(BigInteger.Parse(token.Value, culture)),
+            TypeState.Double => Result.FromDouble(double.Parse(token.Value, culture)),
+            TypeState.Fraction => Result.FromFraction(Fraction.Parse(token.Value, culture)),
+            TypeState.Complex => Result.FromComplex(Complex.Parse(token.Value, culture)),
+            TypeState.Array => throw new InvalidOperationException("Array parsing is not supported"),
+            TypeState.String => Result.FromString(token.Value),
+            _ => throw new UnreachableException($"Unknown token type state: {token.TypeState}"),
+        };
     }
 }

@@ -7,6 +7,9 @@
         "requested": "[6.0.0-pre017, )",
         "resolved": "6.0.0-pre017",
         "contentHash": "5lEZuV9xcBNJYlRmo6/1s7x5eTza2Y92tgF5GTw2uv/ZDtnjduDP8Wq1KXfRIn3qiE0ojlYapd4morI/ZWSKGA=="
+      },
+      "dynamicevaluator.typesystem": {
+        "type": "Project"
       }
     }
   }

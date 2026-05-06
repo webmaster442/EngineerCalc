@@ -3,6 +3,8 @@
 // This code is licensed under MIT license (see LICENSE for details)
 //-----------------------------------------------------------------------------
 
+using DynamicEvaluator.TypeSystem;
+
 namespace DynamicEvaluator.Expressions.Specific.SpecialFunctions;
 
 internal sealed class ArcSinExpression : UnaryExpression
@@ -30,8 +32,8 @@ internal sealed class ArcSinExpression : UnaryExpression
         return new ArcSinExpression(newChild);
     }
 
-    protected override dynamic Evaluate(dynamic value)
-        => Functions.ArcSin(value);
+    protected override Result Evaluate(Result value)
+        => TypeFunctions.ArcSin(value);
 
     protected override string Render(bool emitLatex)
     {

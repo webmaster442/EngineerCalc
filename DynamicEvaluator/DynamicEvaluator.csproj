@@ -21,6 +21,10 @@
     <PackageReference Include="UnitsNet" Version="6.0.0-pre017" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DynamicEvaluator.TypeSystem\DynamicEvaluator.TypeSystem.csproj" />
+  </ItemGroup>
+
   <ProjectExtensions><VisualStudio><UserProperties documentation_4documentation_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>
