@@ -60,10 +60,10 @@ public sealed class ExpressionFactory
         return expression;
     }
 
-    public IExpression CreateFromRpn(string input)
+    public IExpression CreateFromRpn(string input, CultureInfo culture)
     {
         TokenCollection tokens = Tokenizer.Tokenize(input, _functionFactory.IsFunction);
-        return RpnExpressionFactory.Create(tokens, _functionFactory, _culture);
+        return RpnExpressionFactory.Create(tokens, _functionFactory, culture);
     }
 
 

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
+﻿using System.Reflection;
 
 using DynamicEvaluator.TypeSystem;
 
@@ -9,29 +6,30 @@ namespace DynamicEvaluator.Tests;
 
 internal class UT_FunctionFactory
 {
-    private List<string> _typeFunctionNames;
+    private string[] _functionFactoryNames;
 
     [OneTimeSetUp]
     public void Setup()
     {
-        _typeFunctionNames = typeof(TypeFunctions)
-            .GetMethods(BindingFlags.Public | BindingFlags.Static)
-            .Select(x => x.Name)
-            .ToList();
+        _functionFactoryNames = new FunctionFactory().ToArray();
     }
 
-    public static IEnumerable<string> FunctionFactoryNames
+    public static IEnumerable<string> TypeFunctionNames
     {
         get
         {
-            return new FunctionFactory();
+            return typeof(TypeFunctions)
+                .GetMethods(BindingFlags.Public | BindingFlags.Static)
+                .Select(x => x.Name)
+                .ToList();
         }
     }
 
-    [TestCaseSource(nameof(FunctionFactoryNames))]
+
+    [TestCaseSource(nameof(TypeFunctionNames))]
 
     public void EnsureThat_FunctionFactory_HasAllTypeFunctions(string functionName)
     {
-        Assert.That(_typeFunctionNames, Contains.Item(functionName));
+        Assert.That(_functionFactoryNames, Contains.Item(functionName));
     }
 }

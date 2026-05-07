@@ -48,10 +48,10 @@ public sealed class Result :
     }
 
 
-    public static Result FromNumbers(params double[] values)
+    public static Result FromNumbers(IReadOnlyList<double> values)
         => new Result(new DoubleArray(values), TypeState.Array);
 
-    public IEnumerable<double> CastToArray()
+    public IReadOnlyList<double> CastToArray()
     {
         return TypeState switch
         {

@@ -37,6 +37,8 @@ internal sealed class FunctionFactory : IEnumerable<string>
             { nameof(TypeFunctions.ArcTan), TypeFunctions.ArcTan },
             { nameof(TypeFunctions.FromHex), TypeFunctions.FromHex },
             { nameof(TypeFunctions.FromBin ), TypeFunctions.FromBin },
+            { nameof(TypeFunctions.FromHexSigned), TypeFunctions.FromHexSigned },
+            { nameof(TypeFunctions.FromBinSigned ), TypeFunctions.FromBinSigned },
             { nameof(TypeFunctions.ToHex), TypeFunctions.ToHex },
             { nameof(TypeFunctions.ToBin), TypeFunctions.ToBin },
             { nameof(TypeFunctions.Sqrt), TypeFunctions.Sqrt },
@@ -57,6 +59,9 @@ internal sealed class FunctionFactory : IEnumerable<string>
             { nameof(TypeFunctions.Min), TypeFunctions.Min },
             { nameof(TypeFunctions.Sum), TypeFunctions.Sum },
             { nameof(TypeFunctions.Average), TypeFunctions.Average },
+            { nameof(TypeFunctions.Random), TypeFunctions.Random },
+            { nameof(TypeFunctions.Array), TypeFunctions.Array },
+            { nameof(TypeFunctions.Count), TypeFunctions.Count },
         };
     }
 

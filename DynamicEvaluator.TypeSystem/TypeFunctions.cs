@@ -93,6 +93,20 @@ public static class TypeFunctions
         };
     }
 
+    public static Result Random(params Result[] args)
+    {
+        if (args.Length == 0)
+            return Result.FromBigInteger(System.Random.Shared.NextInt64());
+
+        if (args.Length == 1)
+            return Result.FromBigInteger(System.Random.Shared.NextInt64((long)args[0].CastToBigInteger()));
+
+        if (args.Length == 2)
+            return Result.FromBigInteger(System.Random.Shared.NextInt64((long)args[0].CastToBigInteger(), (long)args[1].CastToBigInteger()));
+
+        throw new InvalidOperationException($"Too many arguments for: {nameof(Random)}");
+    }
+
     #endregion
 
     #region Trigonometric Functions
@@ -167,20 +181,34 @@ public static class TypeFunctions
 
     public static Result FromHex(Result value)
     {
-        return value.TypeState switch
-        {
-            TypeState.String => Result.FromBigInteger(BigInteger.Parse(value.CastToString(), System.Globalization.NumberStyles.HexNumber)),
-            _ => throw TypeException.IncompatibleFunction(nameof(FromHex), value.TypeState)
-        };
+        if (value.TypeState != TypeState.String)
+            throw TypeException.IncompatibleFunction(nameof(FromHex), value.TypeState);
+
+        return Result.FromBigInteger(BigInteger.Parse($"0{value.CastToString()}", System.Globalization.NumberStyles.HexNumber));
+    }
+
+    public static Result FromHexSigned(Result value)
+    {
+        if (value.TypeState != TypeState.String)
+            throw TypeException.IncompatibleFunction(nameof(FromHexSigned), value.TypeState);
+
+        return Result.FromBigInteger(BigInteger.Parse(value.CastToString(), System.Globalization.NumberStyles.HexNumber));
     }
 
     public static Result FromBin(Result value)
     {
-        return value.TypeState switch
-        {
-            TypeState.String => Result.FromBigInteger(BigInteger.Parse(value.CastToString(), System.Globalization.NumberStyles.BinaryNumber)),
-            _ => throw TypeException.IncompatibleFunction(nameof(FromBin), value.TypeState)
-        };
+        if (value.TypeState != TypeState.String)
+            throw TypeException.IncompatibleFunction(nameof(FromBin), value.TypeState);
+
+        return Result.FromBigInteger(BigInteger.Parse($"0{value.CastToString()}", System.Globalization.NumberStyles.BinaryNumber));
+    }
+
+    public static Result FromBinSigned(Result value)
+    {
+        if (value.TypeState != TypeState.String)
+            throw TypeException.IncompatibleFunction(nameof(FromBinSigned), value.TypeState);
+
+        return Result.FromBigInteger(BigInteger.Parse(value.CastToString(), System.Globalization.NumberStyles.BinaryNumber));
     }
 
     public static Result ToHex(Result value)
@@ -189,10 +217,12 @@ public static class TypeFunctions
             throw TypeException.IncompatibleFunction(nameof(ToHex), value.TypeState);
 
         BigInteger casted = value.CastToBigInteger();
-        if (casted < long.MaxValue)
+        if (casted > BigInteger.Zero)
         {
-            return Result.FromString(((long)casted).ToString("X"));
+            //remove leading zeros
+            return Result.FromString(casted.ToString("X")[1..]);
         }
+
         return Result.FromString(casted.ToString("X"));
     }
 
@@ -202,10 +232,13 @@ public static class TypeFunctions
             throw TypeException.IncompatibleFunction(nameof(ToHex), value.TypeState);
 
         BigInteger casted = value.CastToBigInteger();
-        if (casted < long.MaxValue)
+
+        if (casted > BigInteger.Zero)
         {
-            return Result.FromString(((long)casted).ToString("B"));
+            //remove leading zeros
+            return Result.FromString(casted.ToString("B")[1..]);
         }
+
         return Result.FromString(casted.ToString("B"));
     }
 
@@ -233,6 +266,19 @@ public static class TypeFunctions
         };
     }
 
+    public static Result Array(params Result[] values)
+    {
+        List<double> doubles = new List<double>();
+        foreach (var value in values)
+        {
+            if (value.TypeState != TypeState.Integer && value.TypeState != TypeState.Double)
+                throw TypeException.IncompatibleFunction(nameof(Array), value.TypeState);
+
+            doubles.Add(value.CastToDouble());
+        }
+        return Result.FromNumbers(doubles);
+    }
+
     #endregion
 
     #region Statistics Functions
@@ -256,6 +302,17 @@ public static class TypeFunctions
                 max = values[i];
         }
         return max;
+    }
+
+    public static Result Count(params Result[] values)
+    {
+        if (values.Length == 0)
+            throw new ArgumentException("At least one value is required.", nameof(values));
+
+        if (values[0].TypeState == TypeState.Array)
+            return Result.FromDouble(values[0].CastToArray().Count);
+
+        return Result.FromBigInteger(values.Length);
     }
 
     public static Result Min(params Result[] values)

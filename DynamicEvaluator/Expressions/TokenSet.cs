@@ -37,7 +37,7 @@ internal sealed class TokenSet
 
     public override string ToString()
     {
-        var tokens = Enum.GetValues(typeof(TokenType)).Cast<TokenType>();
+        var tokens = Enum.GetValues<TokenType>();
         var containedTokens = tokens.Where(Contains).Select(t => t.ToString());
         return string.Join(", ", containedTokens);
     }

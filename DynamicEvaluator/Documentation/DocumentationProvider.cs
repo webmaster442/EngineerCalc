@@ -5,8 +5,15 @@
 
 using System.Collections;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace DynamicEvaluator.Documentation;
+
+[JsonSourceGenerationOptions(JsonSerializerDefaults.Web)]
+[JsonSerializable(typeof(Docmodel[]))]
+internal partial class DocModelContext : JsonSerializerContext
+{
+}
 
 public sealed class DocumentationProvider : IEnumerable<Docmodel>
 {
@@ -19,7 +26,7 @@ public sealed class DocumentationProvider : IEnumerable<Docmodel>
         {
             throw new InvalidOperationException("documentation.json is not embedded");
         }
-        var loaded = JsonSerializer.Deserialize<Docmodel[]>(stream, JsonSerializerOptions.Web);
+        var loaded = JsonSerializer.Deserialize<Docmodel[]>(stream, DocModelContext.Default.DocmodelArray);
         if (loaded == null)
         {
             throw new InvalidOperationException("Failed to deserialize documentation.json");

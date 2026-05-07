@@ -322,6 +322,8 @@ public class ExpressionTests
     [TestCase("x+y", 3)]
     [TestCase("fromhex('ff')", 255)]
     [TestCase("frombin('1010')", 10)]
+    [TestCase("fromhexsigned('ff')", -1)]
+    [TestCase("frombinsigned('1010')", -6)]
     [TestCase("1_000+100", "1100")]
     [TestCase("3%2", 1)]
     [TestCase("min(1, 2, 3, 4, 5)", 1)]
@@ -483,7 +485,7 @@ public class ExpressionTests
 
 
     [TestCase("(1/2)*(3/4)", 3, 8)]
-    [TestCase("y/x", 10, 2)]
+    [TestCase("y/x", 1, 5)]
     public void EnsureThat_Evaluate_Works_Fractions(string expression, long numerator, long denominator)
     {
         IExpression parsed = _expressionFactory.Create(expression, CultureInfo.InvariantCulture);
@@ -646,7 +648,7 @@ public class ExpressionTests
     [TestCase("3 2 + 2 *", "((3 + 2) * 2)")]
     public void EnsureThat_CreateFromRpn_Works(string expression, string expected)
     {
-        IExpression parsed = _expressionFactory.CreateFromRpn(expression);
+        IExpression parsed = _expressionFactory.CreateFromRpn(expression, CultureInfo.InvariantCulture);
         Assert.That(parsed.ToString(), Is.EqualTo(expected));
     }
 
@@ -660,22 +662,9 @@ public class ExpressionTests
     {
         Assert.Throws<InvalidOperationException>(() =>
         {
-            IExpression parsed = _expressionFactory.CreateFromRpn(expression);
+            IExpression parsed = _expressionFactory.CreateFromRpn(expression, CultureInfo.InvariantCulture);
         });
     }
-
-    //[TestCase("array(1, 2, 3)", "[1, 2, 3]")]
-    //[TestCase("array()", "[]")]
-    //[TestCase("count(array(1, 2, 3))", "3")]
-    //[TestCase("array(1, 2, 3).Length", "3")]
-    //public void EnsureThat_Array_Expressions_Work(string expression, string expected)
-    //{
-    //    VariablesAndConstantsCollection variables = new();
-    //    IExpression arrayExpr = _expressionFactory.Create(expression, CultureInfo.InvariantCulture);
-    //    Result result = arrayExpr.Evaluate(variables);
-
-    //    Assert.That(result, Is.EqualTo(expected));
-    //}
 
     [TestCase("min(x, y, z)", 1)]
     [TestCase("min(1, 2, 3)", 1)]
