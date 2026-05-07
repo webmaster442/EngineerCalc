@@ -5,6 +5,7 @@
 
 using System.Globalization;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 using DynamicEvaluator.TypeSystem;
@@ -86,9 +87,9 @@ internal static class Tokenizer
         newIndex = index;
         string tokenValue = sb.ToString();
         if (tokenValue.Any(IsFloatCharacter))
-            return new Token(tokenValue, TokenType.Constant, TypeState.Double);
+            return new Token(tokenValue.Replace("_", ""), TokenType.Constant, TypeState.Double);
         else
-            return new Token(tokenValue, TokenType.Constant, TypeState.Integer);
+            return new Token(tokenValue.Replace("_", ""), TokenType.Constant, TypeState.Integer);
     }
 
     private static Token HandleStringLiteral(string input, int start, char matcher, out int newIndex)
@@ -200,13 +201,15 @@ internal static class Tokenizer
         TokenCollection tokens = new();
         foreach (var item in items)
         {
-            if (BigInteger.TryParse(item, out _))
+            string number = item.Replace("_", "");
+
+            if (BigInteger.TryParse(number, out _))
             {
-                tokens.Add(new Token(item, TokenType.Constant, TypeState.Integer));
+                tokens.Add(new Token(number, TokenType.Constant, TypeState.Integer));
             }
-            else if (double.TryParse(item, CultureInfo.InvariantCulture, out _))
+            else if (double.TryParse(number, CultureInfo.InvariantCulture, out _))
             {
-                tokens.Add(new Token(item, TokenType.Constant, TypeState.Double));
+                tokens.Add(new Token(number, TokenType.Constant, TypeState.Double));
             }
             else if ((item.StartsWith('\'') && item.EndsWith('\''))
                 || (item.StartsWith('"') && item.EndsWith('"')))

@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 
 using DynamicEvaluator.Expressions.Specific;
+using DynamicEvaluator.Expressions.Specific.Rewritables;
+using DynamicEvaluator.Expressions.Specific.SpecialFunctions;
 using DynamicEvaluator.TypeSystem;
 
 namespace DynamicEvaluator;
@@ -10,9 +12,19 @@ internal sealed class FunctionFactory : IEnumerable<string>
     private readonly Dictionary<string, Func<Result, Result>> _oneParamFunctions;
     private readonly Dictionary<string, Func<Result, Result, Result>> _twoParamFunctions;
     private readonly Dictionary<string, Func<Result[], Result>> _multiParamFunctions;
+    private readonly Dictionary<string, int> _rewriteFunctions;
 
     public FunctionFactory()
     {
+        _rewriteFunctions = new Dictionary<string, int>(StringComparer.InvariantCultureIgnoreCase)
+        {
+            { "ctg", 1 },
+            { "arcctg", 1 },
+            { "deg", 1 },
+            { "grad", 1 },
+            { "degtorad", 1 },
+            { "gradtorad", 1 },
+        };
         _oneParamFunctions = new(StringComparer.InvariantCultureIgnoreCase)
         {
             { nameof(TypeFunctions.Abs), TypeFunctions.Abs },
@@ -50,12 +62,40 @@ internal sealed class FunctionFactory : IEnumerable<string>
 
     public bool IsFunction(string name)
     {
-        return _oneParamFunctions.ContainsKey(name)
+        return _rewriteFunctions.ContainsKey(name)
+            || _oneParamFunctions.ContainsKey(name)
             || _twoParamFunctions.ContainsKey(name)
             || _multiParamFunctions.ContainsKey(name);
     }
 
     public IExpression Create(string name, IExpression[] parameters)
+    {
+        if (!ValidateParameterCount(name, parameters.Length))
+            throw new InvalidOperationException($"No overload of {name} found that takes {parameters.Length} parameters");
+
+        return name switch
+        {
+            "abs" => new AbsExpression(parameters[0]),
+            "sin" => new SinExpression(parameters[0]),
+            "arcsin" => new ArcSinExpression(parameters[0]),
+            "cos" => new CosExpression(parameters[0]),
+            "arccos" => new ArcCosExpression(parameters[0]),
+            "tan" => new TanExpression(parameters[0]),
+            "arctan" => new ArcTanExpression(parameters[0]),
+            "ctg" => new CtgExpression(parameters[0]),
+            "arcctg" => new ArcCtgExpression(parameters[0]),
+            "ln" => new LnExpression(parameters[0]),
+            "log" => new LogExpression(parameters[0], parameters[1]),
+            "root" => new RootExpression(parameters[0], parameters[1]),
+            "deg" => new DegExpression(parameters[0]),
+            "grad" => new GradExpression(parameters[0]),
+            "degtorad" => new DegToRadExpression(parameters[0]),
+            "gradtorad" => new GradToRadExpression(parameters[0]),
+            _ => CreateGeneric(name, parameters),
+        };
+    }
+
+    private IExpression CreateGeneric(string name, IExpression[] parameters)
     {
         if (_multiParamFunctions.TryGetValue(name, out Func<Result[], Result>? multiFunction))
         {
@@ -77,6 +117,22 @@ internal sealed class FunctionFactory : IEnumerable<string>
         }
 
         throw new InvalidOperationException($"Unknown function: {name}");
+    }
+
+    private bool ValidateParameterCount(string name, int count)
+    {
+        if (_rewriteFunctions.TryGetValue(name, out int expectedCount))
+        {
+            return count == expectedCount;
+        }
+        if ((_oneParamFunctions.ContainsKey(name) && count == 1)
+            || (_twoParamFunctions.ContainsKey(name) && count == 2)
+            || _multiParamFunctions.ContainsKey(name))
+        {
+            return true;
+        }
+
+        return false;
     }
 
     public IEnumerator<string> GetEnumerator()

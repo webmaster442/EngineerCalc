@@ -3,7 +3,7 @@
 namespace DynamicEvaluator.Tests;
 
 [TestFixture]
-public class DocumentationProviderTests
+public class UT_DocumentationProvider
 {
     private DocumentationProvider _documentationProvider;
     private HashSet<string> _skip;
@@ -19,14 +19,7 @@ public class DocumentationProviderTests
     }
 
     public static IEnumerable<string> FunctionNames
-    {
-        get
-        {
-            var provider = new FunctionProvider();
-            provider.FillFrom(typeof(Functions));
-            return provider.GetFunctionNames();
-        }
-    }
+        => new FunctionFactory();
 
     [TestCaseSource(nameof(FunctionNames))]
     public void EnsureThat_Function_IsDocumented(string function)

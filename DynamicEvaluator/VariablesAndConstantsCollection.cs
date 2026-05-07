@@ -62,7 +62,7 @@ public sealed class VariablesAndConstantsCollection : IEnumerable<KeyValuePair<s
     public bool IsDefined(string key)
         => IsConstant(key) || IsVariable(key);
 
-    public void Add(string key, dynamic value)
+    public void Add(string key, Result value)
     {
         if (_constants.ContainsKey(key))
             throw new InvalidOperationException($"{key} is a constant, that can't be overdefined");
@@ -88,7 +88,7 @@ public sealed class VariablesAndConstantsCollection : IEnumerable<KeyValuePair<s
         return false;
     }
 
-    public dynamic this[string key]
+    public Result this[string key]
     {
         get => _constants.ContainsKey(key) ? _constants[key] : _variables[key];
         set => Add(key, value);

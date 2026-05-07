@@ -84,7 +84,7 @@ public static class IExpressionExtensions
             string pattern = Utilities.GetBinaryValue(i, variableNames.Length);
             for (int j = 0; j < variableNames.Length; j++)
             {
-                variables[variableNames[j]] = pattern[j] == '1' ? true : false;
+                variables[variableNames[j]] = pattern[j] == '1' ? Result.FromBoolean(true) : Result.FromBoolean(false);
             }
 
             Result evaluated = expression.Evaluate(variables);

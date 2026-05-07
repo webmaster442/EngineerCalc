@@ -228,7 +228,7 @@ public sealed class Result :
 
     public static bool operator ==(Result? left, bool right)
     {
-        var result = TypeHelper.GetResultTypeState(left?.TypeState ?? TypeState.NoResult, TypeState.Integer);
+        var result = TypeHelper.GetResultTypeState(left?.TypeState ?? TypeState.NoResult, TypeState.Boolean);
         return result switch
         {
             ResultTypeState.Incompatible => false,

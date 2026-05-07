@@ -42,7 +42,7 @@ internal abstract class GenericFunctionExpression : IExpression
 
     public override string ToString()
     {
-        var subs = string.Join(',', _parameters.Select(x => x.ToString()));
+        var subs = string.Join(", ", _parameters.Select(x => x.ToString()));
         return $"{_name}({subs})";
     }
 }

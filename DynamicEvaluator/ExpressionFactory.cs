@@ -143,7 +143,7 @@ public sealed class ExpressionFactory
 
             return exp;
         }
-        throw new InvalidOperationException("Invalid expression");
+        throw new InvalidOperationException($"Invalid expression. Expected {FirstMultExp}");
     }
 
     private IExpression ParseMultExpression(TokenCollection tokens)
