@@ -46,7 +46,7 @@ internal sealed class TennaryExpression : IExpression
         if (newCondition is ConstantExpression condConst)
         {
             // condition is constant
-            return condConst.Value ? newIfTrue : newIfFalse;
+            return condConst.Value.CastToBoolean() ? newIfTrue : newIfFalse;
         }
         // no simplification
         return new TennaryExpression(newCondition, newIfTrue, newIfFalse);

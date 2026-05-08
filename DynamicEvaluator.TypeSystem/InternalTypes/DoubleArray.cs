@@ -2,18 +2,24 @@
 
 namespace DynamicEvaluator.TypeSystem.InternalTypes;
 
-internal sealed class DoubleArray : IEnumerable<double>
+internal sealed class DoubleArray : IReadOnlyList<double>
 {
-    private readonly double[] _values;
+    private readonly IReadOnlyList<double> _values;
 
-    public DoubleArray(params double[] values)
+    public DoubleArray(IReadOnlyList<double> values)
     {
         _values = values;
     }
 
+    public double this[int index]
+        => _values[index];
+
+    public int Count
+        => _values.Count;
+
     public IEnumerator<double> GetEnumerator()
-        => ((IEnumerable<double>)_values).GetEnumerator();
+        => _values.GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator()
-        => GetEnumerator();
+        => _values.GetEnumerator();
 }

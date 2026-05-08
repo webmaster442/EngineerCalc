@@ -7,7 +7,7 @@ using System.Globalization;
 using System.Numerics;
 
 using DynamicEvaluator;
-using DynamicEvaluator.Types;
+using DynamicEvaluator.TypeSystem;
 
 using Spectre.Console;
 
@@ -18,7 +18,7 @@ internal static class ResultFormatter
     private static string PropertyName(string name)
         => $"[bold silver]{name.EscapeMarkup()}[/]";
 
-    public static string Format(object result, CultureInfo cultureInfo)
+    public static string Format(Result result, CultureInfo cultureInfo)
     {
         ResultBuilder resultBuilder = new(cultureInfo);
 

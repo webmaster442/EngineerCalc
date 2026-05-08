@@ -16,6 +16,11 @@ internal sealed class ConstantExpression : IExpression
         Value = Result.FromBigInteger(value);
     }
 
+    public ConstantExpression(bool value)
+    {
+        Value = Result.FromBoolean(value);
+    }
+
     public ConstantExpression(Result value)
     {
         Value = value;

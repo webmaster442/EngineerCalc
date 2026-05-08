@@ -35,7 +35,7 @@ internal sealed class AndExpression : BinaryExpression
         if (leftConst != null && rightConst != null)
         {
             // two constants
-            return new ConstantExpression(leftConst.Value & rightConst.Value);
+            return new ConstantExpression(leftConst.Value.CastToBoolean() && rightConst.Value.CastToBoolean());
         }
         if (leftConst != null && newRight is VariableExpression rightVariable)
         {

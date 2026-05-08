@@ -7,42 +7,6 @@ namespace DynamicEvaluator.TypeSystem;
 
 public static class TypeFunctions
 {
-    public static IEnumerable<Func<Result, Result>> GetOneParamFunctions()
-    {
-        yield return Abs;
-        yield return Ln;
-        yield return Sin;
-        yield return ArcSin;
-        yield return Cos;
-        yield return ArcCos;
-        yield return Tan;
-        yield return ArcTan;
-        yield return FromHex;
-        yield return FromBin;
-        yield return ToHex;
-        yield return ToBin;
-        yield return Sqrt;
-    }
-
-    public static IEnumerable<Func<Result, Result, Result>> GetTwoParamFunctions()
-    {
-        yield return Cplx;
-        yield return CplxPlr;
-        yield return Log;
-        yield return Pow;
-        yield return Root;
-        yield return Gcd;
-        yield return Lcm;
-    }
-
-    public static IEnumerable<Func<Result[], Result>> GetVariableArgFunctions()
-    {
-        yield return Max;
-        yield return Min;
-        yield return Sum;
-        yield return Average;
-    }
-
     #region General Functions
     public static Result Abs(Result value)
     {
@@ -60,6 +24,7 @@ public static class TypeFunctions
     {
         return value.TypeState switch
         {
+            TypeState.Integer => Result.FromDouble(Math.Log(value.CastToDouble())),
             TypeState.Double => Result.FromDouble(Math.Log(value.CastToDouble())),
             TypeState.Complex => Result.FromComplex(Complex.Log(value.CastToComplex())),
             _ => throw TypeException.IncompatibleFunction(nameof(Ln), value.TypeState)
@@ -70,6 +35,7 @@ public static class TypeFunctions
     {
         return value.TypeState switch
         {
+            TypeState.Integer => Result.FromDouble(Math.Log(value.CastToDouble(), baseValue.CastToDouble())),
             TypeState.Double => Result.FromDouble(Math.Log(value.CastToDouble(), baseValue.CastToDouble())),
             TypeState.Complex => Result.FromComplex(Complex.Log(value.CastToComplex(), baseValue.CastToDouble())),
             _ => throw TypeException.IncompatibleFunction(nameof(Log), value.TypeState, baseValue.TypeState)
@@ -80,6 +46,7 @@ public static class TypeFunctions
     {
         return value.TypeState switch
         {
+            TypeState.Integer => Result.FromDouble(Math.Pow(value.CastToDouble(), exponent.CastToDouble())),
             TypeState.Double => Result.FromDouble(Math.Pow(value.CastToDouble(), exponent.CastToDouble())),
             TypeState.Complex => Result.FromComplex(Complex.Pow(value.CastToComplex(), exponent.CastToComplex())),
             _ => throw TypeException.IncompatibleFunction(nameof(Pow), value.TypeState, exponent.TypeState)
@@ -90,6 +57,7 @@ public static class TypeFunctions
     {
         return value.TypeState switch
         {
+            TypeState.Integer => Result.FromDouble(Math.Pow(value.CastToDouble(), 1.0 / degree.CastToDouble())),
             TypeState.Double => Result.FromDouble(Math.Pow(value.CastToDouble(), 1.0 / degree.CastToDouble())),
             TypeState.Complex => Result.FromComplex(Complex.Pow(value.CastToComplex(), 1.0 / degree.CastToComplex())),
             _ => throw TypeException.IncompatibleFunction(nameof(Root), value.TypeState, degree.TypeState)
@@ -100,6 +68,7 @@ public static class TypeFunctions
     {
         return value.TypeState switch
         {
+            TypeState.Integer => Result.FromDouble(Math.Sqrt(value.CastToDouble())),
             TypeState.Double => Result.FromDouble(Math.Sqrt(value.CastToDouble())),
             TypeState.Complex => Result.FromComplex(Complex.Sqrt(value.CastToComplex())),
             _ => throw TypeException.IncompatibleFunction(nameof(Sqrt), value.TypeState)
@@ -124,6 +93,20 @@ public static class TypeFunctions
         };
     }
 
+    public static Result Random(params Result[] args)
+    {
+        if (args.Length == 0)
+            return Result.FromBigInteger(System.Random.Shared.NextInt64());
+
+        if (args.Length == 1)
+            return Result.FromBigInteger(System.Random.Shared.NextInt64((long)args[0].CastToBigInteger()));
+
+        if (args.Length == 2)
+            return Result.FromBigInteger(System.Random.Shared.NextInt64((long)args[0].CastToBigInteger(), (long)args[1].CastToBigInteger()));
+
+        throw new InvalidOperationException($"Too many arguments for: {nameof(Random)}");
+    }
+
     #endregion
 
     #region Trigonometric Functions
@@ -131,6 +114,7 @@ public static class TypeFunctions
     {
         return value.TypeState switch
         {
+            TypeState.Integer => Result.FromDouble(Math.Sin(value.CastToDouble())),
             TypeState.Double => Result.FromDouble(Math.Sin(value.CastToDouble())),
             TypeState.Complex => Result.FromComplex(Complex.Sin(value.CastToComplex())),
             _ => throw TypeException.IncompatibleFunction(nameof(Sin), value.TypeState)
@@ -141,6 +125,7 @@ public static class TypeFunctions
     {
         return value.TypeState switch
         {
+            TypeState.Integer => Result.FromDouble(Math.Asin(value.CastToDouble())),
             TypeState.Double => Result.FromDouble(Math.Asin(value.CastToDouble())),
             TypeState.Complex => Result.FromComplex(Complex.Asin(value.CastToComplex())),
             _ => throw TypeException.IncompatibleFunction(nameof(ArcSin), value.TypeState)
@@ -151,6 +136,7 @@ public static class TypeFunctions
     {
         return value.TypeState switch
         {
+            TypeState.Integer => Result.FromDouble(Math.Cos(value.CastToDouble())),
             TypeState.Double => Result.FromDouble(Math.Cos(value.CastToDouble())),
             TypeState.Complex => Result.FromComplex(Complex.Cos(value.CastToComplex())),
             _ => throw TypeException.IncompatibleFunction(nameof(Cos), value.TypeState)
@@ -161,6 +147,7 @@ public static class TypeFunctions
     {
         return value.TypeState switch
         {
+            TypeState.Integer => Result.FromDouble(Math.Cos(value.CastToDouble())),
             TypeState.Double => Result.FromDouble(Math.Acos(value.CastToDouble())),
             TypeState.Complex => Result.FromComplex(Complex.Acos(value.CastToComplex())),
             _ => throw TypeException.IncompatibleFunction(nameof(ArcCos), value.TypeState)
@@ -171,6 +158,7 @@ public static class TypeFunctions
     {
         return value.TypeState switch
         {
+            TypeState.Integer => Result.FromDouble(Math.Tan(value.CastToDouble())),
             TypeState.Double => Result.FromDouble(Math.Tan(value.CastToDouble())),
             TypeState.Complex => Result.FromComplex(Complex.Tan(value.CastToComplex())),
             _ => throw TypeException.IncompatibleFunction(nameof(Tan), value.TypeState)
@@ -181,6 +169,7 @@ public static class TypeFunctions
     {
         return value.TypeState switch
         {
+            TypeState.Integer => Result.FromDouble(Math.Atan(value.CastToDouble())),
             TypeState.Double => Result.FromDouble(Math.Atan(value.CastToDouble())),
             TypeState.Complex => Result.FromComplex(Complex.Atan(value.CastToComplex())),
             _ => throw TypeException.IncompatibleFunction(nameof(ArcTan), value.TypeState)
@@ -192,44 +181,73 @@ public static class TypeFunctions
 
     public static Result FromHex(Result value)
     {
-        return value.TypeState switch
-        {
-            TypeState.String => Result.FromBigInteger(BigInteger.Parse(value.CastToString(), System.Globalization.NumberStyles.HexNumber)),
-            _ => throw TypeException.IncompatibleFunction(nameof(FromHex), value.TypeState)
-        };
+        if (value.TypeState != TypeState.String)
+            throw TypeException.IncompatibleFunction(nameof(FromHex), value.TypeState);
+
+        return Result.FromBigInteger(BigInteger.Parse($"0{value.CastToString()}", System.Globalization.NumberStyles.HexNumber));
+    }
+
+    public static Result FromHexSigned(Result value)
+    {
+        if (value.TypeState != TypeState.String)
+            throw TypeException.IncompatibleFunction(nameof(FromHexSigned), value.TypeState);
+
+        return Result.FromBigInteger(BigInteger.Parse(value.CastToString(), System.Globalization.NumberStyles.HexNumber));
     }
 
     public static Result FromBin(Result value)
     {
-        return value.TypeState switch
-        {
-            TypeState.String => Result.FromBigInteger(BigInteger.Parse(value.CastToString(), System.Globalization.NumberStyles.BinaryNumber)),
-            _ => throw TypeException.IncompatibleFunction(nameof(FromBin), value.TypeState)
-        };
+        if (value.TypeState != TypeState.String)
+            throw TypeException.IncompatibleFunction(nameof(FromBin), value.TypeState);
+
+        return Result.FromBigInteger(BigInteger.Parse($"0{value.CastToString()}", System.Globalization.NumberStyles.BinaryNumber));
+    }
+
+    public static Result FromBinSigned(Result value)
+    {
+        if (value.TypeState != TypeState.String)
+            throw TypeException.IncompatibleFunction(nameof(FromBinSigned), value.TypeState);
+
+        return Result.FromBigInteger(BigInteger.Parse(value.CastToString(), System.Globalization.NumberStyles.BinaryNumber));
     }
 
     public static Result ToHex(Result value)
     {
-        return value.TypeState switch
+        if (value.TypeState != TypeState.Integer)
+            throw TypeException.IncompatibleFunction(nameof(ToHex), value.TypeState);
+
+        BigInteger casted = value.CastToBigInteger();
+        if (casted > BigInteger.Zero)
         {
-            TypeState.Integer => Result.FromString(value.CastToBigInteger().ToString("X")),
-            _ => throw TypeException.IncompatibleFunction(nameof(ToHex), value.TypeState)
-        };
+            //remove leading zeros
+            return Result.FromString(casted.ToString("X")[1..]);
+        }
+
+        return Result.FromString(casted.ToString("X"));
     }
 
     public static Result ToBin(Result value)
     {
-        return value.TypeState switch
+        if (value.TypeState != TypeState.Integer)
+            throw TypeException.IncompatibleFunction(nameof(ToHex), value.TypeState);
+
+        BigInteger casted = value.CastToBigInteger();
+
+        if (casted > BigInteger.Zero)
         {
-            TypeState.Integer => Result.FromString(value.CastToBigInteger().ToString("B")),
-            _ => throw TypeException.IncompatibleFunction(nameof(ToBin), value.TypeState)
-        };
+            //remove leading zeros
+            return Result.FromString(casted.ToString("B")[1..]);
+        }
+
+        return Result.FromString(casted.ToString("B"));
     }
 
     public static Result Cplx(Result real, Result imaginary)
     {
         return (real.TypeState, imaginary.TypeState) switch
         {
+            (TypeState.Double, TypeState.Integer) => Result.FromComplex(new Complex(real.CastToDouble(), imaginary.CastToDouble())),
+            (TypeState.Integer, TypeState.Double) => Result.FromComplex(new Complex(real.CastToDouble(), imaginary.CastToDouble())),
             (TypeState.Double, TypeState.Double) => Result.FromComplex(new Complex(real.CastToDouble(), imaginary.CastToDouble())),
             (TypeState.Integer, TypeState.Integer) => Result.FromComplex(new Complex((double)real.CastToBigInteger(), (double)imaginary.CastToBigInteger())),
             _ => throw TypeException.IncompatibleFunction(nameof(Cplx), real.TypeState, imaginary.TypeState)
@@ -240,10 +258,25 @@ public static class TypeFunctions
     {
         return (magnitude.TypeState, phase.TypeState) switch
         {
+            (TypeState.Integer, TypeState.Double) => Result.FromComplex(Complex.FromPolarCoordinates(magnitude.CastToDouble(), phase.CastToDouble())),
+            (TypeState.Double, TypeState.Integer) => Result.FromComplex(Complex.FromPolarCoordinates(magnitude.CastToDouble(), phase.CastToDouble())),
             (TypeState.Double, TypeState.Double) => Result.FromComplex(Complex.FromPolarCoordinates(magnitude.CastToDouble(), phase.CastToDouble())),
             (TypeState.Integer, TypeState.Integer) => Result.FromComplex(Complex.FromPolarCoordinates((double)magnitude.CastToBigInteger(), (double)phase.CastToBigInteger())),
             _ => throw TypeException.IncompatibleFunction(nameof(CplxPlr), magnitude.TypeState, phase.TypeState)
         };
+    }
+
+    public static Result Array(params Result[] values)
+    {
+        List<double> doubles = new List<double>();
+        foreach (var value in values)
+        {
+            if (value.TypeState != TypeState.Integer && value.TypeState != TypeState.Double)
+                throw TypeException.IncompatibleFunction(nameof(Array), value.TypeState);
+
+            doubles.Add(value.CastToDouble());
+        }
+        return Result.FromNumbers(doubles);
     }
 
     #endregion
@@ -269,6 +302,17 @@ public static class TypeFunctions
                 max = values[i];
         }
         return max;
+    }
+
+    public static Result Count(params Result[] values)
+    {
+        if (values.Length == 0)
+            throw new ArgumentException("At least one value is required.", nameof(values));
+
+        if (values[0].TypeState == TypeState.Array)
+            return Result.FromDouble(values[0].CastToArray().Count);
+
+        return Result.FromBigInteger(values.Length);
     }
 
     public static Result Min(params Result[] values)

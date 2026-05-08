@@ -34,4 +34,11 @@ internal sealed class TokenSet
 
     public bool Contains(TokenType type)
         => (_tokens & (uint)type) != 0;
+
+    public override string ToString()
+    {
+        var tokens = Enum.GetValues<TokenType>();
+        var containedTokens = tokens.Where(Contains).Select(t => t.ToString());
+        return string.Join(", ", containedTokens);
+    }
 }

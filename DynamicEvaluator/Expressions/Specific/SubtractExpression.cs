@@ -61,21 +61,21 @@ internal sealed class SubtractExpression : BinaryExpression
             // x - x  =>  0
             if (leftVar.Identifier == rightVar?.Identifier)
             {
-                return SimplifyHelpers.MakeVariableMultplyConstant(leftVar, 0L);
+                return SimplifyHelpers.MakeVariableMultplyConstant(leftVar, Result.FromBigInteger(0L));
             }
             // x - (2 * x)  =>  -1 * x
             if (rightMultiply?.Right is VariableExpression rightMulVar
                 && rightMultiply.Left is ConstantExpression rightMulConst
                 && leftVar.Identifier == rightMulVar.Identifier)
             {
-                return SimplifyHelpers.MakeVariableMultplyConstant(leftVar, 1L - rightMulConst.Value);
+                return SimplifyHelpers.MakeVariableMultplyConstant(leftVar, Result.FromBigInteger(1L) - rightMulConst.Value);
             }
             // x - (x * 2)  =>  -1 * x
             if (rightMultiply?.Left is VariableExpression rightMulVar2
                 && rightMultiply.Right is ConstantExpression rightMulConst2
                 && leftVar.Identifier == rightMulVar2.Identifier)
             {
-                return SimplifyHelpers.MakeVariableMultplyConstant(leftVar, 1L - rightMulConst2.Value);
+                return SimplifyHelpers.MakeVariableMultplyConstant(leftVar, Result.FromBigInteger(1L) - rightMulConst2.Value);
             }
         }
 

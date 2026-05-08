@@ -4,7 +4,7 @@
 //-----------------------------------------------------------------------------
 
 using DynamicEvaluator;
-using DynamicEvaluator.Types;
+using DynamicEvaluator.TypeSystem;
 
 using EngineerCalc;
 using EngineerCalc.Api;
@@ -115,13 +115,13 @@ static void EvaluateExpression(State appState,
 {
     IExpression expression = appState.ParseMode switch
     {
-        ParseMode.Infix => expressionFactory.Create(line),
-        ParseMode.Postfix => expressionFactory.CreateFromRpn(line),
+        ParseMode.Infix => expressionFactory.Create(line, appState.Culture),
+        ParseMode.Postfix => expressionFactory.CreateFromRpn(line, appState.Culture),
         _ => throw new InvalidOperationException("Unknown parse mode."),
     };
-    dynamic result = expression.Evaluate(evaluatorApi.VariablesAndConstants);
+    Result result = expression.Evaluate(evaluatorApi.VariablesAndConstants);
 
-    if (result is not NoResult)
+    if (result.TypeState != TypeState.NoResult)
         evaluatorApi.VariablesAndConstants["ans"] = result;
 
     string resultString = ResultFormatter.Format(result, appState.Culture);

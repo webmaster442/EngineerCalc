@@ -4,6 +4,7 @@
 //-----------------------------------------------------------------------------
 
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
 using DynamicEvaluator.Expressions;
 using DynamicEvaluator.Expressions.Specific;
@@ -83,7 +84,7 @@ public static class IExpressionExtensions
             string pattern = Utilities.GetBinaryValue(i, variableNames.Length);
             for (int j = 0; j < variableNames.Length; j++)
             {
-                variables[variableNames[j]] = pattern[j] == '1' ? true : false;
+                variables[variableNames[j]] = pattern[j] == '1' ? Result.FromBoolean(true) : Result.FromBoolean(false);
             }
 
             Result evaluated = expression.Evaluate(variables);
@@ -102,7 +103,7 @@ public static class IExpressionExtensions
         return expression is AndExpression
             || expression is OrExpression
             || expression is LogicNegateExpression
-            || (expression is ConstantExpression constant && constant.Value is bool)
+            || (expression is ConstantExpression constant && constant.Value.TypeState == TypeState.Boolean)
             || expression is VariableExpression;
     }
 
@@ -139,7 +140,7 @@ public static class IExpressionExtensions
             });
 
             ExpressionFactory factory = new ExpressionFactory();
-            simplified = factory.Create(expressionString);
+            simplified = factory.Create(expressionString, CultureInfo.InvariantCulture);
             return true;
         }
         catch (Exception)

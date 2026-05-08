@@ -97,7 +97,7 @@ internal sealed class DivideExpression : BinaryExpression
             && rightExponent.Right is ConstantExpression rightExpConst
             && leftVar?.Identifier == rightExpVar.Identifier)
         {
-            return SimplifyHelpers.MakeExponentMultiplyConstant(leftVar, 1L - rightExpConst.Value);
+            return SimplifyHelpers.MakeExponentMultiplyConstant(leftVar, Result.FromBigInteger(1L) - rightExpConst.Value);
         }
         // x^2/x
         if (leftExponent?.Left is VariableExpression leftExpVar

@@ -25,4 +25,7 @@ public sealed class TypeException : Exception
 
     public static TypeException ShouldNotHappen(TypeState typeState1, TypeState typeState2)
         => new TypeException($"Unexpected type states: {typeState1} and {typeState2}.");
+
+    internal static Exception IncompatibleOperator(TypeState typeState, string symbol)
+        => new TypeException($"Incompatible type: {typeState} for operation: {symbol}");
 }

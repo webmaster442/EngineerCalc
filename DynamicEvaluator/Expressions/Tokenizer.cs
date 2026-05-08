@@ -4,7 +4,11 @@
 //-----------------------------------------------------------------------------
 
 using System.Globalization;
+using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Text;
+
+using DynamicEvaluator.TypeSystem;
 
 namespace DynamicEvaluator.Expressions;
 
@@ -83,9 +87,9 @@ internal static class Tokenizer
         newIndex = index;
         string tokenValue = sb.ToString();
         if (tokenValue.Any(IsFloatCharacter))
-            return new Token(tokenValue, TokenType.Constant, typeof(double));
+            return new Token(tokenValue.Replace("_", ""), TokenType.Constant, TypeState.Double);
         else
-            return new Token(tokenValue, TokenType.Constant, typeof(long));
+            return new Token(tokenValue.Replace("_", ""), TokenType.Constant, TypeState.Integer);
     }
 
     private static Token HandleStringLiteral(string input, int start, char matcher, out int newIndex)
@@ -106,7 +110,7 @@ internal static class Tokenizer
             }
         }
         newIndex = index;
-        return new Token(sb.ToString(), TokenType.Constant, typeof(string));
+        return new Token(sb.ToString(), TokenType.Constant, TypeState.String);
     }
 
     private static bool IsIdentifier(char c)
@@ -139,7 +143,7 @@ internal static class Tokenizer
             case "true":
             case "false":
                 {
-                    return new Token(identifier, TokenType.Constant, typeof(bool));
+                    return new Token(identifier, TokenType.Constant, TypeState.Boolean);
                 }
             default:
                 {
@@ -197,22 +201,24 @@ internal static class Tokenizer
         TokenCollection tokens = new();
         foreach (var item in items)
         {
-            if (long.TryParse(item, out _))
+            string number = item.Replace("_", "");
+
+            if (BigInteger.TryParse(number, out _))
             {
-                tokens.Add(new Token(item, TokenType.Constant, typeof(long)));
+                tokens.Add(new Token(number, TokenType.Constant, TypeState.Integer));
             }
-            else if (double.TryParse(item, CultureInfo.InvariantCulture, out _))
+            else if (double.TryParse(number, CultureInfo.InvariantCulture, out _))
             {
-                tokens.Add(new Token(item, TokenType.Constant, typeof(double)));
+                tokens.Add(new Token(number, TokenType.Constant, TypeState.Double));
             }
             else if ((item.StartsWith('\'') && item.EndsWith('\''))
                 || (item.StartsWith('"') && item.EndsWith('"')))
             {
-                tokens.Add(new Token(item[1..^1], TokenType.Constant, typeof(string)));
+                tokens.Add(new Token(item[1..^1], TokenType.Constant, TypeState.String));
             }
             else if (item == "true" || item == "false")
             {
-                tokens.Add(new Token(item, TokenType.Constant, typeof(bool)));
+                tokens.Add(new Token(item, TokenType.Constant, TypeState.Boolean));
             }
             else if (item.Length == 1)
             {

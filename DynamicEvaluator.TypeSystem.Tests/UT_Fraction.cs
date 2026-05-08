@@ -1,9 +1,9 @@
-﻿using DynamicEvaluator.Types;
+﻿using DynamicEvaluator.TypeSystem.InternalTypes;
 
-namespace DynamicEvaluator.Tests;
+namespace DynamicEvaluator.TypeSystem.Tests;
 
 [TestFixture]
-internal class FractionTests
+internal class UT_Fraction
 {
     [TestCase(2, 6, 1, 4, 7, 12)]
     [TestCase(3, 10, 1, 5, 1, 2)]

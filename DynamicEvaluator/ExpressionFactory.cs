@@ -3,11 +3,12 @@
 // This code is licensed under MIT license (see LICENSE for details)
 //-----------------------------------------------------------------------------
 
+using System.Globalization;
 using System.Text;
 
 using DynamicEvaluator.Expressions;
 using DynamicEvaluator.Expressions.Specific;
-using DynamicEvaluator.Types;
+using DynamicEvaluator.TypeSystem;
 
 namespace DynamicEvaluator;
 
@@ -18,26 +19,30 @@ public sealed class ExpressionFactory
     private readonly TokenSet FirstUnaryExp;
     private readonly TokenSet FirstFactorPrefix;
     private readonly TokenSet FirstFactor;
-    private readonly FunctionProvider _functionTable;
+    private readonly FunctionFactory _functionFactory;
+
+    private CultureInfo _culture;
 
     public ExpressionFactory()
     {
+        _functionFactory = new FunctionFactory();
+        _culture = CultureInfo.InvariantCulture;
         var firstFunction = new TokenSet(TokenType.Function);
         FirstFactor = firstFunction + new TokenSet(TokenType.Variable, TokenType.OpenParen);
         FirstFactorPrefix = FirstFactor + TokenType.Constant;
         FirstUnaryExp = FirstFactorPrefix + TokenType.Minus + TokenType.Not;
         FirstExpExp = new TokenSet(FirstUnaryExp);
         FirstMultExp = new TokenSet(FirstUnaryExp);
-        _functionTable = new FunctionProvider();
-        _functionTable.FillFrom(typeof(Functions));
     }
 
     public IEnumerable<string> KnownFunctions
-        => _functionTable.GetFunctionNames();
+        => _functionFactory;
 
-    public IExpression Create(string input)
+    public IExpression Create(string input, CultureInfo culture)
     {
-        TokenCollection tokens = Tokenizer.Tokenize(input, _functionTable.IsFunction);
+        _culture = culture;
+
+        TokenCollection tokens = Tokenizer.Tokenize(input, _functionFactory.IsFunction);
 
         if (!tokens.Next())
             throw new InvalidOperationException("Can't create an expression from an empty input");
@@ -55,10 +60,10 @@ public sealed class ExpressionFactory
         return expression;
     }
 
-    public IExpression CreateFromRpn(string input)
+    public IExpression CreateFromRpn(string input, CultureInfo culture)
     {
-        TokenCollection tokens = Tokenizer.Tokenize(input, _functionTable.IsFunction);
-        return RpnExpressionFactory.Create(tokens, _functionTable);
+        TokenCollection tokens = Tokenizer.Tokenize(input, _functionFactory.IsFunction);
+        return RpnExpressionFactory.Create(tokens, _functionFactory, culture);
     }
 
 
@@ -138,7 +143,7 @@ public sealed class ExpressionFactory
 
             return exp;
         }
-        throw new InvalidOperationException("Invalid expression");
+        throw new InvalidOperationException($"Invalid expression. Expected {FirstMultExp}");
     }
 
     private IExpression ParseMultExpression(TokenCollection tokens)
@@ -252,7 +257,7 @@ public sealed class ExpressionFactory
         IExpression? exp = null;
         if (tokens.CurrentToken.Type == TokenType.Constant)
         {
-            dynamic value = TypeFactory.CreateType(tokens.CurrentToken.Value, tokens.CurrentToken.TypeInfo);
+            Result value = tokens.CurrentToken.CreateResult(_culture);
             exp = new ConstantExpression(value);
             tokens.Eat(TokenType.Constant);
         }
@@ -311,7 +316,7 @@ public sealed class ExpressionFactory
         var opType = tokens.CurrentToken.Type;
         var function = tokens.CurrentToken.Value.ToLower();
 
-        if (!_functionTable.IsFunction(function))
+        if (!_functionFactory.IsFunction(function))
             throw new InvalidOperationException($"Unknown function: {function}");
 
         tokens.Eat(opType);
@@ -328,6 +333,6 @@ public sealed class ExpressionFactory
         }
         tokens.Eat(TokenType.CloseParen);
 
-        return _functionTable.Create(function, parameters);
+        return _functionFactory.Create(function, [.. parameters]);
     }
 }
