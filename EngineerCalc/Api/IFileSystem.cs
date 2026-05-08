@@ -13,5 +13,6 @@ internal interface IFileSystem
     IEnumerable<FolderItem> GetDirectoryNames(string fullPath);
     IEnumerable<FileItem> GetFileNames(string fullPath);
     Stream OpenRead(string fullPath);
+    Stream Create(string fullPath);
     void SetCurrentDirectory(string fullPath);
 }

@@ -38,10 +38,11 @@ internal sealed class ScriptFileRunner
         Result result = expression.Evaluate(evaluatorApi.VariablesAndConstants);
 
         if (result.TypeState != TypeState.NoResult)
+        {
             evaluatorApi.VariablesAndConstants["ans"] = result;
-
-        string resultString = ResultFormatter.Format(result, appState.Culture);
-        AnsiConsole.MarkupLine(resultString);
+            string resultString = ResultFormatter.Format(result, appState.Culture);
+            AnsiConsole.MarkupLine(resultString);
+        }
     }
 
     public ScriptFileRunner(ExpressionFactory expressionFactory,

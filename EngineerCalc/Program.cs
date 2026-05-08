@@ -28,6 +28,8 @@ services.AddSingleton<IApplicationApi, ApplicationApi>();
 services.AddSingleton<IEvaluatorApi>(evaluatorApi);
 services.AddSingleton<ICommandRunnerApi>(commandRunnerApi);
 services.AddSingleton<IFileSystem, FileSystem>();
+services.AddSingleton<ScriptFileRunner>();
+services.AddSingleton(expressionFactory);
 
 Console.OutputEncoding = System.Text.Encoding.UTF8;
 

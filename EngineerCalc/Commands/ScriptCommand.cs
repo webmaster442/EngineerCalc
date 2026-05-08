@@ -3,6 +3,8 @@
 // This code is licensed under MIT license (see LICENSE for details)
 //-----------------------------------------------------------------------------
 
+using System.ComponentModel;
+
 using EngineerCalc.Api;
 using EngineerCalc.Commands.Abstraction;
 
@@ -16,6 +18,7 @@ internal sealed class ScriptCommand : FileSystemCommand<ScriptCommand.Arguments>
     internal sealed class Arguments : CommandSettings
     {
         [CommandArgument(0, "<scriptPath>")]
+        [Description("The path to the script file to execute.")]
         public string ScriptPath { get; set; } = string.Empty;
 
         public override ValidationResult Validate()

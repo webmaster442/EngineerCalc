@@ -43,6 +43,9 @@ internal sealed class FileSystem : IFileSystem
     public Stream OpenRead(string fullPath)
         => File.OpenRead(fullPath);
 
+    public Stream Create(string fullPath)
+        => File.Create(fullPath);
+
     public void SetCurrentDirectory(string fullPath)
         => Directory.SetCurrentDirectory(fullPath);
 }
