@@ -9,33 +9,18 @@ using Spectre.Console.Cli;
 
 namespace EngineerCalc.Infrastructure;
 
-internal sealed class TypeRegistrar : ITypeRegistrar
+internal sealed class TypeRegistrar(IServiceCollection services) : ITypeRegistrar
 {
-    private readonly IServiceCollection _builder;
-
-    public TypeRegistrar(IServiceCollection builder)
-    {
-        _builder = builder;
-    }
-
-    public ITypeResolver Build()
-    {
-        return new TypeResolver(_builder.BuildServiceProvider());
-    }
+    public ITypeResolver Build() 
+        => new TypeResolver(services.BuildServiceProvider());
 
     public void Register(Type service, Type implementation)
-    {
-        _builder.AddSingleton(service, implementation);
-    }
+        => services.AddSingleton(service, implementation);
 
     public void RegisterInstance(Type service, object implementation)
-    {
-        _builder.AddSingleton(service, implementation);
-    }
+        => services.AddSingleton(service, implementation);
 
-    public void RegisterLazy(Type service, Func<object> func)
-    {
-        ArgumentNullException.ThrowIfNull(func);
-        _builder.AddSingleton(service, (provider) => func());
-    }
+    public void RegisterLazy(Type service, Func<object> factory)
+        => services.AddSingleton(service, _ => factory());
 }
+
