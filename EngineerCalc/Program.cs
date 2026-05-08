@@ -19,7 +19,7 @@ using Webmaster442.WindowsTerminal;
 
 var appState = new State();
 var expressionFactory = new ExpressionFactory();
-var evaluatorApi = new EvaluatorApi(new VariablesAndConstantsCollection(), expressionFactory);
+var evaluatorApi = new EvaluatorApi(new VariablesAndConstantsCollection(), expressionFactory, appState);
 var commandRunnerApi = new CommandRunnerApi();
 
 var services = new ServiceCollection();
@@ -82,7 +82,7 @@ while (true)
         }
 
 #if DEBUG
-        AnsiConsole.WriteException(ex);
+        AnsiConsole.WriteException(ex, ExceptionFormats.Default);
 #else
         AnsiConsole.WriteException(ex, ExceptionFormats.NoStackTrace);
 #endif
@@ -115,8 +115,8 @@ static void EvaluateExpression(State appState,
 {
     IExpression expression = appState.ParseMode switch
     {
-        ParseMode.Infix => expressionFactory.Create(line, appState.Culture),
-        ParseMode.Postfix => expressionFactory.CreateFromRpn(line, appState.Culture),
+        ParseMode.Infix => expressionFactory.Create(line),
+        ParseMode.Postfix => expressionFactory.CreateFromRpn(line),
         _ => throw new InvalidOperationException("Unknown parse mode."),
     };
     Result result = expression.Evaluate(evaluatorApi.VariablesAndConstants);

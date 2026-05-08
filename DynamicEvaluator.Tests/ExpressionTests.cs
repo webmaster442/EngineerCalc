@@ -54,7 +54,7 @@ public class ExpressionTests
     [TestCase("Log(x, 4)", "(0.7213475204444817 * (1 / x))")]
     public void EnsureThat_Differentiate_Works(string expression, string expected)
     {
-        IExpression derived = _expressionFactory.Create(expression, CultureInfo.InvariantCulture).Differentiate("x").Simplify();
+        IExpression derived = _expressionFactory.Create(expression).Differentiate("x").Simplify();
         Assert.That(derived.ToString(), Is.EqualTo(expected));
     }
 
@@ -225,7 +225,7 @@ public class ExpressionTests
     [TestCase("(x/y).Numerator", "(x / y).Numerator")]
     public void EnsureThat_Simplify_Works(string expression, string expected)
     {
-        IExpression simplified = _expressionFactory.Create(expression, CultureInfo.InvariantCulture).Simplify();
+        IExpression simplified = _expressionFactory.Create(expression).Simplify();
         Assert.That(simplified.ToString(), Is.EqualTo(expected));
     }
 
@@ -259,8 +259,8 @@ public class ExpressionTests
 
     public void EnsureThat_Equals_Works(string expression)
     {
-        IExpression expr1 = _expressionFactory.Create(expression, CultureInfo.InvariantCulture);
-        IExpression expr2 = _expressionFactory.Create(expression, CultureInfo.InvariantCulture);
+        IExpression expr1 = _expressionFactory.Create(expression);
+        IExpression expr2 = _expressionFactory.Create(expression);
         Assert.That(expr1, Is.EqualTo(expr2));
     }
 
@@ -274,7 +274,7 @@ public class ExpressionTests
     [TestCase("!a&!b&!c&!d|!a&!b&!c&d|!a&b&!c&!d|!a&b&!c&d|a&b&!c&!d|a&b&!c&d", "(((!c) & b) | ((!c) & (!a)))")]
     public void EnsureThat_LogicSimplify_Works(string expression, string expected)
     {
-        IExpression parsed = _expressionFactory.Create(expression, CultureInfo.InvariantCulture);
+        IExpression parsed = _expressionFactory.Create(expression);
         bool result = parsed.TrySimplfyAsLogicExpression(out var simplified);
         using (Assert.EnterMultipleScope())
         {
@@ -307,7 +307,7 @@ public class ExpressionTests
     {
         Assert.Throws<InvalidOperationException>(() =>
         {
-            IExpression parsed = _expressionFactory.Create(expression, CultureInfo.InvariantCulture);
+            IExpression parsed = _expressionFactory.Create(expression);
         });
     }
 
@@ -347,7 +347,7 @@ public class ExpressionTests
     [TestCase("(1/3)+(1/3)+(1/3)", 1)]
     public void EnsureThat_Evaluate_Works_Integers(string expression, long expected)
     {
-        IExpression parsed = _expressionFactory.Create(expression, CultureInfo.InvariantCulture);
+        IExpression parsed = _expressionFactory.Create(expression);
         VariablesAndConstantsCollection variables = new()
         {
             { "x", Result.FromBigInteger(1L) },
@@ -372,7 +372,7 @@ public class ExpressionTests
     [TestCase("Cplx(1, 2.74).Imaginary", TypeState.Double)]
     public void EnsureThat_Evaluate_Works_TypeCreation_Expressions(string expression, TypeState expectedType)
     {
-        IExpression parsed = _expressionFactory.Create(expression, CultureInfo.InvariantCulture);
+        IExpression parsed = _expressionFactory.Create(expression);
         VariablesAndConstantsCollection variables = new()
         {
             { "x", Result.FromBigInteger(1L) },
@@ -396,7 +396,7 @@ public class ExpressionTests
     [TestCase("random(10, 15) >= 10 & random(10, 15) < 15", true)]
     public void EnsureThat_Evaluate_Works_Comparision(string expression, bool expected)
     {
-        IExpression parsed = _expressionFactory.Create(expression, CultureInfo.InvariantCulture);
+        IExpression parsed = _expressionFactory.Create(expression);
         VariablesAndConstantsCollection variables = new()
         {
             { "x", Result.FromBigInteger(1L) },
@@ -448,7 +448,7 @@ public class ExpressionTests
     [TestCase("root(2, 1)", "2")]
     public void EnsureThat_Evaluate_Works_Doubles(string expression, double expected)
     {
-        IExpression parsed = _expressionFactory.Create(expression, CultureInfo.InvariantCulture);
+        IExpression parsed = _expressionFactory.Create(expression);
         VariablesAndConstantsCollection variables = new()
         {
             { "x", Result.FromDouble(1d) },
@@ -470,7 +470,7 @@ public class ExpressionTests
     [TestCase("tobin(10)", "1010")]
     public void EnsureThat_Evaluate_Works_Strings(string expression, string expected)
     {
-        IExpression parsed = _expressionFactory.Create(expression, CultureInfo.InvariantCulture);
+        IExpression parsed = _expressionFactory.Create(expression);
         VariablesAndConstantsCollection variables = new()
         {
             { "foo", Result.FromString("foo") },
@@ -488,9 +488,9 @@ public class ExpressionTests
     [TestCase("y/x", 1, 5)]
     public void EnsureThat_Evaluate_Works_Fractions(string expression, long numerator, long denominator)
     {
-        IExpression parsed = _expressionFactory.Create(expression, CultureInfo.InvariantCulture);
+        IExpression parsed = _expressionFactory.Create(expression);
         VariablesAndConstantsCollection variables = new()
-        {
+        {   
             { "x", Result.FromBigInteger(10L) },
             { "y", Result.FromBigInteger(2L) },
         };
@@ -519,7 +519,7 @@ public class ExpressionTests
     [TestCase("true", true)]
     public void EnsureThat_Evaluate_Works_Logics(string expression, bool expected)
     {
-        IExpression parsed = _expressionFactory.Create(expression, CultureInfo.InvariantCulture);
+        IExpression parsed = _expressionFactory.Create(expression);
         VariablesAndConstantsCollection variables = new();
         Result result = parsed.Evaluate(variables);
         using (Assert.EnterMultipleScope())
@@ -536,7 +536,7 @@ public class ExpressionTests
     [TestCase("right=2^(3^2)+7", 519, "right")]
     public void EnsureThat_Assignment_Works(string expression, double valueToAssign, string expectedVariable)
     {
-        IExpression parsed = _expressionFactory.Create(expression, CultureInfo.InvariantCulture);
+        IExpression parsed = _expressionFactory.Create(expression);
         VariablesAndConstantsCollection variables = new()
         {
             { "x", Result.FromDouble(4d) },
@@ -554,7 +554,7 @@ public class ExpressionTests
     [TestCase("random(1, 5)", 1, 5)]
     public void EnsureThat_FunctionOverload_Works_ForRandom(string expression, long minValue, long maxValue)
     {
-        IExpression parsed = _expressionFactory.Create(expression, CultureInfo.InvariantCulture);
+        IExpression parsed = _expressionFactory.Create(expression);
         VariablesAndConstantsCollection variables = new();
         Result result = parsed.Evaluate(variables);
         using (Assert.EnterMultipleScope())
@@ -610,13 +610,16 @@ public class ExpressionTests
     [TestCase("omega", "{ \\omega }")]
     public void EnsureThat_ToLatex_Works(string expression, string expected)
     {
-        IExpression parsed = _expressionFactory.Create(expression, CultureInfo.InvariantCulture);
+        IExpression parsed = _expressionFactory.Create(expression);
         string latex = parsed.ToLatex();
         Assert.That(latex, Is.EqualTo(expected));
     }
 
     [TestCase("x", "x")]
     [TestCase("33", "33")]
+    [TestCase("1_024", "1024")]
+    [TestCase("0.5", "0.5")]
+    [TestCase("1_024.12", "1024.12")]
     [TestCase("x y .", "x.y")]
     [TestCase("3 1 +", "(3 + 1)")]
     [TestCase("3 1 -", "(3 - 1)")]
@@ -648,7 +651,7 @@ public class ExpressionTests
     [TestCase("3 2 + 2 *", "((3 + 2) * 2)")]
     public void EnsureThat_CreateFromRpn_Works(string expression, string expected)
     {
-        IExpression parsed = _expressionFactory.CreateFromRpn(expression, CultureInfo.InvariantCulture);
+        IExpression parsed = _expressionFactory.CreateFromRpn(expression);
         Assert.That(parsed.ToString(), Is.EqualTo(expected));
     }
 
@@ -662,7 +665,7 @@ public class ExpressionTests
     {
         Assert.Throws<InvalidOperationException>(() =>
         {
-            IExpression parsed = _expressionFactory.CreateFromRpn(expression, CultureInfo.InvariantCulture);
+            IExpression parsed = _expressionFactory.CreateFromRpn(expression);
         });
     }
 
@@ -685,7 +688,7 @@ public class ExpressionTests
             { "y", Result.FromDouble(2d) },
             { "z", Result.FromDouble(3d) },
         };
-        IExpression statExpr = _expressionFactory.Create(expression, CultureInfo.InvariantCulture);
+        IExpression statExpr = _expressionFactory.Create(expression);
         Result result = statExpr.Evaluate(variables);
         Assert.That(result.CastToDouble(), Is.EqualTo(expected).Within(0.001));
     }

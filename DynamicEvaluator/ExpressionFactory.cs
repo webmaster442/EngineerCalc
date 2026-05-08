@@ -21,12 +21,9 @@ public sealed class ExpressionFactory
     private readonly TokenSet FirstFactor;
     private readonly FunctionFactory _functionFactory;
 
-    private CultureInfo _culture;
-
     public ExpressionFactory()
     {
         _functionFactory = new FunctionFactory();
-        _culture = CultureInfo.InvariantCulture;
         var firstFunction = new TokenSet(TokenType.Function);
         FirstFactor = firstFunction + new TokenSet(TokenType.Variable, TokenType.OpenParen);
         FirstFactorPrefix = FirstFactor + TokenType.Constant;
@@ -38,10 +35,8 @@ public sealed class ExpressionFactory
     public IEnumerable<string> KnownFunctions
         => _functionFactory;
 
-    public IExpression Create(string input, CultureInfo culture)
+    public IExpression Create(string input)
     {
-        _culture = culture;
-
         TokenCollection tokens = Tokenizer.Tokenize(input, _functionFactory.IsFunction);
 
         if (!tokens.Next())
@@ -60,10 +55,10 @@ public sealed class ExpressionFactory
         return expression;
     }
 
-    public IExpression CreateFromRpn(string input, CultureInfo culture)
+    public IExpression CreateFromRpn(string input)
     {
         TokenCollection tokens = Tokenizer.Tokenize(input, _functionFactory.IsFunction);
-        return RpnExpressionFactory.Create(tokens, _functionFactory, culture);
+        return RpnExpressionFactory.Create(tokens, _functionFactory, CultureInfo.InvariantCulture);
     }
 
 
@@ -257,7 +252,7 @@ public sealed class ExpressionFactory
         IExpression? exp = null;
         if (tokens.CurrentToken.Type == TokenType.Constant)
         {
-            Result value = tokens.CurrentToken.CreateResult(_culture);
+            Result value = tokens.CurrentToken.CreateResult(CultureInfo.InvariantCulture);
             exp = new ConstantExpression(value);
             tokens.Eat(TokenType.Constant);
         }

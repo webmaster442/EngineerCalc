@@ -41,10 +41,9 @@ public sealed class DocumentationRenderer
         {
             buffer
                 .AppendLine(_formatter.FormatExample(parameter.Name))
-                .Append("Supported types: ")
-                .AppendLine(parameter.SupportedTypes)
-                .AppendLine()
-                .AppendLine(parameter.Description);
+                .AppendLine(_formatter.FormatDescription(parameter.Description))
+                .AppendLine(_formatter.FormatTypes(parameter.SupportedTypes.Split('|', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)));
+                
         }
 
         return buffer.ToString();

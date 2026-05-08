@@ -4,7 +4,6 @@
 //-----------------------------------------------------------------------------
 
 using System.Globalization;
-using System.Numerics;
 
 using DynamicEvaluator;
 using DynamicEvaluator.TypeSystem;
@@ -22,122 +21,87 @@ internal static class ResultFormatter
     {
         ResultBuilder resultBuilder = new(cultureInfo);
 
-        if (result is string str)
+        switch (result.TypeState)
         {
-            resultBuilder
-                .Append("([fuchsia]string[/]) ")
-                .Append("[italic green]")
-                .Append(str.EscapeMarkup())
-                .Append("[/]");
-        }
-        else if (result is long l)
-        {
-            resultBuilder
-                .Append("([fuchsia]long[/]) ")
-                .Append("[italic green]")
-                .Append(l)
-                .Append("[/]");
-        }
-        else if (result is int i)
-        {
-            resultBuilder
-                .Append("([fuchsia]int[/]) ")
-                .Append("[italic green]")
-                .Append(i)
-                .Append("[/]");
-        }
-        else if (result is double d)
-        {
-            resultBuilder
-                .Append("([fuchsia]double[/]) ")
-                .Append("[italic green]")
-                .Append(d)
-                .Append("[/]");
-        }
-        else if (result is Fraction fraction)
-        {
-            resultBuilder
-                .Append("([fuchsia]Fraction[/]) ")
-                .Append("[italic green]")
-                .Append(fraction.Numerator)
-                .Append(" / ")
-                .Append(fraction.Denominator)
-                .Append(" ~ ")
-                .Append((double)fraction)
-                .Append("[/]");
-        }
-        else if (result is Complex complex)
-        {
-            resultBuilder
-                .Append("([fuchsia]Complex[/]) ")
-                .Append("[italic green]")
-                .Append(complex.Real)
-                .Append(" + ")
-                .Append(complex.Imaginary)
-                .Append("i ")
-                .Append(PropertyName("|Z|: "))
-                .Append(complex.Magnitude)
-                .Append(PropertyName(" Phi:"))
-                .Append(complex.Phase)
-                .Append("[/]");
-        }
-        else if (result is Vector2 vector2)
-        {
-            resultBuilder
-                .Append("([fuchsia]Vector2[/]) ")
-                .Append("[italic green]")
-                .Append(PropertyName("X: "))
-                .Append(vector2.X)
-                .Append(PropertyName(" Y: "))
-                .Append(vector2.Y)
-                .Append("[/]");
-        }
-        else if (result is Vector3 vector3)
-        {
-            resultBuilder
-                .Append("([fuchsia]Vector3[/]) ")
-                .Append("[italic green]")
-                .Append(PropertyName("X: "))
-                .Append(vector3.X)
-                .Append(PropertyName(" Y: "))
-                .Append(vector3.Y)
-                .Append(PropertyName(" Z: "))
-                .Append(vector3.Z)
-                .Append("[/]");
-        }
-        else if (result is Vector4 vector4)
-        {
-            resultBuilder
-                .Append("([fuchsia]Vector4[/]) ")
-                .Append("[italic green]")
-                .Append(PropertyName("X: "))
-                .Append(vector4.X)
-                .Append(PropertyName(" Y: "))
-                .Append(vector4.Y)
-                .Append(PropertyName(" Z: "))
-                .Append(vector4.Z)
-                .Append(PropertyName(" W: "))
-                .Append(vector4.W)
-                .Append("[/]");
-        }
-        else if (result is NumberArray numberArray)
-        {
-            resultBuilder
-                .Append("([fuchsia]NumberArray[/]) ")
-                .Append("[italic green]")
-                .Append($"[{string.Join(", ", numberArray)}]".EscapeMarkup())
-                .Append("[/]");
-        }
-        else if (result is NoResult)
-        {
-        }
-        else
-        {
-            resultBuilder
-                .Append($"([fuchsia]{result.GetType()}[/]) ")
-                .Append("[italic green]")
-                .Append(result.ToString().EscapeMarkup() ?? string.Empty)
-                .Append("[/]");
+            case TypeState.String:
+                {
+                    resultBuilder
+                        .Append("([fuchsia]string[/]) ")
+                        .Append("[italic green]")
+                        .Append(result.CastToString().EscapeMarkup())
+                        .Append("[/]");
+                }
+                break;
+            case TypeState.Integer:
+                {
+                    resultBuilder
+                        .Append("([fuchsia]integer[/]) ")
+                        .Append("[italic green]")
+                        .Append(result.CastToBigInteger())
+                        .Append("[/]");
+                }
+                break;
+            case TypeState.Double:
+                {
+                    resultBuilder
+                        .Append("([fuchsia]double[/]) ")
+                        .Append("[italic green]")
+                        .Append(result.CastToDouble())
+                        .Append("[/]");
+                }
+                break;
+            case TypeState.Fraction:
+                {
+                    var fraction = result.CastToFraction();
+                    resultBuilder
+                        .Append("([fuchsia]Fraction[/]) ")
+                        .Append("[italic green]")
+                        .Append(fraction.Numerator)
+                        .Append(" / ")
+                        .Append(fraction.Denominator)
+                        .Append(" ~ ")
+                        .Append((double)fraction)
+                        .Append("[/]");
+                }
+                break;
+            case TypeState.NoResult:
+                break;
+            case TypeState.Boolean:
+                {
+                    resultBuilder
+                        .Append("([fuchsia]string[/]) ")
+                        .Append("[italic green]")
+                        .Append(result.CastToBoolean())
+                        .Append("[/]");
+                }
+                break;
+            case TypeState.Complex:
+                {
+                    var complex = result.CastToComplex();
+                    resultBuilder
+                        .Append("([fuchsia]Complex[/]) ")
+                        .Append("[italic green]")
+                        .Append(complex.Real)
+                        .Append(" + ")
+                        .Append(complex.Imaginary)
+                        .Append("i ")
+                        .Append(PropertyName("|Z|: "))
+                        .Append(complex.Magnitude)
+                        .Append(PropertyName(" Phi:"))
+                        .Append(complex.Phase)
+                        .Append("[/]");
+                }
+                break;
+            case TypeState.Array:
+                {
+                    var numberArray = result.CastToArray();
+                    resultBuilder
+                        .Append("([fuchsia]NumberArray[/]) ")
+                        .Append("[italic green]")
+                        .Append($"[{string.Join(", ", numberArray)}]".EscapeMarkup())
+                        .Append("[/]");
+                }
+                break;
         }
 
         return resultBuilder.ToString();

@@ -10,11 +10,15 @@ namespace EngineerCalc.Api;
 internal class EvaluatorApi : IEvaluatorApi
 {
     private readonly ExpressionFactory _expressionFactory;
+    private readonly State _state;
 
-    public EvaluatorApi(VariablesAndConstantsCollection variablesAndConstants, ExpressionFactory expressionFactory)
+    public EvaluatorApi(VariablesAndConstantsCollection variablesAndConstants,
+                        ExpressionFactory expressionFactory,
+                        State state)
     {
         VariablesAndConstants = variablesAndConstants;
         _expressionFactory = expressionFactory;
+        _state = state;
     }
 
     public IExpression Parse(string expression)

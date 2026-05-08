@@ -4,6 +4,7 @@
 //-----------------------------------------------------------------------------
 
 using System.Globalization;
+using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -44,9 +45,15 @@ public partial class ResultBuilder
         _culture = culture;
     }
 
-    public ResultBuilder Append(long l)
+    public ResultBuilder Append(BigInteger integer)
     {
-        _builder.Append(l.ToString("N0", _culture));
+        _builder.Append(integer.ToString("N0", _culture));
+        return this;
+    }
+
+    public ResultBuilder Append(bool value)
+    {
+        _builder.Append(value.ToString(_culture));
         return this;
     }
 

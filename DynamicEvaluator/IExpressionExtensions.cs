@@ -140,7 +140,7 @@ public static class IExpressionExtensions
             });
 
             ExpressionFactory factory = new ExpressionFactory();
-            simplified = factory.Create(expressionString, CultureInfo.InvariantCulture);
+            simplified = factory.Create(expressionString);
             return true;
         }
         catch (Exception)

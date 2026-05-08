@@ -6,4 +6,6 @@ public interface IDocumentFormatter
     string FormatSummary(string summary);
     string FormatSectionTitle(string title);
     string FormatExample(string example);
+    string FormatDescription(string description);
+    string FormatTypes(string[] types);
 }
