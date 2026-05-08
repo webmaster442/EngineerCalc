@@ -1,4 +1,9 @@
-﻿using System.Buffers;
+﻿//-----------------------------------------------------------------------------
+// (c) 2024-2026 Ruzsinszki Gábor
+// This code is licensed under MIT license (see LICENSE for details)
+//-----------------------------------------------------------------------------
+
+using System.Buffers;
 using System.IO.Hashing;
 using System.Security.Cryptography;
 
