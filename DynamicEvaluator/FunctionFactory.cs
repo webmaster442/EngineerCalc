@@ -143,6 +143,7 @@ internal sealed class FunctionFactory : IEnumerable<string>
     public IEnumerator<string> GetEnumerator()
     {
         return _oneParamFunctions.Keys
+            .Concat(_rewriteFunctions.Keys)
             .Concat(_twoParamFunctions.Keys)
             .Concat(_multiParamFunctions.Keys)
             .GetEnumerator();

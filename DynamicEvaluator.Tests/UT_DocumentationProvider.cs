@@ -37,7 +37,23 @@ public class UT_DocumentationProvider
             Assert.That(_documentationProvider.FunctionNames, Contains.Item(function).Using((IEqualityComparer<string>)StringComparer.OrdinalIgnoreCase));
             Assert.That(doc, Is.Not.Null);
             Assert.That(doc.Examples, Has.Length.GreaterThan(0));
-            Assert.That(doc.Description, Is.Not.WhiteSpace);
+            Assert.That(doc.Summary, Is.Not.WhiteSpace);
         }
+    }
+
+
+    public static IEnumerable<string> DocumentationFunctionNames
+    {
+        get
+        {
+            return new DocumentationProvider().Select(m => m.Name);
+        }
+    }
+
+
+    [TestCaseSource(nameof(DocumentationFunctionNames))]
+    public void EnsureThat_Function_InDoc_Exists_InCode(string documentedName)
+    {
+        Assert.That(new FunctionFactory(), Contains.Item(documentedName).Using((IEqualityComparer<string>)StringComparer.OrdinalIgnoreCase));
     }
 }
