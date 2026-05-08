@@ -9,8 +9,6 @@ using EngineerCalc.Tui;
 
 using Spectre.Console;
 
-using Webmaster442.WindowsTerminal;
-
 namespace EngineerCalc;
 
 internal sealed class ScriptFileRunner
@@ -54,7 +52,7 @@ internal sealed class ScriptFileRunner
         _fileSystem = fileSystem;
     }
 
-    public async Task Run(string file)
+    public async Task<bool> RunAsync(string file)
     {
         using StreamReader reader = new(_fileSystem.OpenRead(file), Encoding.UTF8);
         string? line;
@@ -81,16 +79,16 @@ internal sealed class ScriptFileRunner
                         await _commandRunner.RunRestrictedAsync(tokens);
                         break;
                     case CommandState.UnknownCommand:
-                        AnsiConsole.WriteLine($"Unknown command: {tokens[0]}");
-                        break;
+                        throw new InvalidOperationException($"Invalid command: {tokens[0]}");
                 }
-                Terminal.ShellIntegration.CommandFinished(0);
             }
             catch (Exception ex)
             {
                 AnsiConsole.WriteLine($"Error: {ex.Message}");
-                break;
+                return false;
             }
         }
+
+        return true;
     }
 }

@@ -6,7 +6,9 @@
   </Configurations>
   <Folder Name="/Others/">
     <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
     <File Path=".github/workflows/dotnet.yml" />
+    <File Path=".gitignore" />
     <File Path="dockerfile" />
     <File Path="Readme.md" />
   </Folder>

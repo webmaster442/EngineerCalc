@@ -8,12 +8,6 @@
         "resolved": "10.0.5",
         "contentHash": "A+5ZuQ0f449tM+MQrhf6R9ZX7lYpjk/ODEwLYKrnF6111rtARx8fVsm4YznUnQiKnnXfaXNBqgxmil6RW3L3SA=="
       },
-      "UnitsNet": {
-        "type": "Direct",
-        "requested": "[6.0.0-pre017, )",
-        "resolved": "6.0.0-pre017",
-        "contentHash": "5lEZuV9xcBNJYlRmo6/1s7x5eTza2Y92tgF5GTw2uv/ZDtnjduDP8Wq1KXfRIn3qiE0ojlYapd4morI/ZWSKGA=="
-      },
       "dynamicevaluator.typesystem": {
         "type": "Project"
       }

@@ -99,7 +99,7 @@ internal sealed class HashCommand : FileSystemCommand<HashCommand.Arguments>
         var filePath = GetFullPath(settings.File);
         if (!_fileSystem.FileExists(filePath))
         {
-            throw new InvalidOperationException($"File '{filePath}' does not exist.");
+            return Exit($"File '{filePath}' does not exist.");
         }
 
         using var stream = _fileSystem.OpenRead(filePath);

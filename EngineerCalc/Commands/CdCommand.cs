@@ -22,7 +22,7 @@ internal sealed class CdCommand : FileSystemCommand<CdCommand.Arguments>
             {
                 return ValidationResult.Error("Path cannot be empty.");
             }
-            return base.Validate();
+            return ValidationResult.Success();
         }
     }
 
@@ -42,9 +42,9 @@ internal sealed class CdCommand : FileSystemCommand<CdCommand.Arguments>
 
             return ExitCodes.Success;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            throw new InvalidOperationException($"Couldn't change directory to: {settings.Path}", ex);
+            return Exit($"Couldn't change directory to: {settings.Path}");
         }
     }
 }
