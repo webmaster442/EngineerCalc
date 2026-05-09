@@ -203,6 +203,12 @@ public static class TypeFunctions
         return Result.FromBigInteger(IntegerMath.Binomial((int)nValue, (int)kValue));
     }
 
+    public static Result Floor(Result value)
+        => Result.FromDouble(Math.Floor(value.CastToDouble()));
+
+    public static Result Ceiling(Result value)
+        => Result.FromDouble(Math.Ceiling(value.CastToDouble()));
+
     #endregion
 
     #region Trigonometric Functions

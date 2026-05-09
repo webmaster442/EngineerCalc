@@ -288,6 +288,36 @@
       ]
     },
     {
+      "name": "sec",
+      "summary": "Returns the secant of an angle in radians.",
+      "parameters": [
+        {
+          "name": "angle",
+          "supportedTypes": "double | int | fraction | complex",
+          "description": "The angle in radians for which to return the secant."
+        }
+      ],
+      "examples": [
+        "sec(0)",
+        "sec(3.14159 / 4)"
+      ]
+    },
+    {
+      "name": "cosec",
+      "summary": "Returns the cosecant of an angle in radians.",
+      "parameters": [
+        {
+          "name": "angle",
+          "supportedTypes": "double | int | fraction | complex",
+          "description": "The angle in radians for which to return the cosecant."
+        }
+      ],
+      "examples": [
+        "cosec(3.14159 / 4)",
+        "cosec(3.14159 / 2)"
+      ]
+    },
+    {
       "name": "deg",
       "summary": "Converts an angle from radians to degrees.",
       "parameters": [
@@ -710,6 +740,54 @@
       "examples": [
         "binomial(5, 2)",
         "binomial(10, 3)"
+      ]
+    },
+    {
+      "name": "floor",
+      "summary": "Returns the largest integer less than or equal to the given number.",
+      "parameters": [
+        {
+          "name": "number",
+          "supportedTypes": "double | int | fraction",
+          "description": "The number for which to return the floor."
+        }
+      ],
+      "examples": [
+        "floor(3.7)"
+      ]
+    },
+    {
+      "name": "ceiling",
+      "summary": "Returns the smallest integer greater than or equal to the given number.",
+      "parameters": [
+        {
+          "name": "number",
+          "supportedTypes": "double | int | fraction",
+          "description": "The number for which to return the ceiling."
+        }
+      ],
+      "examples": [
+        "ceiling(3.2)"
+      ]
+    },
+    {
+      "name": "parallel",
+      "summary": "Returns the equivalent resistance of two resistors connected in parallel. The formula used is (R1 * R2) / (R1 + R2).",
+      "parameters": [
+        {
+          "name": "R1",
+          "description": "The resistance of the first resistor.",
+          "supportedTypes": "double | int | fraction | complex"
+        },
+        {
+          "name": "R2",
+          "description": "The resistance of the second resistor.",
+          "supportedTypes": "double | int | fraction | complex"
+        }
+      ],
+      "examples": [
+        "parallel(100, 200)",
+        "parallel(50, 50)"
       ]
     }
   ]

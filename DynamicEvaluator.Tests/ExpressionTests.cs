@@ -42,6 +42,8 @@ public class ExpressionTests
     [TestCase("2^x", "(0.6931471805599453 * (2 ^ x))")]
     //trigonometry
     [TestCase("sin(x)", "cos(x)")]
+    [TestCase("sec(x)", "(sin(x) / (cos(x) ^ 2))")]
+    [TestCase("cosec(x)", "((-cos(x)) / (sin(x) ^ 2))")]
     [TestCase("cos(x)", "(-sin(x))")]
     [TestCase("tan(x)", "(cos(x) ^ -2)")]
     [TestCase("ctg(x)", "((-(cos(x) ^ -2)) / (tan(x) ^ 2))")]
@@ -257,6 +259,8 @@ public class ExpressionTests
     [TestCase("cos(x)")]
     [TestCase("tan(x)")]
     [TestCase("ctg(x)")]
+    [TestCase("sec(x)")]
+    [TestCase("cosec(x)")]
     [TestCase("ln(x)")]
     [TestCase("1")]
     [TestCase("true")]
@@ -362,6 +366,7 @@ public class ExpressionTests
     [TestCase("binomial(10, 5)", 252)]
     [TestCase("binomial(1, 5)", 0)]
     [TestCase("binomial(90, 5)", 43949268)]
+    [TestCase("parallel(50, 50)", 25)]
     public void EnsureThat_Evaluate_Works_Integers(string expression, long expected)
     {
         IExpression parsed = _expressionFactory.Create(expression);
@@ -432,8 +437,10 @@ public class ExpressionTests
     [TestCase("1.1e3", 1100d)]
     [TestCase("1.1e+3", 1100d)]
     [TestCase("sin(0)", 0d)]
-    [TestCase("cos(0)", 1d)]
     [TestCase("tan(0)", 0d)]
+    [TestCase("cos(0)", 1d)]
+    [TestCase("sec(0)", 1d)]
+    [TestCase("cosec(pi/2)", 1d)]
     [TestCase("tan(x)", 1.5574077246549023d)]
     [TestCase("tan(y)", -2.1850398632615189d)]
     [TestCase("ctg(x)", 0.64209261593433065d)]

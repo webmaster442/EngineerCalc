@@ -29,6 +29,9 @@ internal sealed class FunctionFactory : IEnumerable<string>
             { "grad", 1 },
             { "degtorad", 1 },
             { "gradtorad", 1 },
+            { "sec", 1 },
+            { "cosec", 1 },
+            { "parallel", 2 },
         };
         _oneParamFunctions = new(StringComparer.InvariantCultureIgnoreCase)
         {
@@ -49,6 +52,8 @@ internal sealed class FunctionFactory : IEnumerable<string>
             { nameof(TypeFunctions.Sqrt), TypeFunctions.Sqrt },
             { nameof(TypeFunctions.Factorial), TypeFunctions.Factorial },
             { nameof(TypeFunctions.Not), TypeFunctions.Not  },
+            { nameof(TypeFunctions.Floor), TypeFunctions.Floor },
+            { nameof(TypeFunctions.Ceiling), TypeFunctions.Ceiling },
         };
         _twoParamFunctions = new(StringComparer.InvariantCultureIgnoreCase)
         {
@@ -109,6 +114,9 @@ internal sealed class FunctionFactory : IEnumerable<string>
             "grad" => new GradExpression(parameters[0]),
             "degtorad" => new DegToRadExpression(parameters[0]),
             "gradtorad" => new GradToRadExpression(parameters[0]),
+            "sec" => new SecExpression(parameters[0]),
+            "cosec" => new CosecExpression(parameters[0]),
+            "parallel" => new ParallelExpression(parameters[0], parameters[1]),
             _ => CreateGeneric(name, parameters),
         };
     }
