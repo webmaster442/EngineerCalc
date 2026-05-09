@@ -47,6 +47,8 @@ internal sealed class FunctionFactory : IEnumerable<string>
             { nameof(TypeFunctions.ToHex), TypeFunctions.ToHex },
             { nameof(TypeFunctions.ToBin), TypeFunctions.ToBin },
             { nameof(TypeFunctions.Sqrt), TypeFunctions.Sqrt },
+            { nameof(TypeFunctions.Factorial), TypeFunctions.Factorial },
+            { nameof(TypeFunctions.Not), TypeFunctions.Not  },
         };
         _twoParamFunctions = new(StringComparer.InvariantCultureIgnoreCase)
         {
@@ -57,6 +59,11 @@ internal sealed class FunctionFactory : IEnumerable<string>
             { nameof(TypeFunctions.Root), TypeFunctions.Root },
             { nameof(TypeFunctions.Gcd), TypeFunctions.Gcd },
             { nameof(TypeFunctions.Lcm), TypeFunctions.Lcm },
+            { nameof(TypeFunctions.And), TypeFunctions.And  },
+            { nameof(TypeFunctions.Or), TypeFunctions.Or },
+            { nameof(TypeFunctions.Xor), TypeFunctions.Xor },
+            { nameof(TypeFunctions.ShiftLeft), TypeFunctions.ShiftLeft },
+            { nameof(TypeFunctions.ShiftRight), TypeFunctions.ShiftRight }
         };
         _multiParamFunctions = new(StringComparer.InvariantCultureIgnoreCase)
         {

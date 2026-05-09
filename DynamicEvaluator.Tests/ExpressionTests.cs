@@ -350,6 +350,15 @@ public class ExpressionTests
     [TestCase("(1/2)*2+(4*3)", 13)]
     [TestCase("z/x", 5)]
     [TestCase("(1/3)+(1/3)+(1/3)", 1)]
+    [TestCase("factorial(0)", 1)]
+    [TestCase("factorial(1)", 1)]
+    [TestCase("factorial(5)", 120)]
+    [TestCase("factorial(20)", 2432902008176640000)]
+    [TestCase("and(1, 1)", 1)]
+    [TestCase("or(1, 0)", 1)]
+    [TestCase("xor(1, 0)", 1)]
+    [TestCase("shiftleft(1, 1)", 2)]
+    [TestCase("shiftright(2, 1)", 1)]
     public void EnsureThat_Evaluate_Works_Integers(string expression, long expected)
     {
         IExpression parsed = _expressionFactory.Create(expression);

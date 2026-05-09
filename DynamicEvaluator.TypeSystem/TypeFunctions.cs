@@ -117,6 +117,69 @@ public static class TypeFunctions
         throw new InvalidOperationException($"Too many arguments for: {nameof(Random)}");
     }
 
+    public static Result Factorial(Result value)
+    {
+        return Result.FromBigInteger(IntegerMath.Factorial(value.CastToBigInteger()));
+    }
+
+    public static Result Not(Result value)
+    {
+        if (value.TypeState != TypeState.Integer)
+            throw TypeException.IncompatibleFunction(nameof(Not), value.TypeState);
+
+        return Result.FromBigInteger(~value.CastToBigInteger());
+    }
+
+    public static Result And(Result a, Result b)
+    {
+        if (a.TypeState != TypeState.Integer || b.TypeState != TypeState.Integer)
+            throw TypeException.IncompatibleFunction(nameof(And), a.TypeState, b.TypeState);
+
+        return Result.FromBigInteger(a.CastToBigInteger() & b.CastToBigInteger());
+    }
+
+    public static Result Or(Result a, Result b)
+    {
+        if (a.TypeState != TypeState.Integer || b.TypeState != TypeState.Integer)
+            throw TypeException.IncompatibleFunction(nameof(Or), a.TypeState, b.TypeState);
+
+        return Result.FromBigInteger(a.CastToBigInteger() | b.CastToBigInteger());
+    }
+
+    public static Result Xor(Result a, Result b)
+    {
+        if (a.TypeState != TypeState.Integer || b.TypeState != TypeState.Integer)
+            throw TypeException.IncompatibleFunction(nameof(Xor), a.TypeState, b.TypeState);
+
+        return Result.FromBigInteger(a.CastToBigInteger() ^ b.CastToBigInteger());
+    }
+
+    public static Result ShiftLeft(Result a, Result b)
+    {
+        if (a.TypeState != TypeState.Integer || b.TypeState != TypeState.Integer)
+            throw TypeException.IncompatibleFunction(nameof(ShiftLeft), a.TypeState, b.TypeState);
+
+        BigInteger shiftAmmount = b.CastToBigInteger();
+
+        if (shiftAmmount > int.MaxValue)
+            throw new ArgumentOutOfRangeException(nameof(b), $"Shift amount cannot be greater than {int.MaxValue}.");
+
+        return Result.FromBigInteger(a.CastToBigInteger() << (int)shiftAmmount);
+    }
+
+    public static Result ShiftRight(Result a, Result b)
+    {
+        if (a.TypeState != TypeState.Integer || b.TypeState != TypeState.Integer)
+            throw TypeException.IncompatibleFunction(nameof(ShiftRight), a.TypeState, b.TypeState);
+
+        BigInteger shiftAmmount = b.CastToBigInteger();
+
+        if (shiftAmmount > int.MaxValue)
+            throw new ArgumentOutOfRangeException(nameof(b), $"Shift amount cannot be greater than {int.MaxValue}.");
+
+        return Result.FromBigInteger(a.CastToBigInteger() >> (int)shiftAmmount);
+    }
+
     #endregion
 
     #region Trigonometric Functions
