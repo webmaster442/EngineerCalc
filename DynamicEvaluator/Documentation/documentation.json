@@ -691,6 +691,26 @@
         "shiftright(4, 1)",
         "shiftright(8, 2)"
       ]
+    },
+    {
+      "name": "binomial",
+      "summary": "Returns the binomial coefficient, which is the number of ways to choose k elements from a set of n elements without regard to order.",
+      "parameters": [
+        {
+          "name": "n",
+          "supportedTypes": "int",
+          "description": "The total number of elements."
+        },
+        {
+          "name": "k",
+          "supportedTypes": "int",
+          "description": "The number of elements to choose."
+        }
+      ],
+      "examples": [
+        "binomial(5, 2)",
+        "binomial(10, 3)"
+      ]
     }
   ]
 }

@@ -161,6 +161,9 @@ public static class TypeFunctions
 
         BigInteger shiftAmmount = b.CastToBigInteger();
 
+        if (shiftAmmount < 0)
+            throw new ArgumentOutOfRangeException(nameof(b), "Shift amount cannot be negative.");
+
         if (shiftAmmount > int.MaxValue)
             throw new ArgumentOutOfRangeException(nameof(b), $"Shift amount cannot be greater than {int.MaxValue}.");
 
@@ -174,10 +177,30 @@ public static class TypeFunctions
 
         BigInteger shiftAmmount = b.CastToBigInteger();
 
+        if (shiftAmmount < 0)
+            throw new ArgumentOutOfRangeException(nameof(b), "Shift amount cannot be negative.");
+
         if (shiftAmmount > int.MaxValue)
             throw new ArgumentOutOfRangeException(nameof(b), $"Shift amount cannot be greater than {int.MaxValue}.");
 
         return Result.FromBigInteger(a.CastToBigInteger() >> (int)shiftAmmount);
+    }
+
+    public static Result Binomial(Result n, Result k)
+    {
+        if (n.TypeState != TypeState.Integer || k.TypeState != TypeState.Integer)
+            throw TypeException.IncompatibleFunction(nameof(Binomial), n.TypeState, k.TypeState);
+
+        var nValue = n.CastToBigInteger();
+        var kValue = k.CastToBigInteger();
+
+        if (nValue > int.MaxValue)
+            throw new ArgumentOutOfRangeException(nameof(n), $"n cannot be greater than {int.MaxValue}.");
+
+        if (kValue > int.MaxValue)
+            throw new ArgumentOutOfRangeException(nameof(k), $"k cannot be greater than {int.MaxValue}.");
+
+        return Result.FromBigInteger(IntegerMath.Binomial((int)nValue, (int)kValue));
     }
 
     #endregion

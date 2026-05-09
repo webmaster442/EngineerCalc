@@ -63,7 +63,8 @@ internal sealed class FunctionFactory : IEnumerable<string>
             { nameof(TypeFunctions.Or), TypeFunctions.Or },
             { nameof(TypeFunctions.Xor), TypeFunctions.Xor },
             { nameof(TypeFunctions.ShiftLeft), TypeFunctions.ShiftLeft },
-            { nameof(TypeFunctions.ShiftRight), TypeFunctions.ShiftRight }
+            { nameof(TypeFunctions.ShiftRight), TypeFunctions.ShiftRight },
+            { nameof(TypeFunctions.Binomial), TypeFunctions.Binomial }
         };
         _multiParamFunctions = new(StringComparer.InvariantCultureIgnoreCase)
         {

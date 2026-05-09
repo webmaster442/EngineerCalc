@@ -34,4 +34,26 @@ internal static class IntegerMath
         }
         return result;
     }
+
+    public static BigInteger Binomial(int n, int k)
+    {
+        if (k < 0 || k > n)
+            return BigInteger.Zero;
+
+        if (k == 0 || k == n)
+            return BigInteger.One;
+
+        // Symmetry optimization
+        k = Math.Min(k, n - k);
+
+        BigInteger result = BigInteger.One;
+
+        for (int i = 1; i <= k; i++)
+        {
+            result *= n - (k - i);
+            result /= i;
+        }
+
+        return result;
+    }
 }

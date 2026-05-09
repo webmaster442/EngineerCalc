@@ -359,6 +359,9 @@ public class ExpressionTests
     [TestCase("xor(1, 0)", 1)]
     [TestCase("shiftleft(1, 1)", 2)]
     [TestCase("shiftright(2, 1)", 1)]
+    [TestCase("binomial(10, 5)", 252)]
+    [TestCase("binomial(1, 5)", 0)]
+    [TestCase("binomial(90, 5)", 43949268)]
     public void EnsureThat_Evaluate_Works_Integers(string expression, long expected)
     {
         IExpression parsed = _expressionFactory.Create(expression);
