@@ -135,7 +135,10 @@ public sealed class Result :
 
     public bool Equals(Result? other)
     {
-        ResultTypeState resultType = TypeHelper.GetResultTypeState(TypeState, other?.TypeState ?? TypeState.NoResult);
+        if (other == null)
+            return false;
+
+        ResultTypeState resultType = TypeHelper.GetResultTypeState(TypeState, other.TypeState);
 
         return resultType switch
         {

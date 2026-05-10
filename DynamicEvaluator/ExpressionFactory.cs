@@ -14,22 +14,22 @@ namespace DynamicEvaluator;
 
 public sealed class ExpressionFactory
 {
-    private readonly TokenSet FirstMultExp;
-    private readonly TokenSet FirstExpExp;
-    private readonly TokenSet FirstUnaryExp;
-    private readonly TokenSet FirstFactorPrefix;
-    private readonly TokenSet FirstFactor;
+    private readonly TokenSet _firstMultExp;
+    private readonly TokenSet _firstExpExp;
+    private readonly TokenSet _firstUnaryExp;
+    private readonly TokenSet _firstFactorPrefix;
+    private readonly TokenSet _firstFactor;
     private readonly FunctionFactory _functionFactory;
 
     public ExpressionFactory()
     {
         _functionFactory = new FunctionFactory();
         var firstFunction = new TokenSet(TokenType.Function);
-        FirstFactor = firstFunction + new TokenSet(TokenType.Variable, TokenType.OpenParen);
-        FirstFactorPrefix = FirstFactor + TokenType.Constant;
-        FirstUnaryExp = FirstFactorPrefix + TokenType.Minus + TokenType.Not;
-        FirstExpExp = new TokenSet(FirstUnaryExp);
-        FirstMultExp = new TokenSet(FirstUnaryExp);
+        _firstFactor = firstFunction + new TokenSet(TokenType.Variable, TokenType.OpenParen);
+        _firstFactorPrefix = _firstFactor + TokenType.Constant;
+        _firstUnaryExp = _firstFactorPrefix + TokenType.Minus + TokenType.Not;
+        _firstExpExp = new TokenSet(_firstUnaryExp);
+        _firstMultExp = new TokenSet(_firstUnaryExp);
     }
 
     public IEnumerable<string> KnownFunctions
@@ -56,11 +56,10 @@ public sealed class ExpressionFactory
     }
 
     public IExpression CreateFromRpn(string input)
-    {
-        TokenCollection tokens = Tokenizer.Tokenize(input, _functionFactory.IsFunction);
+    {     
+        TokenCollection tokens = Tokenizer.TokenizeRpn(input, _functionFactory.IsFunction);
         return RpnExpressionFactory.Create(tokens, _functionFactory, CultureInfo.InvariantCulture);
     }
-
 
     private IExpression ParseTennaryExpression(TokenCollection tokens)
     {
@@ -84,14 +83,14 @@ public sealed class ExpressionFactory
 
     private IExpression ParseAssignmentExpression(TokenCollection tokens)
     {
-        if (tokens.Check(FirstMultExp))
+        if (tokens.Check(_firstMultExp))
         {
             var exp = ParseAddExpression(tokens);
             while (tokens.Check(new TokenSet(TokenType.Assignment)))
             {
                 var opType = tokens.CurrentToken.Type;
                 tokens.Eat(opType);
-                if (!tokens.Check(FirstMultExp))
+                if (!tokens.Check(_firstMultExp))
                 {
                     throw new InvalidOperationException("Expected expression");
                 }
@@ -112,7 +111,7 @@ public sealed class ExpressionFactory
 
     private IExpression ParseAddExpression(TokenCollection tokens)
     {
-        if (tokens.Check(FirstMultExp))
+        if (tokens.Check(_firstMultExp))
         {
             var exp = ParseMultExpression(tokens);
 
@@ -120,7 +119,7 @@ public sealed class ExpressionFactory
             {
                 var opType = tokens.CurrentToken.Type;
                 tokens.Eat(opType);
-                if (!tokens.Check(FirstMultExp))
+                if (!tokens.Check(_firstMultExp))
                 {
                     throw new InvalidOperationException("Expected expression");
                 }
@@ -138,12 +137,12 @@ public sealed class ExpressionFactory
 
             return exp;
         }
-        throw new InvalidOperationException($"Invalid expression. Expected {FirstMultExp}");
+        throw new InvalidOperationException($"Invalid expression. Expected {_firstMultExp}");
     }
 
     private IExpression ParseMultExpression(TokenCollection tokens)
     {
-        if (tokens.Check(FirstExpExp))
+        if (tokens.Check(_firstExpExp))
         {
             var exp = ParseExpExpression(tokens);
 
@@ -151,7 +150,7 @@ public sealed class ExpressionFactory
             {
                 var opType = tokens.CurrentToken.Type;
                 tokens.Eat(opType);
-                if (!tokens.Check(FirstExpExp))
+                if (!tokens.Check(_firstExpExp))
                 {
                     throw new InvalidOperationException("Expected expression after * or /");
                 }
@@ -174,7 +173,7 @@ public sealed class ExpressionFactory
 
     private IExpression ParseExpExpression(TokenCollection tokens)
     {
-        if (tokens.Check(FirstUnaryExp))
+        if (tokens.Check(_firstUnaryExp))
         {
             var exp = ParseUnaryExpression(tokens);
 
@@ -189,7 +188,7 @@ public sealed class ExpressionFactory
             {
                 var opType = tokens.CurrentToken.Type;
                 tokens.Eat(opType);
-                if (!tokens.Check(FirstUnaryExp))
+                if (!tokens.Check(_firstUnaryExp))
                 {
                     throw new InvalidOperationException("Expected expression after exponent");
                 }
@@ -229,7 +228,7 @@ public sealed class ExpressionFactory
             not = true;
         }
 
-        if (tokens.Check(FirstFactorPrefix))
+        if (tokens.Check(_firstFactorPrefix))
         {
             var exp = ParseFactorPrefix(tokens);
 
@@ -257,7 +256,7 @@ public sealed class ExpressionFactory
             tokens.Eat(TokenType.Constant);
         }
 
-        if (tokens.Check(FirstFactor))
+        if (tokens.Check(_firstFactor))
         {
             if (exp == null)
             {
@@ -301,7 +300,7 @@ public sealed class ExpressionFactory
 
             exp = (exp == null) ? right : new MultiplyExpression(exp, right);
         }
-        while (tokens.Check(FirstFactor));
+        while (tokens.Check(_firstFactor));
 
         return exp;
     }

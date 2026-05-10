@@ -536,6 +536,10 @@ public static class TypeFunctions
 
         Result sum = Sum(values);
 
+        if (sum.TypeState == TypeState.Integer)
+            return Result.FromFraction(new Fraction(sum.CastToBigInteger(), values.Length));
+
+
         return sum / Result.FromBigInteger(values.Length);
     }
 

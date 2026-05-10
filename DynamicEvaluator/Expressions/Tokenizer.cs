@@ -220,23 +220,29 @@ internal static class Tokenizer
             {
                 tokens.Add(new Token(item, TokenType.Constant, TypeState.Boolean));
             }
-            else if (item.Length == 1)
+            else if (item.Length == 1
+                && !IsIdentifier(item[0]))
             {
                 tokens.Add(HandleSingleCharOperator(item[0], -1));
             }
-            else if (item.Length == 2)
+            else if (item.Length == 2
+                && !IsIdentifier(item[0])
+                && !IsIdentifier(item[1]))
             {
                 tokens.Add(HandleOperator(item[0], item[1], -1, out _));
-            }
-            else if (IsIdentifier(item[0]) && item.All(IsIdentifier))
-            {
-                tokens.Add(new Token(item, TokenType.Variable));
             }
             else if (isFunctionCheck(item))
             {
                 tokens.Add(new Token(item, TokenType.Function));
             }
+            else if (IsIdentifier(item[0]) && item.All(IsIdentifier))
+            {
+                tokens.Add(new Token(item, TokenType.Variable));
+            }
         }
+
+        tokens.Add(new Token(string.Empty, TokenType.Eof));
+
         return tokens;
     }
 
