@@ -58,7 +58,7 @@ internal sealed class ExportVariablesCommand : FileSystemCommand<ExportVariables
             TypeState.Fraction => r.CastToFraction().ToString(CultureInfo.InvariantCulture),
             TypeState.Complex => FormatComplex(r.CastToComplex()),
             TypeState.Array => $"array({string.Join(",", r.CastToArray().Select(x => x.ToString("R", CultureInfo.InvariantCulture)))})",
-            TypeState.String => $"'{r.CastToString()}'",
+            TypeState.String => $"'{r.CastToString().Replace("'", "\\'")}'",
             _ => throw new InvalidOperationException("Unknown result type state."),
         };
     }

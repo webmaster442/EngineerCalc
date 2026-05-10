@@ -7,7 +7,15 @@ using Spectre.Console.Cli;
 
 namespace EngineerCalc.Infrastructure;
 
-public sealed class TypeResolver(IServiceProvider provider) : ITypeResolver
+public sealed class TypeResolver(IServiceProvider provider) : ITypeResolver, IDisposable
 {
+    public void Dispose()
+    {
+        if (provider is IDisposable disposable)
+        {
+            disposable.Dispose();
+        }
+    }
+
     public object? Resolve(Type? type) => type == null ? null : provider.GetService(type);
 }

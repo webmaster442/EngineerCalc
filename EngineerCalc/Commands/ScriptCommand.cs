@@ -44,7 +44,7 @@ internal sealed class ScriptCommand : FileSystemCommand<ScriptCommand.Arguments>
                                                     Arguments settings,
                                                     CancellationToken cancellationToken)
     {
-        var scriptFile = Path.GetFullPath(settings.ScriptPath);
+        var scriptFile = GetFullPath(settings.ScriptPath);
         if (!_fileSystem.FileExists(scriptFile))
         {
             return Exit($"File '{scriptFile}' does not exist.");

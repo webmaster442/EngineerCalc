@@ -278,7 +278,7 @@ public static class TypeFunctions
     {
         return value.TypeState switch
         {
-            TypeState.Integer => Result.FromDouble(Math.Cos(value.CastToDouble())),
+            TypeState.Integer => Result.FromDouble(Math.Acos(value.CastToDouble())),
             TypeState.Double => Result.FromDouble(Math.Acos(value.CastToDouble())),
             TypeState.Fraction => Result.FromDouble(Math.Acos(value.CastToDouble())),
             TypeState.Complex => Result.FromComplex(Complex.Acos(value.CastToComplex())),
@@ -401,13 +401,15 @@ public static class TypeFunctions
             throw TypeException.IncompatibleFunction(nameof(ToHex), value.TypeState);
 
         BigInteger casted = value.CastToBigInteger();
+        string hex = casted.ToString("X");
+
         if (casted > BigInteger.Zero)
         {
-            //remove leading zeros
-            return Result.FromString(casted.ToString("X")[1..]);
+            string trimmed = hex.TrimStart('0');
+            return Result.FromString(trimmed.Length == 0 ? "0" : trimmed);
         }
 
-        return Result.FromString(casted.ToString("X"));
+        return Result.FromString(hex);
     }
 
     public static Result ToBin(Result value)

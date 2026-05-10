@@ -51,7 +51,7 @@ internal sealed class FunctionsCommand : Command<FunctionsCommand.Arguments>
 
         if (string.IsNullOrEmpty(settings.FunctionName))
         {
-            AnsiConsole.WriteLine("Availabe functions: ");
+            AnsiConsole.WriteLine("Available functions: ");
             AnsiConsole.WriteLine("To get details of a function use .functions <functionname>");
             var docTable = documentation.OrderBy(x => x.Name).Select(x => new string[]
             {

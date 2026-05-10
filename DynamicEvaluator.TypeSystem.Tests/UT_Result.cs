@@ -39,6 +39,7 @@ public class UT_Result
         Assert.That(result.CastToDouble(), Is.EqualTo(3.14));
     }
 
+    [Test]
     public void EnsureThat_FromComplex_ReturnsInteger_WhenValueIsWholeNumber()
     {
         // Arrange
@@ -83,6 +84,6 @@ public class UT_Result
         var result = Result.FromFraction(value);
         // Assert
         Assert.That(result.TypeState, Is.EqualTo(TypeState.Fraction));
-        Assert.That(result.CastToFraction, Is.EqualTo(value));
+        Assert.That(result.CastToFraction(), Is.EqualTo(value));
     }
 }

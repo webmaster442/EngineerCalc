@@ -69,7 +69,7 @@ internal static class ResultFormatter
             case TypeState.Boolean:
                 {
                     resultBuilder
-                        .Append("([fuchsia]string[/]) ")
+                        .Append("([fuchsia]bool[/]) ")
                         .Append("[italic green]")
                         .Append(result.CastToBoolean())
                         .Append("[/]");

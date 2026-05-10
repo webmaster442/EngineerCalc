@@ -5,7 +5,6 @@
 
 using System.Globalization;
 using System.Numerics;
-using System.Runtime.InteropServices.Swift;
 
 using DynamicEvaluator.TypeSystem.Internals;
 using DynamicEvaluator.TypeSystem.InternalTypes;
@@ -365,7 +364,7 @@ public sealed class Result :
             TypeState.Integer => FromBigInteger(-value.CastToBigInteger()),
             TypeState.Double => FromDouble(-value.CastToDouble()),
             TypeState.Fraction => FromFraction(-value.CastToFraction()),
-            TypeState.Complex => throw TypeException.IncompatibleOperator(value.TypeState, "-"),
+            TypeState.Complex => FromComplex(-value.CastToComplex()),
             TypeState.Array => throw TypeException.IncompatibleOperator(value.TypeState, "-"),
             TypeState.String => throw TypeException.IncompatibleOperator(value.TypeState, "-"),
             _ => throw new InvalidOperationException("Unknown result type state."),
@@ -381,7 +380,7 @@ public sealed class Result :
             TypeState.Integer => FromBigInteger(+value.CastToBigInteger()),
             TypeState.Double => FromDouble(+value.CastToDouble()),
             TypeState.Fraction => FromFraction(+value.CastToFraction()),
-            TypeState.Complex => throw TypeException.IncompatibleOperator(value.TypeState, "+"),
+            TypeState.Complex => FromComplex(+value.CastToComplex()),
             TypeState.Array => throw TypeException.IncompatibleOperator(value.TypeState, "+"),
             TypeState.String => throw TypeException.IncompatibleOperator(value.TypeState, "+"),
             _ => throw new InvalidOperationException("Unknown result type state."),
