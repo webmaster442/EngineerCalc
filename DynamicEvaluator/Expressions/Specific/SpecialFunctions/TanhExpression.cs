@@ -7,15 +7,13 @@ using DynamicEvaluator.TypeSystem;
 
 namespace DynamicEvaluator.Expressions.Specific.SpecialFunctions;
 
-internal sealed class SinExpression : UnaryExpression
+internal sealed class TanhExpression : UnaryExpression
 {
-    public SinExpression(IExpression child) : base(child)
+    public TanhExpression(IExpression child) : base(child)
     {
     }
-
     public override IExpression Differentiate(string byVariable)
-        => new MultiplyExpression(new CosExpression(Child), Child.Differentiate(byVariable));
-
+        => new MultiplyExpression(new ExponentExpression(new CoshExpression(Child), new ConstantExpression(-2)), Child.Differentiate(byVariable));
     public override IExpression Simplify()
     {
         var newChild = Child.Simplify();
@@ -24,20 +22,14 @@ internal sealed class SinExpression : UnaryExpression
             // child is constant
             return new ConstantExpression(Evaluate(childConst.Value));
         }
-        if (newChild.IsIntegerMultupleOfPi())
-        {
-            return new ConstantExpression(0L);
-        }
-        return new SinExpression(newChild);
+        return new TanhExpression(newChild);
     }
-
     protected override Result Evaluate(Result value)
-        => TypeFunctions.Sin(value);
-
+        => TypeFunctions.Tanh(value);
     protected override string Render(bool emitLatex)
     {
         return emitLatex
-            ? $"{{ sin({Child.ToLatex()}) }}"
-            : $"sin({Child})";
+            ? $"{{ tanh({Child.ToLatex()}) }}"
+            : $"tanh({Child})";
     }
 }

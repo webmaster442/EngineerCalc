@@ -7,14 +7,14 @@ using DynamicEvaluator.TypeSystem;
 
 namespace DynamicEvaluator.Expressions.Specific.SpecialFunctions;
 
-internal sealed class SinExpression : UnaryExpression
+internal sealed class SinhExpression : UnaryExpression
 {
-    public SinExpression(IExpression child) : base(child)
+    public SinhExpression(IExpression child) : base(child)
     {
     }
 
     public override IExpression Differentiate(string byVariable)
-        => new MultiplyExpression(new CosExpression(Child), Child.Differentiate(byVariable));
+        => new MultiplyExpression(new CoshExpression(Child), Child.Differentiate(byVariable));
 
     public override IExpression Simplify()
     {
@@ -24,20 +24,16 @@ internal sealed class SinExpression : UnaryExpression
             // child is constant
             return new ConstantExpression(Evaluate(childConst.Value));
         }
-        if (newChild.IsIntegerMultupleOfPi())
-        {
-            return new ConstantExpression(0L);
-        }
-        return new SinExpression(newChild);
+        return new SinhExpression(newChild);
     }
 
     protected override Result Evaluate(Result value)
-        => TypeFunctions.Sin(value);
+        => TypeFunctions.Sinh(value);
 
     protected override string Render(bool emitLatex)
     {
         return emitLatex
-            ? $"{{ sin({Child.ToLatex()}) }}"
-            : $"sin({Child})";
+            ? $"{{ sinh({Child.ToLatex()}) }}"
+            : $"sinh({Child})";
     }
 }

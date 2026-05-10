@@ -236,6 +236,32 @@ public static class TypeFunctions
         };
     }
 
+
+    public static Result Sinh(Result value)
+    {
+        return value.TypeState switch
+        {
+            TypeState.Integer => Result.FromDouble(Math.Sinh(value.CastToDouble())),
+            TypeState.Double => Result.FromDouble(Math.Sinh(value.CastToDouble())),
+            TypeState.Fraction => Result.FromDouble(Math.Sinh(value.CastToDouble())),
+            TypeState.Complex => Result.FromComplex(Complex.Sinh(value.CastToComplex())),
+            _ => throw TypeException.IncompatibleFunction(nameof(Sinh), value.TypeState)
+        };
+    }
+
+    public static Result ArcSinh(Result value)
+    {
+        return value.TypeState switch
+        {
+            TypeState.Integer => Result.FromDouble(Math.Asinh(value.CastToDouble())),
+            TypeState.Double => Result.FromDouble(Math.Asinh(value.CastToDouble())),
+            TypeState.Fraction => Result.FromDouble(Math.Asinh(value.CastToDouble())),
+            TypeState.Complex => Result.FromComplex(ComplexMath.Asinh(value.CastToComplex())),
+            _ => throw TypeException.IncompatibleFunction(nameof(ArcSinh), value.TypeState)
+        };
+    }
+
+
     public static Result Cos(Result value)
     {
         return value.TypeState switch
@@ -257,6 +283,30 @@ public static class TypeFunctions
             TypeState.Fraction => Result.FromDouble(Math.Acos(value.CastToDouble())),
             TypeState.Complex => Result.FromComplex(Complex.Acos(value.CastToComplex())),
             _ => throw TypeException.IncompatibleFunction(nameof(ArcCos), value.TypeState)
+        };
+    }
+
+    public static Result Cosh(Result value)
+    {
+        return value.TypeState switch
+        {
+            TypeState.Integer => Result.FromDouble(Math.Cosh(value.CastToDouble())),
+            TypeState.Double => Result.FromDouble(Math.Cosh(value.CastToDouble())),
+            TypeState.Fraction => Result.FromDouble(Math.Cosh(value.CastToDouble())),
+            TypeState.Complex => Result.FromComplex(Complex.Cosh(value.CastToComplex())),
+            _ => throw TypeException.IncompatibleFunction(nameof(Cosh), value.TypeState)
+        };
+    }
+
+    public static Result ArcCosh(Result value)
+    {
+        return value.TypeState switch
+        {
+            TypeState.Integer => Result.FromDouble(Math.Acosh(value.CastToDouble())),
+            TypeState.Double => Result.FromDouble(Math.Acosh(value.CastToDouble())),
+            TypeState.Fraction => Result.FromDouble(Math.Acosh(value.CastToDouble())),
+            TypeState.Complex => Result.FromComplex(ComplexMath.Acosh(value.CastToComplex())),
+            _ => throw TypeException.IncompatibleFunction(nameof(ArcCosh), value.TypeState)
         };
     }
 
@@ -283,6 +333,32 @@ public static class TypeFunctions
             _ => throw TypeException.IncompatibleFunction(nameof(ArcTan), value.TypeState)
         };
     }
+
+    public static Result Tanh(Result value)
+    {
+        return value.TypeState switch
+        {
+            TypeState.Integer => Result.FromDouble(Math.Tanh(value.CastToDouble())),
+            TypeState.Double => Result.FromDouble(Math.Tanh(value.CastToDouble())),
+            TypeState.Fraction => Result.FromDouble(Math.Tanh(value.CastToDouble())),
+            TypeState.Complex => Result.FromComplex(Complex.Tanh(value.CastToComplex())),
+            _ => throw TypeException.IncompatibleFunction(nameof(Tanh), value.TypeState)
+        };
+    }
+
+
+    public static Result ArcTanh(Result value)
+    {
+        return value.TypeState switch
+        {
+            TypeState.Integer => Result.FromDouble(Math.Atanh(value.CastToDouble())),
+            TypeState.Double => Result.FromDouble(Math.Atanh(value.CastToDouble())),
+            TypeState.Fraction => Result.FromDouble(Math.Atanh(value.CastToDouble())),
+            TypeState.Complex => Result.FromComplex(ComplexMath.Atanh(value.CastToComplex())),
+            _ => throw TypeException.IncompatibleFunction(nameof(ArcTanh), value.TypeState)
+        };
+    }
+
     #endregion
 
     #region Type Functions
