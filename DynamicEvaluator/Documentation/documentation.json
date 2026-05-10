@@ -789,6 +789,96 @@
         "parallel(100, 200)",
         "parallel(50, 50)"
       ]
+    },
+    {
+      "name": "sinh",
+      "summary": "Returns the hyperbolic sine of a number.",
+      "parameters": [
+        {
+          "name": "number",
+          "description": "The number for which to return the hyperbolic sine.",
+          "supportedTypes": "double | int | fraction | complex"
+        }
+      ],
+      "examples": [
+        "sinh(0)",
+        "sinh(1)"
+      ]
+    },
+    {
+      "name": "cosh",
+      "summary": "Returns the hyperbolic cosine of a number.",
+      "parameters": [
+        {
+          "name": "number",
+          "description": "The number for which to return the hyperbolic cosine.",
+          "supportedTypes": "double | int | fraction | complex"
+        }
+      ],
+      "examples": [
+        "cosh(0)",
+        "cosh(1)"
+      ]
+    },
+    {
+      "name": "tanh",
+      "summary": "Returns the hyperbolic tangent of a number.",
+      "parameters": [
+        {
+          "name": "number",
+          "description": "The number for which to return the hyperbolic tangent.",
+          "supportedTypes": "double | int | fraction | complex"
+        }
+      ],
+      "examples": [
+        "tanh(0)",
+        "tanh(1)"
+      ]
+    },
+    {
+      "name": "arcsinh",
+      "summary": "Returns the inverse hyperbolic sine of a number.",
+      "parameters": [
+        {
+          "name": "number",
+          "description": "The number for which to return the inverse hyperbolic sine.",
+          "supportedTypes": "double | int | fraction | complex"
+        }
+      ],
+      "examples": [
+        "arcsinh(0)",
+        "arcsinh(1)"
+      ]
+    },
+    {
+      "name": "arccosh",
+      "summary": "Returns the inverse hyperbolic cosine of a number.",
+      "parameters": [
+        {
+          "name": "number",
+          "description": "The number for which to return the inverse hyperbolic cosine.",
+          "supportedTypes": "double | int | fraction | complex"
+        }
+      ],
+      "examples": [
+        "arccosh(1)",
+        "arccosh(2)"
+      ]
+    },
+    {
+      "name": "arctanh",
+      "summary": "Returns the inverse hyperbolic tangent of a number.",
+      "parameters": [
+        {
+          "name": "number",
+          "description": "The number for which to return the inverse hyperbolic tangent.",
+          "supportedTypes": "double | int | fraction | complex"
+        }
+      ],
+      "examples": [
+        "arctanh(0)",
+        "arctanh(0.5)"
+      ]
     }
   ]
 }
