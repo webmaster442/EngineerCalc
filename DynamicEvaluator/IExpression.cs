@@ -3,6 +3,8 @@
 // This code is licensed under MIT license (see LICENSE for details)
 //-----------------------------------------------------------------------------
 
+using DynamicEvaluator.TypeSystem;
+
 namespace DynamicEvaluator;
 
 public interface IExpression : IEquatable<IExpression>
@@ -11,7 +13,7 @@ public interface IExpression : IEquatable<IExpression>
     /// Evaluate an expression
     /// </summary>
     /// <returns>Result of expression</returns>
-    dynamic Evaluate(VariablesAndConstantsCollection variables);
+    Result Evaluate(VariablesAndConstantsCollection variables);
 
     /// <summary>
     /// Diferentiate an expression

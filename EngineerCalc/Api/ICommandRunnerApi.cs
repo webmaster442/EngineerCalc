@@ -10,4 +10,5 @@ namespace EngineerCalc.Api;
 internal interface ICommandRunnerApi
 {
     IDictionary<string, Command> KnownCommands { get; }
+    Task RunRestrictedAsync(IReadOnlyList<string> tokens);
 }

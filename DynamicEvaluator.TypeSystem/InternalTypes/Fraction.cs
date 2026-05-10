@@ -6,11 +6,10 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Numerics;
-using System.Text;
 
-using DynamicEvaluator.InternalFcuntions;
+using DynamicEvaluator.TypeSystem.Internals;
 
-namespace DynamicEvaluator.Types;
+namespace DynamicEvaluator.TypeSystem.InternalTypes;
 
 /// <summary>
 /// Represents a fractional number.
@@ -46,7 +45,7 @@ public readonly struct Fraction :
     /// <param name="numerator">numerator</param>
     /// <param name="denominator">denominator</param>
     /// <exception cref="DivideByZeroException">when denominator is 0</exception>
-    public Fraction(long numerator, long denominator)
+    public Fraction(BigInteger numerator, BigInteger denominator)
     {
         if (denominator == 0)
         {
@@ -59,7 +58,7 @@ public readonly struct Fraction :
             denominator = -denominator;
         }
 
-        long gcd = Integers.GreatestCommonDivisor(numerator, denominator);
+        BigInteger gcd = BigInteger.GreatestCommonDivisor(numerator, denominator);
         Numerator = numerator / gcd;
         Denominator = denominator / gcd;
     }
@@ -79,13 +78,13 @@ public readonly struct Fraction :
     /// <summary>
     /// Gets the denominator of the fraction.
     /// </summary>
-    public long Denominator { get; }
+    public BigInteger Denominator { get; }
 
 
     /// <summary>
     /// Gets the numerator of the fraction.
     /// </summary>
-    public long Numerator { get; }
+    public BigInteger Numerator { get; }
 
 
     /// <summary>
@@ -94,16 +93,7 @@ public readonly struct Fraction :
     /// <param name="fraction">Fraction to convert</param>
     public static implicit operator double(Fraction fraction)
     {
-        return (double)fraction.Numerator / fraction.Denominator;
-    }
-
-    /// <summary>
-    /// Converts the specified fraction to a single-precision floating-point number.
-    /// </summary>
-    /// <param name="fraction">Fraction to convert</param>
-    public static implicit operator float(Fraction fraction)
-    {
-        return (float)fraction.Numerator / fraction.Denominator;
+        return (double)fraction.Numerator / (double)fraction.Denominator;
     }
 
     /// <summary>
@@ -117,10 +107,10 @@ public readonly struct Fraction :
     /// <inheritdoc/>
     public static Fraction operator -(Fraction left, Fraction right)
     {
-        long lcm = Integers.Lcm(left.Denominator, right.Denominator);
-        long factorLeft = lcm / left.Denominator;
-        long factorRigt = lcm / right.Denominator;
-        long numerator = left.Numerator * factorLeft - right.Numerator * factorRigt;
+        BigInteger lcm = IntegerMath.Lcm(left.Denominator, right.Denominator);
+        BigInteger factorLeft = lcm / left.Denominator;
+        BigInteger factorRigt = lcm / right.Denominator;
+        BigInteger  numerator = left.Numerator * factorLeft - right.Numerator * factorRigt;
         return new Fraction(numerator, lcm);
     }
 
@@ -145,35 +135,35 @@ public readonly struct Fraction :
     /// <inheritdoc/>
     public static Fraction operator %(Fraction left, Fraction right)
     {
-        long lcm = Integers.Lcm(left.Denominator, right.Denominator);
-        long numerator1 = lcm / left.Denominator * left.Numerator;
-        long numerator2 = lcm / right.Denominator * right.Numerator;
+        BigInteger lcm = IntegerMath.Lcm(left.Denominator, right.Denominator);
+        BigInteger numerator1 = lcm / left.Denominator * left.Numerator;
+        BigInteger numerator2 = lcm / right.Denominator * right.Numerator;
         return new Fraction(numerator1 % numerator2, lcm);
     }
 
     /// <inheritdoc/>
     public static Fraction operator *(Fraction left, Fraction right)
     {
-        long numerator = left.Numerator * right.Numerator;
-        long denominator = left.Denominator * right.Denominator;
+        BigInteger numerator = left.Numerator * right.Numerator;
+        BigInteger denominator = left.Denominator * right.Denominator;
         return new Fraction(numerator, denominator);
     }
 
     /// <inheritdoc/>
     public static Fraction operator /(Fraction left, Fraction right)
     {
-        long numerator = left.Numerator * right.Denominator;
-        long denominator = left.Denominator * right.Numerator;
+        BigInteger numerator = left.Numerator * right.Denominator;
+        BigInteger denominator = left.Denominator * right.Numerator;
         return new Fraction(numerator, denominator);
     }
 
     /// <inheritdoc/>
     public static Fraction operator +(Fraction left, Fraction right)
     {
-        long lcm = Integers.Lcm(left.Denominator, right.Denominator);
-        long factorLeft = lcm / left.Denominator;
-        long factorRigt = lcm / right.Denominator;
-        long numerator = left.Numerator * factorLeft + right.Numerator * factorRigt;
+        BigInteger lcm = IntegerMath.Lcm(left.Denominator, right.Denominator);
+        BigInteger factorLeft = lcm / left.Denominator;
+        BigInteger factorRigt = lcm / right.Denominator;
+        BigInteger  numerator = left.Numerator * factorLeft + right.Numerator * factorRigt;
         return new Fraction(numerator, lcm);
     }
 
@@ -249,8 +239,8 @@ public readonly struct Fraction :
     /// <inheritdoc/>
     public readonly int CompareTo(Fraction other)
     {
-        long n1 = Numerator * other.Denominator;
-        long n2 = other.Numerator * Denominator;
+        BigInteger n1 = Numerator * other.Denominator;
+        BigInteger n2 = other.Numerator * Denominator;
         return n1.CompareTo(n2);
     }
 
@@ -298,7 +288,7 @@ public readonly struct Fraction :
 
     public static Fraction Abs(Fraction f)
     {
-        long newNumerator = f.Numerator < 0 ? -1L * f.Numerator : f.Numerator;
+        BigInteger newNumerator = f.Numerator < 0 ? -1L * f.Numerator : f.Numerator;
         return new Fraction(newNumerator, f.Denominator);
     }
 }

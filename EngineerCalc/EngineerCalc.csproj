@@ -51,7 +51,7 @@
     <PackageReference Include="System.IO.Hashing" Version="11.0.0-preview.3.26207.106" />
     <PackageReference Include="Webmaster442.WindowsTerminal" Version="4.1.1" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\DynamicEvaluator\DynamicEvaluator.csproj" />
   </ItemGroup>

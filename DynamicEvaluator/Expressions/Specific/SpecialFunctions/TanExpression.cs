@@ -3,6 +3,8 @@
 // This code is licensed under MIT license (see LICENSE for details)
 //-----------------------------------------------------------------------------
 
+using DynamicEvaluator.TypeSystem;
+
 namespace DynamicEvaluator.Expressions.Specific.SpecialFunctions;
 
 internal sealed class TanExpression : UnaryExpression
@@ -31,8 +33,8 @@ internal sealed class TanExpression : UnaryExpression
         return new TanExpression(newChild);
     }
 
-    protected override dynamic Evaluate(dynamic value)
-        => Functions.Tan(value);
+    protected override Result Evaluate(Result value)
+        => TypeFunctions.Tan(value);
 
     protected override string Render(bool emitLatex)
     {

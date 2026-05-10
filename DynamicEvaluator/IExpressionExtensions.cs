@@ -4,10 +4,12 @@
 //-----------------------------------------------------------------------------
 
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
 using DynamicEvaluator.Expressions;
 using DynamicEvaluator.Expressions.Specific;
 using DynamicEvaluator.Logic;
+using DynamicEvaluator.TypeSystem;
 
 namespace DynamicEvaluator;
 
@@ -82,9 +84,12 @@ public static class IExpressionExtensions
             string pattern = Utilities.GetBinaryValue(i, variableNames.Length);
             for (int j = 0; j < variableNames.Length; j++)
             {
-                variables[variableNames[j]] = pattern[j] == '1' ? true : false;
+                variables[variableNames[j]] = pattern[j] == '1' ? Result.FromBoolean(true) : Result.FromBoolean(false);
             }
-            if (expression.Evaluate(variables) is bool b && b == true)
+
+            Result evaluated = expression.Evaluate(variables);
+
+            if (evaluated.TypeState == TypeState.Boolean && evaluated.CastToBoolean())
             {
                 result.Add(i);
             }
@@ -98,7 +103,7 @@ public static class IExpressionExtensions
         return expression is AndExpression
             || expression is OrExpression
             || expression is LogicNegateExpression
-            || (expression is ConstantExpression constant && constant.Value is bool)
+            || (expression is ConstantExpression constant && constant.Value.TypeState == TypeState.Boolean)
             || expression is VariableExpression;
     }
 

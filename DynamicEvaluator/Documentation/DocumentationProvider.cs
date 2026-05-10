@@ -8,9 +8,9 @@ using System.Text.Json;
 
 namespace DynamicEvaluator.Documentation;
 
-public sealed class DocumentationProvider : IEnumerable<Docmodel>
+public sealed class DocumentationProvider : IEnumerable<FunctionModel>
 {
-    private readonly Dictionary<string, Docmodel> _documents;
+    private readonly Dictionary<string, FunctionModel> _documents;
 
     public DocumentationProvider()
     {
@@ -19,25 +19,26 @@ public sealed class DocumentationProvider : IEnumerable<Docmodel>
         {
             throw new InvalidOperationException("documentation.json is not embedded");
         }
-        var loaded = JsonSerializer.Deserialize<Docmodel[]>(stream, JsonSerializerOptions.Web);
+        var loaded = JsonSerializer.Deserialize<DocumentModel>(stream, DocumentModelJsonSerializerContext.Default.DocumentModel);
         if (loaded == null)
         {
             throw new InvalidOperationException("Failed to deserialize documentation.json");
         }
-        _documents = loaded.ToDictionary(d => d.FunctionName, d => d, StringComparer.InvariantCultureIgnoreCase);
+        _documents = loaded.Functions.ToDictionary(d => d.Name, d => d, StringComparer.InvariantCultureIgnoreCase);
     }
 
     public IEnumerable<string> FunctionNames
         => _documents.Keys;
 
-    public Docmodel GetDocumentation(string function)
+    public bool IsDocumented(string name)
+        => _documents.ContainsKey(name);
+
+    public FunctionModel GetDocumentation(string function)
         => _documents[function];
 
-    public IEnumerator<Docmodel> GetEnumerator()
+    public IEnumerator<FunctionModel> GetEnumerator()
         => _documents.Values.GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
+        => GetEnumerator();
 }

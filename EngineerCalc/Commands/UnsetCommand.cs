@@ -16,11 +16,12 @@ internal sealed class UnsetCommand : Command<UnsetCommand.Settings>
 {
     public sealed class Settings : CommandSettings
     {
-        [CommandArgument(0, "<name>")]
+        [CommandArgument(0, "[name]")]
         [Description("Name of the variable to unset")]
         public string Name { get; set; } = string.Empty;
 
-        [CommandOption("--all")]
+        [CommandOption("-a|--all")]
+        [Description("Unset all variables")]
         public bool All { get; set; }
 
         public override ValidationResult Validate()

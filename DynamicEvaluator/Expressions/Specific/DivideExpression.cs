@@ -3,7 +3,8 @@
 // This code is licensed under MIT license (see LICENSE for details)
 //-----------------------------------------------------------------------------
 
-using DynamicEvaluator.Types;
+using DynamicEvaluator.TypeSystem;
+using DynamicEvaluator.TypeSystem.InternalTypes;
 
 namespace DynamicEvaluator.Expressions.Specific;
 
@@ -96,7 +97,7 @@ internal sealed class DivideExpression : BinaryExpression
             && rightExponent.Right is ConstantExpression rightExpConst
             && leftVar?.Identifier == rightExpVar.Identifier)
         {
-            return SimplifyHelpers.MakeExponentMultiplyConstant(leftVar, 1L - rightExpConst.Value);
+            return SimplifyHelpers.MakeExponentMultiplyConstant(leftVar, Result.FromBigInteger(1L) - rightExpConst.Value);
         }
         // x^2/x
         if (leftExponent?.Left is VariableExpression leftExpVar
@@ -110,11 +111,12 @@ internal sealed class DivideExpression : BinaryExpression
         return new DivideExpression(newLeft, newRight);
     }
 
-    protected override dynamic Evaluate(dynamic value1, dynamic value2)
+    protected override Result Evaluate(Result value1, Result value2)
     {
-        if (TypeHelper.IsLong(value1) && TypeHelper.IsLong(value2))
+        if (value1.TypeState == TypeState.Integer && value2.TypeState == TypeState.Integer)
         {
-            return TypeFactory.CreateFraction(value1, value2);
+            Fraction f = new Fraction(value1.CastToBigInteger(), value2.CastToBigInteger());
+            return Result.FromFraction(f);
         }
         return value1 / value2;
     }

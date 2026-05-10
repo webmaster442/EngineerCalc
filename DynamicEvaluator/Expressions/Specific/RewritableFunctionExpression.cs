@@ -3,6 +3,8 @@
 // This code is licensed under MIT license (see LICENSE for details)
 //-----------------------------------------------------------------------------
 
+using DynamicEvaluator.TypeSystem;
+
 namespace DynamicEvaluator.Expressions.Specific;
 
 internal abstract class RewritableFunctionExpression : IExpression
@@ -19,7 +21,7 @@ internal abstract class RewritableFunctionExpression : IExpression
     public IExpression Differentiate(string byVariable)
         => _rewritten.Differentiate(byVariable);
 
-    public dynamic Evaluate(VariablesAndConstantsCollection variables)
+    public Result Evaluate(VariablesAndConstantsCollection variables)
         => _rewritten.Evaluate(variables);
 
     public IExpression Simplify()

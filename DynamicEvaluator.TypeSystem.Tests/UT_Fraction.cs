@@ -1,9 +1,14 @@
-﻿using DynamicEvaluator.Types;
+﻿//-----------------------------------------------------------------------------
+// (c) 2024-2026 Ruzsinszki Gábor
+// This code is licensed under MIT license (see LICENSE for details)
+//-----------------------------------------------------------------------------
 
-namespace DynamicEvaluator.Tests;
+using DynamicEvaluator.TypeSystem.InternalTypes;
+
+namespace DynamicEvaluator.TypeSystem.Tests;
 
 [TestFixture]
-internal class FractionTests
+internal class UT_Fraction
 {
     [TestCase(2, 6, 1, 4, 7, 12)]
     [TestCase(3, 10, 1, 5, 1, 2)]

@@ -6,45 +6,47 @@
 using System.Collections;
 using System.Collections.Specialized;
 
+using DynamicEvaluator.TypeSystem;
+
 namespace DynamicEvaluator;
 
-public sealed class VariablesAndConstantsCollection : IEnumerable<KeyValuePair<string, object>>, INotifyCollectionChanged
+public sealed class VariablesAndConstantsCollection : IEnumerable<KeyValuePair<string, Result>>, INotifyCollectionChanged
 {
-    private readonly Dictionary<string, dynamic> _variables;
-    private readonly Dictionary<string, dynamic> _constants;
+    private readonly Dictionary<string, Result> _variables;
+    private readonly Dictionary<string, Result> _constants;
 
     public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
     public VariablesAndConstantsCollection()
     {
-        _variables = new Dictionary<string, dynamic>();
-        _constants = new Dictionary<string, dynamic>()
+        _variables = new Dictionary<string, Result>();
+        _constants = new Dictionary<string, Result>()
         {
-            { "e", Math.E },
-            { "pi", Math.PI },
-            { "tau", Math.Tau },
-            { "yocto", 1e-24 },
-            { "zepto", 1e-21 },
-            { "atto",  1e-18 },
-            { "femto", 1e-15 },
-            { "pico",  1e-12 },
-            { "nano",  1e-9  },
-            { "micro", 1e-6  },
-            { "milli", 1e-3  },
-            { "centi", 1e-2  },
-            { "deci",  1e-1  },
-            { "deca",  1e1   },
-            { "hecto", 1e2   },
-            { "kilo",  1e3   },
-            { "mega",  1e6   },
-            { "giga",  1e9   },
-            { "tera",  1e12  },
-            { "peta",  1e15  },
-            { "exa",   1e18  },
-            { "zetta", 1e21  },
-            { "yotta", 1e24  },
-            { "ronna", 1e27  },
-            { "quetta",1e30  }
+            { "e", Result.FromDouble(Math.E) },
+            { "pi", Result.FromDouble(Math.PI) },
+            { "tau", Result.FromDouble(Math.Tau) },
+            { "yocto", Result.FromDouble(1e-24) },
+            { "zepto", Result.FromDouble(1e-21) },
+            { "atto",  Result.FromDouble(1e-18) },
+            { "femto", Result.FromDouble(1e-15) },
+            { "pico",  Result.FromDouble(1e-12) },
+            { "nano",  Result.FromDouble(1e-9) },
+            { "micro", Result.FromDouble(1e-6) },
+            { "milli", Result.FromDouble(1e-3) },
+            { "centi", Result.FromDouble(1e-2) },
+            { "deci",  Result.FromDouble(1e-1) },
+            { "deca",  Result.FromDouble(1e1) },
+            { "hecto", Result.FromDouble(1e2) },
+            { "kilo",  Result.FromDouble(1e3) },
+            { "mega",  Result.FromDouble(1e6) },
+            { "giga",  Result.FromDouble(1e9) },
+            { "tera",  Result.FromDouble(1e12) },
+            { "peta",  Result.FromDouble(1e15) },
+            { "exa",   Result.FromDouble(1e18) },
+            { "zetta", Result.FromDouble(1e21) },
+            { "yotta", Result.FromDouble(1e24) },
+            { "ronna", Result.FromDouble(1e27) },
+            { "quetta", Result.FromDouble(1e30) }
         };
     }
 
@@ -60,7 +62,7 @@ public sealed class VariablesAndConstantsCollection : IEnumerable<KeyValuePair<s
     public bool IsDefined(string key)
         => IsConstant(key) || IsVariable(key);
 
-    public void Add(string key, dynamic value)
+    public void Add(string key, Result value)
     {
         if (_constants.ContainsKey(key))
             throw new InvalidOperationException($"{key} is a constant, that can't be overdefined");
@@ -86,25 +88,25 @@ public sealed class VariablesAndConstantsCollection : IEnumerable<KeyValuePair<s
         return false;
     }
 
-    public dynamic this[string key]
+    public Result this[string key]
     {
         get => _constants.ContainsKey(key) ? _constants[key] : _variables[key];
         set => Add(key, value);
     }
 
-    public IEnumerable<KeyValuePair<string, dynamic>> Variables()
+    public IEnumerable<KeyValuePair<string, Result>> Variables()
     {
         foreach (var item in _variables)
             yield return item;
     }
 
-    public IEnumerable<KeyValuePair<string, dynamic>> Constants()
+    public IEnumerable<KeyValuePair<string, Result>> Constants()
     {
         foreach (var item in _constants)
             yield return item;
     }
 
-    public IEnumerator<KeyValuePair<string, dynamic>> GetEnumerator()
+    public IEnumerator<KeyValuePair<string, Result>> GetEnumerator()
     {
         foreach (var item in _constants)
             yield return item;

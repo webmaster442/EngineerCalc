@@ -6,14 +6,18 @@
   </Configurations>
   <Folder Name="/Others/">
     <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
     <File Path=".github/workflows/dotnet.yml" />
+    <File Path=".gitignore" />
     <File Path="dockerfile" />
     <File Path="Readme.md" />
   </Folder>
   <Folder Name="/Tests/">
     <Project Path="DynamicEvaluator.Tests/DynamicEvaluator.Tests.csproj" />
+    <Project Path="DynamicEvaluator.TypeSystem.Tests/DynamicEvaluator.TypeSystem.Tests.csproj" />
     <Project Path="EngineerCalc.Tests/EngineerCalc.Tests.csproj" />
   </Folder>
+  <Project Path="DynamicEvaluator.TypeSystem/DynamicEvaluator.TypeSystem.csproj" />
   <Project Path="DynamicEvaluator/DynamicEvaluator.csproj" />
   <Project Path="EngineerCalc/EngineerCalc.csproj" />
 </Solution>

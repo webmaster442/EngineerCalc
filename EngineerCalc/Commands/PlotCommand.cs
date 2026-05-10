@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 
 using DynamicEvaluator;
+using DynamicEvaluator.TypeSystem;
 
 using EngineerCalc.Api;
 using EngineerCalc.Commands.Abstraction;
@@ -113,7 +114,7 @@ internal sealed class PlotCommand : Command<PlotCommand.Settings>
                 value += step;
                 dynamic computed = expression.Evaluate(new VariablesAndConstantsCollection
                 {
-                    { "x", value }
+                    { "x", Result.FromDouble(value) }
                 });
                 if (computed is double y)
                 {

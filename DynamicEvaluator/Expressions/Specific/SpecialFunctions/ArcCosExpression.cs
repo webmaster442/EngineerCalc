@@ -3,6 +3,8 @@
 // This code is licensed under MIT license (see LICENSE for details)
 //-----------------------------------------------------------------------------
 
+using DynamicEvaluator.TypeSystem;
+
 namespace DynamicEvaluator.Expressions.Specific.SpecialFunctions;
 
 internal sealed class ArcCosExpression : UnaryExpression
@@ -30,8 +32,8 @@ internal sealed class ArcCosExpression : UnaryExpression
         return new ArcCosExpression(newChild);
     }
 
-    protected override dynamic Evaluate(dynamic value)
-        => Functions.ArcCos(value);
+    protected override Result Evaluate(Result value)
+        => TypeFunctions.ArcCos(value);
 
     protected override string Render(bool emitLatex)
     {

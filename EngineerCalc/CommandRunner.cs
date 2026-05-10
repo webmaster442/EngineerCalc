@@ -102,6 +102,14 @@ internal sealed class CommandRunner
             config
                 .AddCommand<Commands.FunctionsCommand>(".functions")
                 .WithDescription("Lists available functions or shows details about a specific function");
+
+            config
+                .AddCommand<Commands.ExportVariablesCommand>(".export-variables")
+                .WithDescription("Exports all defined variables to a file");
+
+            config
+                .AddCommand<Commands.ScriptCommand>(".script")
+                .WithDescription("Executes a script file");
         });
     }
 

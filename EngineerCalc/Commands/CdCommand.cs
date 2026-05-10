@@ -1,4 +1,9 @@
-﻿using System.ComponentModel;
+﻿//-----------------------------------------------------------------------------
+// (c) 2024-2026 Ruzsinszki Gábor
+// This code is licensed under MIT license (see LICENSE for details)
+//-----------------------------------------------------------------------------
+
+using System.ComponentModel;
 
 using EngineerCalc.Api;
 using EngineerCalc.Commands.Abstraction;
@@ -22,7 +27,7 @@ internal sealed class CdCommand : FileSystemCommand<CdCommand.Arguments>
             {
                 return ValidationResult.Error("Path cannot be empty.");
             }
-            return base.Validate();
+            return ValidationResult.Success();
         }
     }
 
@@ -42,9 +47,9 @@ internal sealed class CdCommand : FileSystemCommand<CdCommand.Arguments>
 
             return ExitCodes.Success;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            throw new InvalidOperationException($"Couldn't change directory to: {settings.Path}", ex);
+            return Exit($"Couldn't change directory to: {settings.Path}");
         }
     }
 }

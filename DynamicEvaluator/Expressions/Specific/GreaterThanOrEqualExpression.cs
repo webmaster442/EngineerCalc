@@ -3,6 +3,7 @@
 // This code is licensed under MIT license (see LICENSE for details)
 //-----------------------------------------------------------------------------
 
+using DynamicEvaluator.TypeSystem;
 
 namespace DynamicEvaluator.Expressions.Specific;
 
@@ -29,8 +30,8 @@ internal sealed class GreaterThanOrEqualExpression : BinaryExpression
         return new GreaterThanOrEqualExpression(newLeft, newRight);
     }
 
-    protected override dynamic Evaluate(dynamic value1, dynamic value2)
-        => value1 >= value2;
+    protected override Result Evaluate(Result value1, Result value2)
+        => Result.FromBoolean(value1 >= value2);
 
     protected override string Render(bool emitLatex)
     {

@@ -14,15 +14,31 @@ namespace EngineerCalc.Api;
 
 internal class CommandRunnerApi : ICommandRunnerApi
 {
+    private CommandRunner? _runner;
+    private readonly HashSet<string> _allowedCommands;
+
+
     public IDictionary<string, Models.XmlDoc.Command> KnownCommands { get; }
 
     public CommandRunnerApi()
     {
         KnownCommands = new Dictionary<string, Models.XmlDoc.Command>();
+        _allowedCommands = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase)
+        {
+            ".clear",
+            ".culture",
+            ".infix",
+            ".postfix",
+            ".simplify",
+            ".unset",
+            ".details"
+        };
     }
 
     public async Task Init(CommandRunner runner)
     {
+        _runner = runner;
+
         using var buffer = new StringWriter();
         var captureConsole = AnsiConsole.Create(new AnsiConsoleSettings
         {
@@ -48,5 +64,18 @@ internal class CommandRunnerApi : ICommandRunnerApi
                 KnownCommands.Add(command.Name, command);
             }
         }
+    }
+
+    public Task RunRestrictedAsync(IReadOnlyList<string> tokens)
+    {
+        if (_runner == null)
+            throw new InvalidOperationException("CommandRunnerApi is not initialized.");
+
+        if (_allowedCommands.Contains(tokens[0]))
+        {
+            return _runner.RunAsync(tokens);
+        }
+
+        throw new InvalidOperationException($"Command '{tokens[0]}' is not allowed in scripting context.");
     }
 }

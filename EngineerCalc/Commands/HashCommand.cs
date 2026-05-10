@@ -1,4 +1,9 @@
-﻿using System.ComponentModel;
+﻿//-----------------------------------------------------------------------------
+// (c) 2024-2026 Ruzsinszki Gábor
+// This code is licensed under MIT license (see LICENSE for details)
+//-----------------------------------------------------------------------------
+
+using System.ComponentModel;
 using System.IO.Hashing;
 
 using EngineerCalc.Api;
@@ -99,7 +104,7 @@ internal sealed class HashCommand : FileSystemCommand<HashCommand.Arguments>
         var filePath = GetFullPath(settings.File);
         if (!_fileSystem.FileExists(filePath))
         {
-            throw new InvalidOperationException($"File '{filePath}' does not exist.");
+            return Exit($"File '{filePath}' does not exist.");
         }
 
         using var stream = _fileSystem.OpenRead(filePath);

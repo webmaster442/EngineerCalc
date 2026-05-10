@@ -1,9 +1,15 @@
-﻿using System.Buffers;
+﻿//-----------------------------------------------------------------------------
+// (c) 2024-2026 Ruzsinszki Gábor
+// This code is licensed under MIT license (see LICENSE for details)
+//-----------------------------------------------------------------------------
+
+using System.Buffers;
 using System.IO.Hashing;
 using System.Security.Cryptography;
 
 using EngineerCalc.Api;
 
+using Spectre.Console;
 using Spectre.Console.Cli;
 
 namespace EngineerCalc.Commands.Abstraction;
@@ -26,6 +32,12 @@ internal abstract class FileSystemCommand<TArguments> : AsyncCommand<TArguments>
             return file;
 
         return Path.GetFullPath(Path.Combine(_state.CurrentDirectory, file));
+    }
+
+    protected int Exit(string message, int exitCode = ExitCodes.GeneralError)
+    {
+        AnsiConsole.MarkupLineInterpolated($"[red]{message.EscapeMarkup()}[/]");
+        return exitCode;
     }
 
     private const int BufferSize = 4096;

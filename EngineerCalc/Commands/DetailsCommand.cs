@@ -6,6 +6,7 @@
 using System.Globalization;
 
 using DynamicEvaluator;
+using DynamicEvaluator.TypeSystem;
 
 using EngineerCalc.Api;
 using EngineerCalc.Commands.Abstraction;
@@ -20,43 +21,21 @@ internal sealed class DetailsCommand : ExpressionCommand
     {
     }
 
-    private static byte[] GetBytes(dynamic result)
+    private static byte[] GetBytes(Result result)
     {
-        if (result is float f)
-            return BitConverter.GetBytes(f);
-        if (result is double d)
-            return BitConverter.GetBytes(d);
-        if (result is decimal m)
-            return decimal.GetBits(m).SelectMany(BitConverter.GetBytes).ToArray();
-        if (result is int i)
-            return BitConverter.GetBytes(i);
-        if (result is long l)
-            return BitConverter.GetBytes(l);
-        if (result is short s)
-            return BitConverter.GetBytes(s);
-        if (result is byte b)
-            return new[] { b };
-        if (result is uint ui)
-            return BitConverter.GetBytes(ui);
-        if (result is ulong ul)
-            return BitConverter.GetBytes(ul);
-        if (result is ushort us)
-            return BitConverter.GetBytes(us);
-        if (result is sbyte sb)
-            return new[] { (byte)sb };
-        if (result is char c)
-            return BitConverter.GetBytes(c);
-        if (result is bool bo)
-            return BitConverter.GetBytes(bo);
-        if (result is string str)
-            return System.Text.Encoding.UTF8.GetBytes(str);
-
-        throw new InvalidOperationException("Unsupported type.");
+        return result.TypeState switch
+        {
+            TypeState.Boolean => BitConverter.GetBytes(result.CastToBoolean()),
+            TypeState.Integer => result.CastToBigInteger().ToByteArray(),
+            TypeState.Double => BitConverter.GetBytes(result.CastToDouble()),
+            TypeState.String => System.Text.Encoding.UTF8.GetBytes(result.CastToString()),
+            _ => throw new InvalidOperationException("Unsupported type."),
+        };
     }
 
     protected override void ProcessExpression(IExpression expression)
     {
-        dynamic result = expression.Evaluate(_api.VariablesAndConstants);
+        Result result = expression.Evaluate(_api.VariablesAndConstants);
         byte[] bytes = GetBytes(result);
 
         Table table = new();

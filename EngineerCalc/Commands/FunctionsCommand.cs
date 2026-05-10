@@ -1,4 +1,9 @@
-﻿using System.ComponentModel;
+﻿//-----------------------------------------------------------------------------
+// (c) 2024-2026 Ruzsinszki Gábor
+// This code is licensed under MIT license (see LICENSE for details)
+//-----------------------------------------------------------------------------
+
+using System.ComponentModel;
 
 using DynamicEvaluator.Documentation;
 
@@ -16,18 +21,42 @@ internal sealed class FunctionsCommand : Command<FunctionsCommand.Arguments>
         public string FunctionName { get; set; } = string.Empty;
     }
 
+    internal sealed class ConsoleFormatter : IDocumentFormatter
+    {
+        public string FormatDescription(string description)
+            => $"    {description}";
+
+        public string FormatExample(string example)
+            => $"    [italic invert]{example.EscapeMarkup()}[/]";
+
+        public string FormatName(string name)
+            => $"[bold green]{name.EscapeMarkup()}[/]";
+
+        public string FormatSectionTitle(string title)
+            => $"[bold yellow]{title.EscapeMarkup()}[/]";
+
+        public string FormatSummary(string summary)
+            => $"[italic]{summary.EscapeMarkup()}[/]";
+
+        public string FormatTypes(string[] types)
+        {
+            var typeList = string.Join(", ", types.Select(t => $"[italic red]{t.EscapeMarkup()}[/]"));
+            return $"    Supported types: {typeList}";
+        }
+    }
+
     protected override int Execute(CommandContext context, Arguments settings, CancellationToken cancellationToken)
     {
         DocumentationProvider documentation = new();
 
         if (string.IsNullOrEmpty(settings.FunctionName))
         {
-            AnsiConsole.WriteLine("Availabe functions: ");
+            AnsiConsole.WriteLine("Available functions: ");
             AnsiConsole.WriteLine("To get details of a function use .functions <functionname>");
-            var docTable = documentation.OrderBy(x => x.FunctionName).Select(x => new string[]
+            var docTable = documentation.OrderBy(x => x.Name).Select(x => new string[]
             {
-                x.FunctionName,
-                x.Description
+                x.Name,
+                x.Summary
             });
 
             var table = new Table();
@@ -40,25 +69,13 @@ internal sealed class FunctionsCommand : Command<FunctionsCommand.Arguments>
             return ExitCodes.Success;
         }
 
-        var doc = documentation.GetDocumentation(settings.FunctionName);
+        if (!documentation.IsDocumented(settings.FunctionName))
+        {
+            throw new InvalidOperationException($"No documentation found for: {settings.FunctionName}");
+        }
 
-        AnsiConsole.MarkupLine($"[yellow]Function:[/] {doc.FunctionName.EscapeMarkup()}");
-        AnsiConsole.WriteLine();
-        AnsiConsole.MarkupLine($"[green italic]  {doc.Description.EscapeMarkup()}[/]");
-        foreach (var example in doc.Examples)
-        {
-            AnsiConsole.WriteLine();
-            AnsiConsole.MarkupLine($"[blue italic]{example.EscapeMarkup()}[/]");
-        }
-        AnsiConsole.WriteLine();
-        AnsiConsole.MarkupLine("Paramaters");
-        AnsiConsole.WriteLine();
-        foreach (var argument in doc.Arguments)
-        {
-            AnsiConsole.MarkupLine($"[yellow]{argument.Name}[/]");
-            AnsiConsole.MarkupLine($"  [green italic]{argument.Description.EscapeMarkup()}[/]");
-            AnsiConsole.WriteLine();
-        }
+        var documentRenderer = new DocumentationRenderer(new ConsoleFormatter(), documentation);
+        AnsiConsole.MarkupLine(documentRenderer.GetDocumentation(settings.FunctionName));
 
         return ExitCodes.Success;
     }

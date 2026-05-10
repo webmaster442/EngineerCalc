@@ -3,21 +3,22 @@
 // This code is licensed under MIT license (see LICENSE for details)
 //-----------------------------------------------------------------------------
 
+using DynamicEvaluator.TypeSystem;
 
 namespace DynamicEvaluator.Expressions;
 
 internal readonly struct Token
 {
-    public Token(string value, TokenType type, Type? typeInfo = null)
+    public Token(string value, TokenType type, TypeState? typeState = null)
     {
         Value = value;
         Type = type;
-        TypeInfo = typeInfo;
+        TypeState = typeState;
     }
-    public Type? TypeInfo { get; }
+    public TypeState? TypeState { get; }
     public string Value { get; }
     public TokenType Type { get; }
 
     public override string ToString()
-        => $"{Value} | {Type} | {TypeInfo}";
+        => $"{Value} | {Type} | {TypeState}";
 }

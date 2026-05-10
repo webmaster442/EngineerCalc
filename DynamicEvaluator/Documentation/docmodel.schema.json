@@ -3,58 +3,72 @@
   "$id": "https://github.com/webmaster442/EngineerCalc/docmodel.schema.json",
   "title": "Docmodel",
   "description": "Schema for function documentation model",
-  "type": "array",
-  "minItems": 1,
-  "items": {
-    "type": "object",
-    "description": "Single function documentation",
-    "required": [
-      "functionName",
-      "description",
-      "examples",
-      "arguments"
-    ],
-    "properties": {
-      "functionName": {
-        "type": "string",
-        "description": "The name of the function"
-      },
-      "description": {
-        "type": "string",
-        "description": "Function description",
-        "minLength": 1
-      },
-      "examples": {
-        "type": "array",
-        "description": "Examples of function usage",
-        "items": {
-          "type": "string"
-        }
-      },
-      "arguments": {
-        "type": "array",
-        "description": "Function arguments",
-        "items": {
-          "type": "object",
-          "description": "Represents a function argument",
-          "required": [
-            "name",
-            "description"
-          ],
-          "properties": {
-            "name": {
-              "type": "string",
-              "description": "The argument name"
-            },
-            "description": {
-              "type": "string",
-              "description": "The argument description"
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "const": "docmodel.schema.json",
+      "description": "Schema identifier"
+    },
+    "functions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "summary",
+          "parameters",
+          "examples"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Function name"
+          },
+          "summary": {
+            "type": "string",
+            "description": "Brief summary of the function",
+            "minLength": 1
+          },
+          "examples": {
+            "type": "array",
+            "items": {
+              "type": "string"
             }
           },
-          "additionalProperties": false
+          "parameters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "Parameter name"
+                },
+                "supportedTypes": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "Parameter types, separated by | for multiple types"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Description of the parameter"
+                }
+              },
+              "required": [
+                "name",
+                "supportedTypes",
+                "description"
+              ],
+              "additionalProperties": false
+            }
+          }
         }
       }
     }
   },
-  "additionalProperties": false
+  "additionalProperties": false,
+  "required": [ "functions" ]
 }

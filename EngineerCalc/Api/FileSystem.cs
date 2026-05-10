@@ -1,4 +1,9 @@
-﻿using EngineerCalc.Models;
+﻿//-----------------------------------------------------------------------------
+// (c) 2024-2026 Ruzsinszki Gábor
+// This code is licensed under MIT license (see LICENSE for details)
+//-----------------------------------------------------------------------------
+
+using EngineerCalc.Models;
 
 namespace EngineerCalc.Api;
 
@@ -37,6 +42,9 @@ internal sealed class FileSystem : IFileSystem
 
     public Stream OpenRead(string fullPath)
         => File.OpenRead(fullPath);
+
+    public Stream Create(string fullPath)
+        => File.Create(fullPath);
 
     public void SetCurrentDirectory(string fullPath)
         => Directory.SetCurrentDirectory(fullPath);

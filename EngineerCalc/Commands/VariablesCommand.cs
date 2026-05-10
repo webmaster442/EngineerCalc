@@ -5,12 +5,14 @@
 
 using System.Text.RegularExpressions;
 
+using DynamicEvaluator.TypeSystem;
+
 using EngineerCalc.Api;
 using EngineerCalc.Commands.Abstraction;
 
 namespace EngineerCalc.Commands;
 
-internal sealed class VariablesCommand : TableCommand<KeyValuePair<string, object>>
+internal sealed class VariablesCommand : TableCommand<KeyValuePair<string, Result>>
 {
     private readonly IEvaluatorApi _api;
 
@@ -19,12 +21,12 @@ internal sealed class VariablesCommand : TableCommand<KeyValuePair<string, objec
         _api = api;
     }
 
-    protected override IEnumerable<KeyValuePair<string, object>> GetDataSet(Regex filter)
+    protected override IEnumerable<KeyValuePair<string, Result>> GetDataSet(Regex filter)
         => _api.VariablesAndConstants.Variables().Where(kv => filter.IsMatch(kv.Key));
 
     protected override string[] GetTableHeaders()
-        => ["Name", "Value"];
+        => ["Name", "Value", "Type"];
 
-    protected override string[] ToTableRow(KeyValuePair<string, object> data)
-        => [data.Key, data.Value.ToString() ?? string.Empty];
+    protected override string[] ToTableRow(KeyValuePair<string, Result> data)
+        => [data.Key, data.Value.ToString(), data.Value.TypeState.ToString()];
 }

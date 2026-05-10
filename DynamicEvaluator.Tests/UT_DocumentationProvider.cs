@@ -1,9 +1,14 @@
-﻿using DynamicEvaluator.Documentation;
+﻿//-----------------------------------------------------------------------------
+// (c) 2024-2026 Ruzsinszki Gábor
+// This code is licensed under MIT license (see LICENSE for details)
+//-----------------------------------------------------------------------------
+
+using DynamicEvaluator.Documentation;
 
 namespace DynamicEvaluator.Tests;
 
 [TestFixture]
-public class DocumentationProviderTests
+public class UT_DocumentationProvider
 {
     private DocumentationProvider _documentationProvider;
     private HashSet<string> _skip;
@@ -19,14 +24,7 @@ public class DocumentationProviderTests
     }
 
     public static IEnumerable<string> FunctionNames
-    {
-        get
-        {
-            var provider = new FunctionProvider();
-            provider.FillFrom(typeof(Functions));
-            return provider.GetFunctionNames();
-        }
-    }
+        => new FunctionFactory();
 
     [TestCaseSource(nameof(FunctionNames))]
     public void EnsureThat_Function_IsDocumented(string function)
@@ -44,7 +42,23 @@ public class DocumentationProviderTests
             Assert.That(_documentationProvider.FunctionNames, Contains.Item(function).Using((IEqualityComparer<string>)StringComparer.OrdinalIgnoreCase));
             Assert.That(doc, Is.Not.Null);
             Assert.That(doc.Examples, Has.Length.GreaterThan(0));
-            Assert.That(doc.Description, Is.Not.WhiteSpace);
+            Assert.That(doc.Summary, Is.Not.WhiteSpace);
         }
+    }
+
+
+    public static IEnumerable<string> DocumentationFunctionNames
+    {
+        get
+        {
+            return new DocumentationProvider().Select(m => m.Name);
+        }
+    }
+
+
+    [TestCaseSource(nameof(DocumentationFunctionNames))]
+    public void EnsureThat_Function_InDoc_Exists_InCode(string documentedName)
+    {
+        Assert.That(new FunctionFactory(), Contains.Item(documentedName).Using((IEqualityComparer<string>)StringComparer.OrdinalIgnoreCase));
     }
 }

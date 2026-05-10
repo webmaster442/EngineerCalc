@@ -3,6 +3,7 @@
 // This code is licensed under MIT license (see LICENSE for details)
 //-----------------------------------------------------------------------------
 
+using DynamicEvaluator.TypeSystem;
 
 namespace DynamicEvaluator.Expressions.Specific;
 
@@ -19,14 +20,14 @@ internal static class SimplifyHelpers
         if (expression is MultiplyExpression multiplyExpression)
         {
             if (multiplyExpression.Left is ConstantExpression leftConst
-                && leftConst.Value is long
+                && leftConst.Value.TypeState == TypeState.Integer
                 && multiplyExpression.Right is VariableExpression rightVar
                 && rightVar.Identifier == "pi")
             {
                 return true;
             }
             if (multiplyExpression.Right is ConstantExpression rightConst
-                && rightConst.Value is long
+                && rightConst.Value.TypeState == TypeState.Integer
                 && multiplyExpression.Left is VariableExpression leftVar
                 && leftVar.Identifier == "pi")
             {
@@ -36,7 +37,7 @@ internal static class SimplifyHelpers
         return false;
     }
 
-    internal static IExpression MakeVariableMultplyConstant(VariableExpression variable, dynamic value)
+    internal static IExpression MakeVariableMultplyConstant(VariableExpression variable, Result value)
     {
         if (value == 1)
         {
@@ -49,7 +50,7 @@ internal static class SimplifyHelpers
         return new MultiplyExpression(variable, new ConstantExpression(value));
     }
 
-    internal static IExpression MakeExponentMultiplyConstant(VariableExpression variable, dynamic value)
+    internal static IExpression MakeExponentMultiplyConstant(VariableExpression variable, Result value)
     {
         if (value == 1)
         {
