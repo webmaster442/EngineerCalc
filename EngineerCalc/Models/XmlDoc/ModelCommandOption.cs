@@ -31,3 +31,25 @@ public class ModelCommandOption
     [XmlAttribute]
     public required string ClrType { get; set; }
 }
+
+[Serializable]
+[XmlType(AnonymousType = true)]
+public class ModelCommandArgument
+{
+    public required string Description { get; set; }
+
+    [XmlAttribute()]
+    public required string Name { get; set; }
+
+    [XmlAttribute()]
+    public int Position { get; set; }
+
+    [XmlAttribute()]
+    public required bool Required { get; set; }
+
+    [XmlAttribute()]
+    public required string Kind { get; set; }
+
+    [XmlAttribute()]
+    public required string ClrType { get; set; }
+}

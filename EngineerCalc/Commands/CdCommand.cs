@@ -7,6 +7,8 @@ using System.ComponentModel;
 
 using EngineerCalc.Api;
 using EngineerCalc.Commands.Abstraction;
+using EngineerCalc.Infrastructure;
+using EngineerCalc.Models;
 
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -19,7 +21,8 @@ internal sealed class CdCommand : FileSystemCommand<CdCommand.Arguments>
     {
         [CommandArgument(0, "<path>")]
         [Description("The path to change the current directory to.")]
-        public string Path { get; set; } = string.Empty;
+        [TypeConverter(typeof(DirectoryPathConverter))]
+        public DirectoryPath Path { get; set; } = string.Empty;
 
         public override ValidationResult Validate()
         {

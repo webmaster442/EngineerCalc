@@ -21,13 +21,14 @@ var appState = new State();
 var expressionFactory = new ExpressionFactory();
 var evaluatorApi = new EvaluatorApi(new VariablesAndConstantsCollection(), expressionFactory, appState);
 var commandRunnerApi = new CommandRunnerApi();
+var fileSystem = new FileSystem();
 
 var services = new ServiceCollection();
 services.AddSingleton(appState);
 services.AddSingleton<IApplicationApi, ApplicationApi>();
 services.AddSingleton<IEvaluatorApi>(evaluatorApi);
 services.AddSingleton<ICommandRunnerApi>(commandRunnerApi);
-services.AddSingleton<IFileSystem, FileSystem>();
+services.AddSingleton<IFileSystem>(fileSystem);
 services.AddSingleton<ScriptFileRunner>();
 services.AddSingleton(expressionFactory);
 
@@ -37,7 +38,12 @@ var runner = new CommandRunner(services);
 
 await commandRunnerApi.Init(runner);
 
-var lineCompleter = new LineCompleter(expressionFactory.KnownFunctions, commandRunnerApi.GetAutocompleteData(), evaluatorApi);
+var lineCompleter = new LineCompleter(expressionFactory.KnownFunctions,
+                                      commandRunnerApi.KnownCommands,
+                                      evaluatorApi,
+                                      fileSystem,
+                                      appState);
+
 var readline = new LineReader(lineCompleter);
 
 AnsiConsole.Clear();

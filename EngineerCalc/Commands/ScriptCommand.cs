@@ -7,6 +7,8 @@ using System.ComponentModel;
 
 using EngineerCalc.Api;
 using EngineerCalc.Commands.Abstraction;
+using EngineerCalc.Infrastructure;
+using EngineerCalc.Models;
 
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -19,7 +21,8 @@ internal sealed class ScriptCommand : FileSystemCommand<ScriptCommand.Arguments>
     {
         [CommandArgument(0, "<scriptPath>")]
         [Description("The path to the script file to execute.")]
-        public string ScriptPath { get; set; } = string.Empty;
+        [TypeConverter(typeof(FilePathConverter))]
+        public FilePath ScriptPath { get; set; } = string.Empty;
 
         public override ValidationResult Validate()
         {

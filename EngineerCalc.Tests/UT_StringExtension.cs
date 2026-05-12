@@ -8,7 +8,7 @@ using EngineerCalc.Extensions;
 namespace EngineerCalc.Tests;
 
 [TestFixture]
-public class StringExtensionTests
+public class UT_StringExtension
 {
     [TestCase("", 0, 0)]
     [TestCase("foo bar baz", 0, 0)]
@@ -23,7 +23,7 @@ public class StringExtensionTests
     [TestCase("foo bar baz", 9, 2)]
     [TestCase("foo bar baz", 10, 2)]
     [TestCase("foo bar baz", 111, 2)]
-    public void ToWordIndexTest(string input, int position, int expected)
+    public void EnsureThat_ToWordIndex_Returns_Expected(string input, int position, int expected)
     {
         int returnValue = input.ToWordIndex(position);
         Assert.That(returnValue, Is.EqualTo(expected), $"Expected ToWordIndex('{input}', {position}) to return {expected}, but got {returnValue}.");

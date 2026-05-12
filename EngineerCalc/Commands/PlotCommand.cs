@@ -4,13 +4,14 @@
 //-----------------------------------------------------------------------------
 
 using System.ComponentModel;
-using System.Diagnostics;
 
 using DynamicEvaluator;
 using DynamicEvaluator.TypeSystem;
 
 using EngineerCalc.Api;
 using EngineerCalc.Commands.Abstraction;
+using EngineerCalc.Tui.Oxyplot;
+using EngineerCalc.Tui.Sixel;
 
 using OxyPlot;
 
@@ -19,9 +20,8 @@ using Spectre.Console.Cli;
 
 namespace EngineerCalc.Commands;
 
-internal sealed class PlotCommand : Command<PlotCommand.Settings>
+internal sealed class PlotCommand : FileSystemCommand<PlotCommand.Settings>
 {
-    private readonly State _state;
     private readonly IEvaluatorApi _api;
 
     public sealed class Settings : ExpressionCommandSettings
@@ -48,7 +48,7 @@ internal sealed class PlotCommand : Command<PlotCommand.Settings>
 
         [CommandOption("-o|--output")]
         [Description("Output file name for the plot (SVG format).")]
-        public string FileName { get; set; } = Path.Combine(Environment.CurrentDirectory, "plot.svg");
+        public string FileName { get; set; } = string.Empty;
 
         public override ValidationResult Validate()
         {
@@ -64,25 +64,48 @@ internal sealed class PlotCommand : Command<PlotCommand.Settings>
             if (string.IsNullOrWhiteSpace(YLabel))
                 return ValidationResult.Error("YLabel cannot be empty.");
 
-            if (string.IsNullOrWhiteSpace(FileName))
-                return ValidationResult.Error("FileName cannot be empty.");
-
-            var directory = Path.GetDirectoryName(FileName);
-
-            if (directory == null || !Directory.Exists(directory))
-                return ValidationResult.Error("Directory for the output file does not exist.");
-
             return base.Validate();
         }
     }
 
-    public PlotCommand(State state, IEvaluatorApi api)
+    public PlotCommand(State state, IFileSystem fileSystem, IEvaluatorApi api)
+        : base(fileSystem, state)
     {
-        _state = state;
         _api = api;
     }
 
-    protected override int Execute(CommandContext context, Settings settings, CancellationToken cancellationToken)
+    private static List<DataPoint> RenderDataPoints(IExpression expression, Settings settings)
+    {
+        static double CalculateSteps(double min, double max)
+        {
+            const double hdHorizontalResolution = 1920;
+            double range = max - min;
+            return range / (hdHorizontalResolution * 2);
+        }
+
+        double step = CalculateSteps(settings.Min, settings.Max);
+
+        expression = expression.Simplify().Simplify();
+
+        double value = settings.Min;
+        List<DataPoint> points = new();
+        while (value <= settings.Max)
+        {
+            value += step;
+            Result computed = expression.Evaluate(new VariablesAndConstantsCollection
+                {
+                    { "x", Result.FromDouble(value) }
+                });
+
+            if (computed.TypeState != TypeState.Double)
+                throw new InvalidOperationException("Expression did not evaluate to a numeric value.");
+
+            points.Add(new DataPoint(value, computed.CastToDouble()));
+        }
+        return points;
+    }
+
+    protected override Task<int> ExecuteAsync(CommandContext context, Settings settings, CancellationToken cancellationToken)
     {
         try
         {
@@ -103,67 +126,62 @@ internal sealed class PlotCommand : Command<PlotCommand.Settings>
             });
             model.Title = settings.Title;
 
-            double step = CalculateSteps(settings.Min, settings.Max);
-
-            expression = expression.Simplify().Simplify();
-
-            double value = settings.Min;
-            List<DataPoint> points = new();
-            while (value <= settings.Max)
-            {
-                value += step;
-                dynamic computed = expression.Evaluate(new VariablesAndConstantsCollection
-                {
-                    { "x", Result.FromDouble(value) }
-                });
-                if (computed is double y)
-                {
-                    points.Add(new DataPoint(value, y));
-                }
-                else
-                {
-                    throw new InvalidOperationException("Expression did not evaluate to a numeric value.");
-                }
-            }
-
             var series = new OxyPlot.Series.LineSeries
             {
-                ItemsSource = points,
+                ItemsSource = RenderDataPoints(expression, settings),
                 Title = settings.Expression
             };
 
             model.Series.Add(series);
 
-            using (var stream = File.Create(settings.FileName))
+            if (!string.IsNullOrEmpty(settings.FileName))
             {
-                var exporter = new SvgExporter
-                {
-                    Width = 1920,
-                    Height = 1080,
-                };
-                exporter.Export(model, stream);
+                Export(model, settings.FileName);
             }
-
-            Process.Start(new ProcessStartInfo
+            else
             {
-                FileName = settings.FileName,
-                UseShellExecute = true
-            });
-
+                Display(model);
+            }
         }
         catch (Exception ex)
         {
             AnsiConsole.MarkupLineInterpolated($"[red]Error: {ex.Message}[/]");
-            return ExitCodes.GeneralError;
+            return Task.FromResult(ExitCodes.GeneralError);
         }
 
-        return ExitCodes.Success;
+        return Task.FromResult(ExitCodes.Success);
     }
 
-    private static double CalculateSteps(double min, double max)
+    private static void Display(PlotModel model)
     {
-        const double hdHorizontalResolution = 1920;
-        double range = max - min;
-        return range / (hdHorizontalResolution * 2);
+        var (cellWidth, cellHeight) = SixelEncoder.GetCellSize();
+        (int renderWidth, int renderHeght) = (cellWidth * AnsiConsole.Profile.Width, cellHeight * AnsiConsole.Profile.Height);
+
+        var exporter = new PngExporter(width: renderWidth, height: renderHeght, resolution: 96);
+        model.Background = OxyColors.White;
+        using (var memStream = new MemoryStream())
+        {
+            exporter.Export(model, memStream);
+            memStream.Seek(0, SeekOrigin.Begin);
+            AnsiConsole.AlternateScreen(() =>
+            {
+                SixelImage img = new(memStream);
+                AnsiConsole.Write(img);
+                Console.ReadLine();
+            });
+        }
+    }
+
+    private void Export(PlotModel model, string fileName)
+    {
+        var fullPath = GetFullPath(fileName);
+        var exporter = new SvgExporter
+        {
+            Width = 1920,
+            Height = 1080,
+        };
+        using var stream = _fileSystem.Create(fullPath);
+        exporter.Export(model, stream);
+        AnsiConsole.MarkupLine($"[green]Plot exported to {fullPath}[/]");
     }
 }

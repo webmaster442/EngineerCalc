@@ -12,6 +12,8 @@ using DynamicEvaluator.TypeSystem;
 
 using EngineerCalc.Api;
 using EngineerCalc.Commands.Abstraction;
+using EngineerCalc.Infrastructure;
+using EngineerCalc.Models;
 
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -24,7 +26,8 @@ internal sealed class ExportVariablesCommand : FileSystemCommand<ExportVariables
     {
         [CommandArgument(0, "<scriptPath>")]
         [Description("File to save variables to")]
-        public string ScriptPath { get; set; } = string.Empty;
+        [TypeConverter(typeof(FilePathConverter))]
+        public FilePath ScriptPath { get; set; } = string.Empty;
 
         public override ValidationResult Validate()
         {

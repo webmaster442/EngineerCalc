@@ -8,6 +8,7 @@ using System.IO.Hashing;
 
 using EngineerCalc.Api;
 using EngineerCalc.Commands.Abstraction;
+using EngineerCalc.Infrastructure;
 using EngineerCalc.Models;
 
 using Spectre.Console;
@@ -21,7 +22,8 @@ internal sealed class HashCommand : FileSystemCommand<HashCommand.Arguments>
     {
         [CommandArgument(0, "<file>")]
         [Description("The file to calculate the hash for.")]
-        public string File { get; set; } = string.Empty;
+        [TypeConverter(typeof(FilePathConverter))]
+        public FilePath File { get; set; } = string.Empty;
 
         [CommandOption("-a|--algorithm")]
         [Description("The hash algorithm to use.")]
