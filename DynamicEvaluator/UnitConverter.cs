@@ -1,23 +1,25 @@
 ﻿using DynamicEvaluator.ConversionEngine;
-using DynamicEvaluator.TypeSystem;
 
 namespace DynamicEvaluator;
 
-internal static class UnitConverter
+public sealed  class UnitConverter
 {
-    public static double Convert(string fromUnit, string toUnit, double value)
+    private readonly UnitBase[] _units;
+
+    public UnitConverter()
     {
-        UnitBase? from = UnitRegistry
-            .GetAllUnits()
-            .SelectMany(u => u)
+        _units = UnitRegistry.Units.ToArray();
+    }
+
+    public double Convert(string fromUnit, string toUnit, double value)
+    {
+        UnitBase? from = _units
             .FirstOrDefault(unit => unit.Names.Contains(fromUnit));
 
         if (from is null)
             throw new ArgumentException($"Unknown unit: {fromUnit}");
 
-        UnitBase? to = UnitRegistry
-            .GetAllUnits()
-            .SelectMany(u => u)
+        UnitBase? to = _units
             .FirstOrDefault(unit => unit.Names.Contains(toUnit));
 
         if (to is null)
@@ -26,8 +28,8 @@ internal static class UnitConverter
         if (from.Dimension != to.Dimension)
             throw new InvalidOperationException($"Cannot convert from {fromUnit} to {toUnit} because they have different dimensions.");
 
-        ConversionNumber baseValue = from.ToBaseUnit(value);
-        
-        return to.FromBaseUnit(baseValue).ToDouble();
+        decimal baseValue = from.ToBaseUnit((decimal)value);
+
+        return (double)to.FromBaseUnit(baseValue);
     }
 }
