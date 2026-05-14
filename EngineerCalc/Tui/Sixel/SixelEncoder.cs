@@ -5,7 +5,7 @@
 
 using System.Text;
 
-using SixLabors.ImageSharp.PixelFormats;
+using SkiaSharp;
 
 namespace EngineerCalc.Tui.Sixel;
 
@@ -21,11 +21,11 @@ internal static class SixelEncoder
     private const string SIXELTRANSPARENTCOLOR = "#0;2;0;0;0";
     private const string SIXELRASTERATTRIBUTES = "\"1;1;";
 
-    private static void AddColorToPalette(this StringBuilder sixelBuilder, Rgba32 pixel, int colorIndex)
+    private static void AddColorToPalette(this StringBuilder sixelBuilder, SKColor pixel, int colorIndex)
     {
-        var r = (int)Math.Round(pixel.R / 255.0 * 100);
-        var g = (int)Math.Round(pixel.G / 255.0 * 100);
-        var b = (int)Math.Round(pixel.B / 255.0 * 100);
+        var r = (int)Math.Round(pixel.Red / 255.0 * 100);
+        var g = (int)Math.Round(pixel.Green / 255.0 * 100);
+        var b = (int)Math.Round(pixel.Blue / 255.0 * 100);
 
         sixelBuilder.Append(SIXELCOLORSTART)
                     .Append(colorIndex)
@@ -99,17 +99,17 @@ internal static class SixelEncoder
         }
     }
 
-    public static string Encode(SixLabors.ImageSharp.Image<Rgba32> image)
+    public static string Encode(SKColor[] data, int width, int height)
     {
-        static int AllocateSize(SixLabors.ImageSharp.Image<Rgba32> image)
-            => (image.Width / 6) * image.Height;
+        static int AllocateSize(int width, int height)
+            => (width / 6) * height;
 
-        var sixelBuilder = new StringBuilder(AllocateSize(image));
-        var palette = new Dictionary<Rgba32, int>();
+        var sixelBuilder = new StringBuilder(AllocateSize(width, height));
+        var palette = new Dictionary<SKColor, int>();
         var colorCounter = 1;
-        sixelBuilder.StartSixel(image.Width, image.Height);
+        sixelBuilder.StartSixel(width, height);
 
-        for (var y = 0; y < image.Height; y++)
+        for (var y = 0; y < height; y++)
         {
             // The way sixel works, this bitshift starting from the SIXELEMPTY constant
             // will give us the correct character to use for the current row.
@@ -118,9 +118,9 @@ internal static class SixelEncoder
             var c = (char)(SIXELEMPTY + (1 << (y % 6)));
             var lastColor = -1;
             var repeatCounter = 0;
-            for (int x = 0; x < image.Width; x++)
+            for (int x = 0; x < width; x++)
             {
-                Rgba32 pixel = image[x, y];
+                var pixel = data[y * width + x];
                 if (!palette.TryGetValue(pixel, out var colorIndex))
                 {
                     colorIndex = colorCounter++;

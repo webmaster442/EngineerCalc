@@ -157,7 +157,12 @@ internal sealed class PlotCommand : FileSystemCommand<PlotCommand.Settings>
         var (cellWidth, cellHeight) = SixelEncoder.GetCellSize();
         (int renderWidth, int renderHeght) = (cellWidth * AnsiConsole.Profile.Width, cellHeight * AnsiConsole.Profile.Height);
 
-        var exporter = new PngExporter(width: renderWidth, height: renderHeght, resolution: 96);
+        var exporter = new PngExporter
+        {
+            Width = renderWidth,
+            Height = renderHeght,
+            Dpi = 96
+        };
         model.Background = OxyColors.White;
         using (var memStream = new MemoryStream())
         {

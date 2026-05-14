@@ -1,75 +1,78 @@
-﻿//-----------------------------------------------------------------------------
-// (c) 2024-2026 Ruzsinszki Gábor
-// This code is licensed under MIT license (see LICENSE for details)
-//-----------------------------------------------------------------------------
+﻿using OxyPlot;
 
-using OxyPlot;
+using SkiaSharp;
 
 namespace EngineerCalc.Tui.Oxyplot;
 
 /// <summary>
-/// Provides functionality to export plots to png.
+/// Provides functionality to export plots to png using the SkiaSharp renderer.
 /// </summary>
-internal class PngExporter : IExporter
+public class PngExporter : IExporter
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="PngExporter"/> class.
+    /// Gets or sets the DPI.
     /// </summary>
-    /// <param name="width">The width in pixels of the exported png.</param>
-    /// <param name="height">The height in pixels of the exported png.</param>
-    /// <param name="resolution">The resolution in dots per inch (DPI) of the exported png.</param>
-    public PngExporter(int width, int height, double resolution = 96)
-    {
-        this.Width = width;
-        this.Height = height;
-        this.Resolution = resolution;
-    }
+    public float Dpi { get; set; } = 96;
 
     /// <summary>
-    /// Gets or sets the width in pixels of the exported png.
-    /// </summary>
-    public int Width { get; set; }
-
-    /// <summary>
-    /// Gets or sets the height in pixels of the exported png.
+    /// Gets or sets the export height (in pixels).
     /// </summary>
     public int Height { get; set; }
 
     /// <summary>
-    /// Gets or sets the resolution in dots per inch (DPI) of the exported png.
+    /// Gets or sets the export width (in pixels).
     /// </summary>
-    public double Resolution { get; set; }
+    public int Width { get; set; }
 
     /// <summary>
-    /// Exports the specified <see cref="PlotModel" /> to the specified file.
+    /// Gets or sets a value indicating whether text shaping should be used when rendering text.
+    /// </summary>
+    public bool UseTextShaping { get; set; } = true;
+
+    /// <summary>
+    /// Exports the specified model to a file.
     /// </summary>
     /// <param name="model">The model.</param>
-    /// <param name="fileName">The file name.</param>
-    /// <param name="width">The width.</param>
-    /// <param name="height">The height.</param>
-    /// <param name="resolution">The resolution in dpi (defaults to 96dpi).</param>
-    public static void Export(IPlotModel model, string fileName, int width, int height, double resolution = 96)
+    /// <param name="path">The path.</param>
+    /// <param name="width">The width (points).</param>
+    /// <param name="height">The height (points).</param>
+    /// <param name="dpi">The DPI (dots per inch).</param>
+    public static void Export(IPlotModel model, string path, int width, int height, float dpi = 96)
     {
-        var exporter = new PngExporter(width, height, resolution);
-        using (var stream = File.Create(fileName))
-        {
-            exporter.Export(model, stream);
-        }
+        using var stream = File.OpenWrite(path);
+        Export(model, stream, width, height, dpi);
     }
 
     /// <summary>
-    /// Exports the specified <see cref="PlotModel"/> to the specified <see cref="Stream"/>.
+    /// Exports the specified model to a stream.
     /// </summary>
     /// <param name="model">The model.</param>
     /// <param name="stream">The output stream.</param>
+    /// <param name="width">The width (points).</param>
+    /// <param name="height">The height (points).</param>
+    /// <param name="dpi">The DPI (dots per inch).</param>
+    public static void Export(IPlotModel model, Stream stream, int width, int height, float dpi = 96)
+    {
+        var exporter = new PngExporter { Width = width, Height = height, Dpi = dpi };
+        exporter.Export(model, stream);
+    }
+
+    /// <inheritdoc/>
     public void Export(IPlotModel model, Stream stream)
     {
-        using (var rc = new ImageRenderContext(this.Width, this.Height, model.Background, this.Resolution))
+        using var bitmap = new SKBitmap(this.Width, this.Height);
+
+        using (var canvas = new SKCanvas(bitmap))
+        using (var context = new SkiaRenderContext { RenderTarget = RenderTarget.PixelGraphic, SkCanvas = canvas, UseTextShaping = this.UseTextShaping })
         {
-            var dpiScale = this.Resolution / 96;
+            var dpiScale = this.Dpi / 96;
+            context.DpiScale = dpiScale;
             model.Update(true);
-            model.Render(rc, new OxyRect(0, 0, this.Width / dpiScale, this.Height / dpiScale));
-            rc.SaveAsPng(stream);
+            canvas.Clear(model.Background.ToSKColor());
+            model.Render(context, new OxyRect(0, 0, this.Width / dpiScale, this.Height / dpiScale));
         }
+
+        using var skStream = new SKManagedWStream(stream);
+        bitmap.Encode(skStream, SKEncodedImageFormat.Png, 0);
     }
 }
