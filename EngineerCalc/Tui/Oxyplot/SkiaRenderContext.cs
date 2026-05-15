@@ -7,6 +7,9 @@ using SkiaSharp.HarfBuzz;
 
 namespace EngineerCalc.Tui.Oxyplot;
 
+#nullable disable
+#pragma warning disable CS0618 // Type or member is obsolete
+
 /// <summary>
 /// Implements <see cref="IRenderContext" /> based on SkiaSharp.
 /// </summary>
@@ -974,3 +977,6 @@ public class SkiaRenderContext : IRenderContext, IDisposable
         }
     }
 }
+
+#nullable enable
+#pragma warning restore CS0618 // Type or member is obsolete
