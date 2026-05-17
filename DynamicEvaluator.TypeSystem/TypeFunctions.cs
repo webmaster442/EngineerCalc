@@ -261,7 +261,6 @@ public static class TypeFunctions
         };
     }
 
-
     public static Result Cos(Result value)
     {
         return value.TypeState switch

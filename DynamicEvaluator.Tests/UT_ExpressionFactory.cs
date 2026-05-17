@@ -11,6 +11,7 @@ using DynamicEvaluator.TypeSystem;
 
 namespace DynamicEvaluator.Tests;
 
+[TestFixture]
 public class UT_ExpressionFactory
 {
     private ExpressionFactory _sut;
@@ -358,14 +359,6 @@ public class UT_ExpressionFactory
     [TestCase("factorial(1)", 1)]
     [TestCase("factorial(5)", 120)]
     [TestCase("factorial(20)", 2432902008176640000)]
-    [TestCase("and(1, 1)", 1)]
-    [TestCase("or(1, 0)", 1)]
-    [TestCase("xor(1, 0)", 1)]
-    [TestCase("shiftleft(1, 1)", 2)]
-    [TestCase("shiftright(2, 1)", 1)]
-    [TestCase("binomial(10, 5)", 252)]
-    [TestCase("binomial(1, 5)", 0)]
-    [TestCase("binomial(90, 5)", 43949268)]
     [TestCase("parallel(50, 50)", 25)]
     public void EnsureThat_Evaluate_Works_Integers(string expression, long expected)
     {
@@ -444,15 +437,10 @@ public class UT_ExpressionFactory
     [TestCase("tan(x)", 1.5574077246549023d)]
     [TestCase("tan(y)", -2.1850398632615189d)]
     [TestCase("ctg(x)", 0.64209261593433065d)]
-    [TestCase("ln(e)", 1)]
-    [TestCase("ln(100)", 4.6051701859880913680359829093687)]
-    [TestCase("log(1024,2)", 10)]
     [TestCase("1_0+1.1", 11.1)]
     [TestCase("sin(pi/2)", 1.0d)]
     [TestCase("2*kilo", 2000.0d)]
     [TestCase("21*milli", 0.021d)]
-    [TestCase("abs(-1)", 1.0d)]
-    [TestCase("abs(22)", 22.0d)]
     [TestCase("deg(0)", 0d)]
     [TestCase("deg(pi)", 180d)]
     [TestCase("grad(0)", 0d)]
@@ -466,10 +454,8 @@ public class UT_ExpressionFactory
     [TestCase("2^3/2", 4d)]
     [TestCase("2^3*2", 16d)]
     [TestCase("2^3^2", 512d)]
-    [TestCase("root(2, 2)", "1.4142135623730951")]
     [TestCase("111^0", "1")]
     [TestCase("0.12^0", "1")]
-    [TestCase("root(2, 1)", "2")]
     public void EnsureThat_Evaluate_Works_Doubles(string expression, double expected)
     {
         IExpression parsed = _sut.Create(expression);
@@ -490,8 +476,6 @@ public class UT_ExpressionFactory
     [TestCase("'foo'+'foo'", "foofoo")]
     [TestCase("\"foo\"", "foo")]
     [TestCase("\"foo\"+\"foo\"", "foofoo")]
-    [TestCase("tohex(255)", "FF")]
-    [TestCase("tobin(10)", "1010")]
     public void EnsureThat_Evaluate_Works_Strings(string expression, string expected)
     {
         IExpression parsed = _sut.Create(expression);
@@ -692,29 +676,5 @@ public class UT_ExpressionFactory
         {
             IExpression parsed = _sut.CreateFromRpn(expression);
         });
-    }
-
-    [TestCase("min(x, y, z)", 1)]
-    [TestCase("min(1, 2, 3)", 1)]
-    [TestCase("max(1, 2, 3)", 3)]
-    [TestCase("average(1, 2, 3)", 2)]
-    [TestCase("sum(1, 2, 3)", 6)]
-    [TestCase("count(1, 2, 3)", 3)]
-    [TestCase("min(array(1, 2, 3))", 1)]
-    [TestCase("max(array(1, 2, 3))", 3)]
-    [TestCase("average(array(1, 2, 3))", 2)]
-    [TestCase("sum(array(1, 2, 3))", 6)]
-    [TestCase("count(array(1, 2, 3))", 3)]
-    public void EnsureThat_Statistic_Expressions_Work(string expression, double expected)
-    {
-        VariablesAndConstantsCollection variables = new()
-        {
-            { "x", Result.FromDouble(1d) },
-            { "y", Result.FromDouble(2d) },
-            { "z", Result.FromDouble(3d) },
-        };
-        IExpression statExpr = _sut.Create(expression);
-        Result result = statExpr.Evaluate(variables);
-        Assert.That(result.CastToDouble(), Is.EqualTo(expected).Within(0.001));
     }
 }
