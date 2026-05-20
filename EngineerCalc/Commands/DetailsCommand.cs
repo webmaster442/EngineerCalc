@@ -15,7 +15,7 @@ using Spectre.Console;
 
 namespace EngineerCalc.Commands;
 
-internal sealed class DetailsCommand : ExpressionCommand
+internal sealed class DetailsCommand : ExpressionCommand<ExpressionCommandSettings>
 {
     public DetailsCommand(IEvaluatorApi api, State state) : base(api, state)
     {
@@ -33,7 +33,7 @@ internal sealed class DetailsCommand : ExpressionCommand
         };
     }
 
-    protected override void ProcessExpression(IExpression expression)
+    protected override void ProcessExpression(IExpression expression, ExpressionCommandSettings settings)
     {
         Result result = expression.Evaluate(_api.VariablesAndConstants);
         byte[] bytes = GetBytes(result);

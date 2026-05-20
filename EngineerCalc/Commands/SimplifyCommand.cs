@@ -3,34 +3,32 @@
 // This code is licensed under MIT license (see LICENSE for details)
 //-----------------------------------------------------------------------------
 
+using System.ComponentModel;
+
 using DynamicEvaluator;
 
 using EngineerCalc.Api;
 using EngineerCalc.Commands.Abstraction;
 
 using Spectre.Console;
+using Spectre.Console.Cli;
 
 namespace EngineerCalc.Commands;
 
-internal sealed class SimplifyCommand : ExpressionCommand
+internal sealed class SimplifyCommand : ExpressionCommand<ExpressionCommandSettings>
 {
     public SimplifyCommand(IEvaluatorApi api, State state) : base(api, state)
     {
     }
 
-    protected override void ProcessExpression(IExpression expression)
+    protected override void ProcessExpression(IExpression expression, ExpressionCommandSettings settings)
     {
-        IExpression simplified;
-        if (expression.TrySimplfyAsLogicExpression(out IExpression? simpleLogicExpression))
-        {
-            simplified = simpleLogicExpression;
-        }
-        else
-        {
-            simplified = expression
+        IExpression simplified = expression.TrySimplfyAsLogicExpression(out IExpression? simpleLogicExpression)
+            ? simpleLogicExpression
+            : expression
                 .Simplify()
                 .Simplify();
-        }
-        AnsiConsole.MarkupLineInterpolated($"[green]Simplified expression: {simplified}[/]");
+
+        PrintResult("Simplified expression", simplified);
     }
 }

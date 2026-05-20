@@ -110,6 +110,14 @@ internal sealed class CommandRunner
             config
                 .AddCommand<Commands.ScriptCommand>(".script")
                 .WithDescription("Executes a script file");
+
+            config
+                .AddCommand<Commands.ConvertCommand>(".convert")
+                .WithDescription("Converts a value from one unit to another");
+
+            config
+                .AddCommand<Commands.DifferentiateCommand>(".differentiate")
+                .WithDescription("Differentiates an expression with respect to a variable");
         });
     }
 

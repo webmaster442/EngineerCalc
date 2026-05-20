@@ -7,7 +7,7 @@ using DynamicEvaluator.ConversionEngine;
 
 namespace DynamicEvaluator;
 
-public sealed  class UnitConverter
+public sealed class UnitConverter
 {
     private readonly UnitBase[] _units;
 
