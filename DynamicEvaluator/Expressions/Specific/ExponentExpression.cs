@@ -23,7 +23,7 @@ internal sealed class ExponentExpression : BinaryExpression
                 new MultiplyExpression(new MultiplyExpression(Right, Left.Differentiate(byVariable)),
                                        new ExponentExpression(Left, new SubtractExpression(Right, new ConstantExpression(1L))));
         }
-        var simple = Left?.Simplify();
+        var simple = Left.Simplify();
         if (simple is ConstantExpression constant)
         {
             // f(x) = a^g(x)

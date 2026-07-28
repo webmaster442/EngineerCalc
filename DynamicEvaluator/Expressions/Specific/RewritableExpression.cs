@@ -7,16 +7,9 @@ using DynamicEvaluator.TypeSystem;
 
 namespace DynamicEvaluator.Expressions.Specific;
 
-internal abstract class RewritableTwoparamFunctionExpression : IExpression
+internal abstract class RewritableExpression : IExpression
 {
-    private readonly IExpression _rewritten;
-
-    public RewritableTwoparamFunctionExpression(IExpression first, IExpression second)
-    {
-        _rewritten = RewriteTo(first, second);
-    }
-
-    protected abstract IExpression RewriteTo(IExpression first, IExpression second);
+    protected IExpression _rewritten = null!;
 
     public IExpression Differentiate(string byVariable)
         => _rewritten.Differentiate(byVariable);
@@ -28,14 +21,14 @@ internal abstract class RewritableTwoparamFunctionExpression : IExpression
         => _rewritten.Simplify();
 
     public string ToLatex()
-        => _rewritten.ToLatex();
+    => _rewritten.ToLatex();
 
     public override string ToString()
         => _rewritten.ToString();
 
     public bool Equals(IExpression? other)
     {
-        return other is RewritableTwoparamFunctionExpression otherRewritable
+        return other is RewritableExpression otherRewritable
             && _rewritten.Equals(otherRewritable._rewritten);
     }
 }

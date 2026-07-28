@@ -5,14 +5,10 @@
 
 namespace DynamicEvaluator.Expressions.Specific.Rewritables;
 
-internal sealed class GradToRadExpression : RewritableFunctionExpression
+internal sealed class GradToRadExpression : RewritableExpression
 {
-    public GradToRadExpression(IExpression original) : base(original)
+    public GradToRadExpression(IExpression original)
     {
-    }
-
-    protected override IExpression RewriteTo(IExpression original)
-    {
-        return new MultiplyExpression(new DivideExpression(original, new ConstantExpression(200L)), new VariableExpression("pi"));
+        _rewritten = new MultiplyExpression(new DivideExpression(original, new ConstantExpression(200L)), new VariableExpression("pi"));
     }
 }

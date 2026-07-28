@@ -7,14 +7,10 @@ using DynamicEvaluator.Expressions.Specific.SpecialFunctions;
 
 namespace DynamicEvaluator.Expressions.Specific.Rewritables;
 
-internal sealed class CtgExpression : RewritableFunctionExpression
+internal sealed class CtgExpression : RewritableExpression
 {
-    public CtgExpression(IExpression original) : base(original)
+    public CtgExpression(IExpression original)
     {
-    }
-
-    protected override IExpression RewriteTo(IExpression original)
-    {
-        return new DivideExpression(new ConstantExpression(1L), new TanExpression(original));
+        _rewritten = new DivideExpression(new ConstantExpression(1L), new TanExpression(original));
     }
 }

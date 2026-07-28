@@ -5,14 +5,10 @@
 
 namespace DynamicEvaluator.Expressions.Specific.Rewritables;
 
-internal sealed class ParallelExpression : RewritableTwoparamFunctionExpression
+internal sealed class ParallelExpression : RewritableExpression
 {
-    public ParallelExpression(IExpression first, IExpression second) : base(first, second)
+    public ParallelExpression(IExpression first, IExpression second)
     {
-    }
-
-    protected override IExpression RewriteTo(IExpression first, IExpression second)
-    {
-        return new DivideExpression(new MultiplyExpression(first, second), new AddExpression(first, second));
+        _rewritten = new DivideExpression(new MultiplyExpression(first, second), new AddExpression(first, second));
     }
 }

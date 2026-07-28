@@ -15,7 +15,7 @@ internal sealed class DirectoryPath : IEquatable<DirectoryPath?>
     }
 
     public override bool Equals(object? obj) 
-        => Equals(obj as FilePath);
+        => Equals(obj as DirectoryPath);
 
     public bool Equals(DirectoryPath? other)
     {

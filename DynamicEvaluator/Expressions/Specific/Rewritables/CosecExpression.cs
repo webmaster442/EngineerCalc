@@ -7,13 +7,10 @@ using DynamicEvaluator.Expressions.Specific.SpecialFunctions;
 
 namespace DynamicEvaluator.Expressions.Specific.Rewritables;
 
-internal sealed class CosecExpression : RewritableFunctionExpression
+internal sealed class CosecExpression : RewritableExpression
 {
-    public CosecExpression(IExpression original) : base(original)
+    public CosecExpression(IExpression original)
     {
-    }
-    protected override IExpression RewriteTo(IExpression original)
-    {
-        return new DivideExpression(new ConstantExpression(1L), new SinExpression(original));
+        _rewritten = new DivideExpression(new ConstantExpression(1L), new SinExpression(original));
     }
 }
