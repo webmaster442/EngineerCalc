@@ -13,7 +13,7 @@ internal static class Prompt
     {
         string[] lines =
         [
-            $"╭─ {GetDirectoryString(state.CurrentDirectory)}",
+            $"╭─ [CornflowerBlue italic link={MakeLink(state.CurrentDirectory)}]{GetDirectoryString(state.CurrentDirectory)}[/]",
             $"╰─ [bold yellow]{state.Culture.ThreeLetterISOLanguageName}[/] | [green]{state.ParseMode}[/] | [orangered1]{DateTime.Now.ToShortTimeString().EscapeMarkup()}[/]"
         ];
         for (int i = 0; i < lines.Length -1; i++)
@@ -22,6 +22,9 @@ internal static class Prompt
         }
         AnsiConsole.Markup(lines[^1]);
     }
+
+    private static string MakeLink(string currentDirectory)
+        => new Uri(currentDirectory).AbsoluteUri;
 
     private static string GetDirectoryString(string currentDirectory)
     {
