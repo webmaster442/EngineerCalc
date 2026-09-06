@@ -105,22 +105,78 @@ internal sealed class LineCompleter : ICompleter
 
     private IEnumerable<string> GetFileNames(string str)
     {
-        var dataset = _fileSystem.GetFileNames(_state.CurrentDirectory);
+        SplitPathInput(str, out string searchDirectory, out string prefixToKeep, out string namePrefix);
 
-        if (!string.IsNullOrWhiteSpace(str))
-            return dataset.Where(f => f.Name.StartsWith(str, StringComparison.InvariantCultureIgnoreCase)).Select(f => f.Name);
+        if (!Directory.Exists(searchDirectory))
+            return [];
 
-        return dataset.Select(f => f.Name);
+        var dataset = _fileSystem.GetFileNames(searchDirectory);
+
+        if (!string.IsNullOrEmpty(namePrefix))
+            return dataset
+                .Where(f => f.Name.StartsWith(namePrefix, StringComparison.InvariantCultureIgnoreCase))
+                .Select(f => prefixToKeep + f.Name);
+
+        return dataset.Select(f => prefixToKeep + f.Name);
+    }
+
+    private void SplitPathInput(string str, out string searchDirectory, out string prefixToKeep, out string namePrefix)
+    {
+        if (string.IsNullOrEmpty(str))
+        {
+            searchDirectory = _state.CurrentDirectory;
+            prefixToKeep = string.Empty;
+            namePrefix = string.Empty;
+            return;
+        }
+
+        bool endsWithSeparator = str[^1] == Path.DirectorySeparatorChar || str[^1] == Path.AltDirectorySeparatorChar;
+
+        string dirPart;
+        if (endsWithSeparator)
+        {
+            dirPart = str;
+            namePrefix = string.Empty;
+            prefixToKeep = str;
+        }
+        else
+        {
+            dirPart = Path.GetDirectoryName(str) ?? string.Empty;
+            namePrefix = Path.GetFileName(str);
+            prefixToKeep = dirPart.Length == 0
+                ? string.Empty
+                : (str[..^namePrefix.Length]);
+        }
+
+        if (string.IsNullOrEmpty(dirPart))
+        {
+            searchDirectory = _state.CurrentDirectory;
+        }
+        else if (Path.IsPathRooted(dirPart))
+        {
+            searchDirectory = dirPart;
+        }
+        else
+        {
+            searchDirectory = Path.GetFullPath(dirPart, _state.CurrentDirectory);
+        }
     }
 
     private IEnumerable<string> GetDirectoryNames(string str)
     {
-        var dataset = _fileSystem.GetDirectoryNames(_state.CurrentDirectory);
+        SplitPathInput(str, out string searchDirectory, out string prefixToKeep, out string namePrefix);
 
-        if (!string.IsNullOrWhiteSpace(str))
-            return dataset.Where(f => f.Name.StartsWith(str, StringComparison.InvariantCultureIgnoreCase)).Select(f => f.Name);
+        if (!Directory.Exists(searchDirectory))
+            return [];
 
-        return dataset.Select(f => f.Name);
+        var dataset = _fileSystem.GetDirectoryNames(searchDirectory);
+
+        if (!string.IsNullOrEmpty(namePrefix))
+            return dataset
+                .Where(f => f.Name.StartsWith(namePrefix, StringComparison.InvariantCultureIgnoreCase))
+                .Select(f => prefixToKeep + f.Name);
+
+        return dataset.Select(f => prefixToKeep + f.Name);
     }
 
     private IEnumerable<string> CompleteCommandName(string commandName)
