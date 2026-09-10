@@ -10,7 +10,6 @@ using DynamicEvaluator.TypeSystem;
 
 using EngineerCalc.Api;
 using EngineerCalc.Commands.Abstraction;
-using EngineerCalc.Tui.Oxyplot;
 using EngineerCalc.Tui.Sixel;
 
 using OxyPlot;
@@ -157,11 +156,10 @@ internal sealed class PlotCommand : FileSystemCommand<PlotCommand.Settings>
         var (cellWidth, cellHeight) = SixelEncoder.GetCellSize();
         (int renderWidth, int renderHeght) = (cellWidth * AnsiConsole.Profile.Width, cellHeight * AnsiConsole.Profile.Height);
 
-        var exporter = new PngExporter
+        var exporter = new SvgExporter
         {
             Width = renderWidth,
             Height = renderHeght,
-            Dpi = 96
         };
         model.Background = OxyColors.White;
         using (var memStream = new MemoryStream())
@@ -170,7 +168,7 @@ internal sealed class PlotCommand : FileSystemCommand<PlotCommand.Settings>
             memStream.Seek(0, SeekOrigin.Begin);
             AnsiConsole.AlternateScreen(() =>
             {
-                SixelImage img = new(memStream);
+                SixelSvgImage img = new(memStream);
                 AnsiConsole.Write(img);
                 Console.ReadLine();
             });
