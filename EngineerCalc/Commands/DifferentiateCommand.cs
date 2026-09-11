@@ -2,8 +2,8 @@
 
 using DynamicEvaluator;
 
-using EngineerCalc.Api;
 using EngineerCalc.Commands.Abstraction;
+using EngineerCalc.Domain;
 
 using Spectre.Console.Cli;
 

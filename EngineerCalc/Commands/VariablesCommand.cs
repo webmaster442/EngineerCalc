@@ -7,8 +7,8 @@ using System.Text.RegularExpressions;
 
 using DynamicEvaluator.TypeSystem;
 
-using EngineerCalc.Api;
 using EngineerCalc.Commands.Abstraction;
+using EngineerCalc.Domain;
 
 namespace EngineerCalc.Commands;
 

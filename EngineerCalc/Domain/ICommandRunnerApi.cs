@@ -3,16 +3,12 @@
 // This code is licensed under MIT license (see LICENSE for details)
 //-----------------------------------------------------------------------------
 
-namespace EngineerCalc.Api;
+using EngineerCalc.Models.XmlDoc;
 
-public sealed class ApplicationApi : IApplicationApi
+namespace EngineerCalc.Domain;
+
+internal interface ICommandRunnerApi
 {
-    public void Exit(int exitCode)
-    {
-        Environment.Exit(exitCode);
-    }
-    public void Clear()
-    {
-        Console.Clear();
-    }
+    IDictionary<string, Command> KnownCommands { get; }
+    Task RunRestrictedAsync(IReadOnlyList<string> tokens);
 }

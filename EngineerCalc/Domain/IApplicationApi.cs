@@ -3,7 +3,7 @@
 // This code is licensed under MIT license (see LICENSE for details)
 //-----------------------------------------------------------------------------
 
-namespace EngineerCalc.Api;
+namespace EngineerCalc.Domain;
 
 internal interface IApplicationApi
 {

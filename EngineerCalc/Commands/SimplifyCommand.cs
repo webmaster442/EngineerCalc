@@ -7,8 +7,8 @@ using System.ComponentModel;
 
 using DynamicEvaluator;
 
-using EngineerCalc.Api;
 using EngineerCalc.Commands.Abstraction;
+using EngineerCalc.Domain;
 
 using Spectre.Console;
 using Spectre.Console.Cli;

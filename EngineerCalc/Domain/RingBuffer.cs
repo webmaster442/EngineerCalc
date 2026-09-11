@@ -1,4 +1,4 @@
-﻿namespace EngineerCalc.Api;
+﻿namespace EngineerCalc.Domain;
 
 internal sealed class RingBuffer<T>
 {

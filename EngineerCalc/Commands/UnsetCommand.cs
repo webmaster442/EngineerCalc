@@ -5,7 +5,7 @@
 
 using System.ComponentModel;
 
-using EngineerCalc.Api;
+using EngineerCalc.Domain;
 
 using Spectre.Console;
 using Spectre.Console.Cli;

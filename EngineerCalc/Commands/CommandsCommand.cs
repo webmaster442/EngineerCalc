@@ -5,8 +5,8 @@
 
 using System.Text.RegularExpressions;
 
-using EngineerCalc.Api;
 using EngineerCalc.Commands.Abstraction;
+using EngineerCalc.Domain;
 
 using Spectre.Console;
 

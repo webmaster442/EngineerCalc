@@ -8,8 +8,8 @@ using System.ComponentModel;
 using DynamicEvaluator;
 using DynamicEvaluator.TypeSystem;
 
-using EngineerCalc.Api;
 using EngineerCalc.Commands.Abstraction;
+using EngineerCalc.Domain;
 using EngineerCalc.Tui.Sixel;
 
 using OxyPlot;

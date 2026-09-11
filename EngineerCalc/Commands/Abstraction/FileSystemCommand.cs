@@ -7,7 +7,7 @@ using System.Buffers;
 using System.IO.Hashing;
 using System.Security.Cryptography;
 
-using EngineerCalc.Api;
+using EngineerCalc.Domain;
 
 using Spectre.Console;
 using Spectre.Console.Cli;
