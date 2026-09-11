@@ -1,0 +1,40 @@
+# Build output
+**/bin/
+**/obj/
+**/out/
+**/publish/
+**/AppPackages/
+**/*.binlog
+
+# IDE / editor
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.userprefs
+*.swp
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Docker
+Dockerfile*
+.dockerignore
+docker-compose*.yml
+
+# CI / misc
+.github/
+LICENSE
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test results / coverage
+TestResults/
+**/*.coverage
+**/*.coveragexml
+coverage/

@@ -1,9 +1,11 @@
-﻿FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+﻿FROM mcr.microsoft.com/dotnet/sdk:10.0.401 AS build
 WORKDIR /src
 
 # Copy project files first to maximize layer cache usage.
 COPY EngineerCalc/EngineerCalc.csproj EngineerCalc/
 COPY DynamicEvaluator/DynamicEvaluator.csproj DynamicEvaluator/
+COPY DynamicEvaluator.TypeSystem/DynamicEvaluator.TypeSystem.csproj DynamicEvaluator.TypeSystem/
+COPY Readme.md Readme.md
 
 RUN dotnet restore EngineerCalc/EngineerCalc.csproj
 
@@ -15,7 +17,7 @@ RUN dotnet publish EngineerCalc/EngineerCalc.csproj \
 		/p:InvariantGlobalization=true \
 		--output /out/publish
 
-FROM mcr.microsoft.com/dotnet/runtime:10.0 AS runtime
+FROM mcr.microsoft.com/dotnet/runtime:10.0.12 AS runtime
 WORKDIR /app
 
 COPY --from=build /out/publish .
