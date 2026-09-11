@@ -7,11 +7,14 @@ using DynamicEvaluator;
 
 using EngineerCalc;
 using EngineerCalc.Api;
+using EngineerCalc.DomainServices;
 using EngineerCalc.Extensions;
+using EngineerCalc.Infrastructure;
 using EngineerCalc.Tui;
 using EngineerCalc.Tui.Readline;
 
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 using Spectre.Console;
 
@@ -22,9 +25,18 @@ var expressionFactory = new ExpressionFactory();
 var evaluatorApi = new EvaluatorApi(new VariablesAndConstantsCollection(), expressionFactory, appState);
 var commandRunnerApi = new CommandRunnerApi();
 var fileSystem = new FileSystem();
+using var loggerprovider = new LoggerProvider(100, TimeProvider.System);
+var loggerFactory = LoggerFactory.Create(builder =>
+{
+    builder.ClearProviders();
+    builder.AddProvider(loggerprovider);
+    builder.SetMinimumLevel(LogLevel.Debug);
+});
 
 var services = new ServiceCollection();
 services.AddSingleton(appState);
+services.AddSingleton(loggerprovider);
+services.AddSingleton<ILoggerFactory>(loggerFactory);
 services.AddSingleton<IApplicationApi, ApplicationApi>();
 services.AddSingleton<IEvaluatorApi>(evaluatorApi);
 services.AddSingleton<ICommandRunnerApi>(commandRunnerApi);
@@ -34,7 +46,7 @@ services.AddSingleton(expressionFactory);
 
 Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-var runner = new CommandRunner(services);
+var runner = new CommandRunner(services, loggerFactory.CreateLogger<CommandRunner>());
 
 await commandRunnerApi.Init(runner);
 
@@ -49,6 +61,8 @@ var readline = new LineReader(lineCompleter);
 AnsiConsole.Clear();
 
 await runner.RunAsync([".intro"]);
+
+var logger = loggerFactory.CreateLogger("Program");
 
 while (true)
 {
@@ -76,19 +90,22 @@ while (true)
                 break;
             case CommandState.UnknownCommand:
                 AnsiConsole.WriteLine($"Unknown command: {tokens[0]}");
+                logger.LogWarning("Unknown command: {command}", tokens[0]);
                 break;
         }
         Terminal.ShellIntegration.CommandFinished(0);
     }
     catch (Exception ex)
     {
+        logger.LogError(ex, "An error occurred while executing the command: {Command}", line);
+
         if (ex is InvalidOperationException or OverflowException)
         {
             AnsiConsole.MarkupLineInterpolated($"[red]{ex.Message}[/]");
             Terminal.ShellIntegration.CommandFinished(-1);
             continue;
         }
-
+       
 #if DEBUG
         AnsiConsole.WriteException(ex, ExceptionFormats.Default);
 #else

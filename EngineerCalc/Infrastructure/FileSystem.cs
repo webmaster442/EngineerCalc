@@ -3,9 +3,10 @@
 // This code is licensed under MIT license (see LICENSE for details)
 //-----------------------------------------------------------------------------
 
+using EngineerCalc.Api;
 using EngineerCalc.Models;
 
-namespace EngineerCalc.Api;
+namespace EngineerCalc.Infrastructure;
 
 internal sealed class FileSystem : IFileSystem
 {

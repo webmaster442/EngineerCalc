@@ -6,6 +6,7 @@
 using EngineerCalc.Infrastructure;
 
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -14,8 +15,11 @@ namespace EngineerCalc;
 
 internal sealed class CommandRunner
 {
-    public CommandRunner(ServiceCollection services)
+    private readonly ILogger<CommandRunner> _logger;
+
+    public CommandRunner(ServiceCollection services, ILogger<CommandRunner> logger)
     {
+        _logger = logger;
         App = new CommandApp(new TypeRegistrar(services));
         App.Configure(config =>
         {
@@ -25,6 +29,10 @@ internal sealed class CommandRunner
                 .AddCommand<Commands.IntroCommand>(".intro")
                 .WithDescription("Displays introductory information")
                 .IsHidden();
+
+            config
+                .AddCommand<Commands.LogsCommand>(".logs")
+                .WithDescription("Displays the log entries");
 
             config
                 .AddCommand<Commands.ClearCommand>(".clear")
@@ -127,9 +135,12 @@ internal sealed class CommandRunner
     {
         if (tokens.Count == 0)
             return;
+
         var result = await App.RunAsync(tokens);
+
         if (result != 0)
         {
+            _logger.LogInformation("Command execution failed with code {code}", result);
             AnsiConsole.MarkupLineInterpolated($"[red]Command execution failed with code {result}.[/]");
         }
     }

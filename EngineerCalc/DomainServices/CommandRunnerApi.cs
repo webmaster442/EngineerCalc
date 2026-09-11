@@ -5,12 +5,13 @@
 
 using System.Xml.Serialization;
 
+using EngineerCalc.Api;
 using EngineerCalc.Models.XmlDoc;
 
 using Spectre.Console;
 using Spectre.Console.Cli;
 
-namespace EngineerCalc.Api;
+namespace EngineerCalc.DomainServices;
 
 internal class CommandRunnerApi : ICommandRunnerApi
 {

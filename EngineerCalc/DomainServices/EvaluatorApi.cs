@@ -5,7 +5,9 @@
 
 using DynamicEvaluator;
 
-namespace EngineerCalc.Api;
+using EngineerCalc.Api;
+
+namespace EngineerCalc.DomainServices;
 
 internal class EvaluatorApi : IEvaluatorApi
 {
