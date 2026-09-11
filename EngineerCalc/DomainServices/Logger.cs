@@ -38,6 +38,17 @@ internal sealed class Logger : ILogger
             LogLevel = logLevel,
             Message = formatter(state, exception),
             Timestamp = _timeProvider.GetUtcNow(),
+            ExceptionDetails = FormatException(exception)
         });
+    }
+
+    private static string? FormatException(Exception? exception)
+    {
+        return exception == null
+            ? null
+            : $"""
+               {exception.GetType()}
+               {exception.StackTrace}
+               """;
     }
 }
