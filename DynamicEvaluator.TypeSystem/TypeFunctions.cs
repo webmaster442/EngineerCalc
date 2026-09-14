@@ -543,4 +543,44 @@ public static class TypeFunctions
     }
 
     #endregion
+
+    #region Date & Time Functions
+
+    private static long UnixTime(DateTime dateTime)
+    {
+        DateTimeOffset offset = new DateTimeOffset(dateTime);
+        return offset.ToUnixTimeSeconds();
+    }
+
+    public static Result Today(TimeProvider timeProvider)
+    {
+        long timeStamp = UnixTime(timeProvider.GetLocalNow().Date);
+        return Result.FromBigInteger(timeStamp);
+    }
+
+    public static Result Tomorrow(TimeProvider timeProvider)
+    {
+        long timeStamp = UnixTime(timeProvider.GetLocalNow().Date.AddDays(1));
+        return Result.FromBigInteger(timeStamp);
+    }
+
+    public static Result Yesterday(TimeProvider timeProvider)
+    {
+        long timeStamp = UnixTime(timeProvider.GetLocalNow().Date.AddDays(-1));
+        return Result.FromBigInteger(timeStamp);
+    }
+
+    public static Result UtcNow(TimeProvider timeProvider)
+    {
+        long timeStamp = timeProvider.GetUtcNow().ToUnixTimeSeconds();
+        return Result.FromBigInteger(timeStamp);
+    }
+
+    public static Result Now(TimeProvider timeProvider)
+    {
+        long timeStamp = timeProvider.GetLocalNow().ToUnixTimeSeconds();
+        return Result.FromBigInteger(timeStamp);
+    }
+
+    #endregion
 }
