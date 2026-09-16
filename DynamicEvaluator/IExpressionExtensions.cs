@@ -139,7 +139,7 @@ public static class IExpressionExtensions
                 VariableNamesToUse = names,
             });
 
-            ExpressionFactory factory = new ExpressionFactory();
+            ExpressionFactory factory = new ExpressionFactory(new DummyTimeAbstraction());
             simplified = factory.Create(expressionString);
             return true;
         }

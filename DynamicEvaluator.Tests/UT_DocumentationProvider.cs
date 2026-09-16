@@ -4,6 +4,7 @@
 //-----------------------------------------------------------------------------
 
 using DynamicEvaluator.Documentation;
+using DynamicEvaluator.TypeSystem;
 
 namespace DynamicEvaluator.Tests;
 
@@ -11,11 +12,13 @@ namespace DynamicEvaluator.Tests;
 public class UT_DocumentationProvider
 {
     private DocumentationProvider _documentationProvider;
+    private FunctionFactory _functionFactory;
     private HashSet<string> _skip;
 
     [OneTimeSetUp]
     public void Setup()
     {
+        _functionFactory = new FunctionFactory(new DummyTimeAbstraction());
         _documentationProvider = new DocumentationProvider();
         _skip =
         [
@@ -24,7 +27,7 @@ public class UT_DocumentationProvider
     }
 
     public static IEnumerable<string> FunctionNames
-        => new FunctionFactory();
+        => new FunctionFactory(new DummyTimeAbstraction());
 
     [TestCaseSource(nameof(FunctionNames))]
     public void EnsureThat_Function_IsDocumented(string function)
@@ -59,6 +62,6 @@ public class UT_DocumentationProvider
     [TestCaseSource(nameof(DocumentationFunctionNames))]
     public void EnsureThat_Function_InDoc_Exists_InCode(string documentedName)
     {
-        Assert.That(new FunctionFactory(), Contains.Item(documentedName).Using((IEqualityComparer<string>)StringComparer.OrdinalIgnoreCase));
+        Assert.That(_functionFactory, Contains.Item(documentedName).Using((IEqualityComparer<string>)StringComparer.OrdinalIgnoreCase));
     }
 }

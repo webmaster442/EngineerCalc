@@ -15,12 +15,23 @@ namespace DynamicEvaluator;
 internal sealed class FunctionFactory : IEnumerable<string>
 {
     private readonly Dictionary<string, Func<Result, Result>> _oneParamFunctions;
+    private readonly Dictionary<string, Func<Result>> _parameterlessFunctions;
     private readonly Dictionary<string, Func<Result, Result, Result>> _twoParamFunctions;
     private readonly Dictionary<string, Func<Result[], Result>> _multiParamFunctions;
     private readonly Dictionary<string, int> _rewriteFunctions;
+    private readonly ITimeAbstraction _timeAbstraction;
 
-    public FunctionFactory()
+    public FunctionFactory(ITimeAbstraction timeAbstraction)
     {
+        _timeAbstraction = timeAbstraction;
+        _parameterlessFunctions = new Dictionary<string, Func<Result>>(StringComparer.InvariantCultureIgnoreCase)
+        {
+            { nameof(TypeFunctions.Now), () => TypeFunctions.Now(_timeAbstraction) },
+            { nameof(TypeFunctions.UtcNow), () => TypeFunctions.UtcNow(_timeAbstraction) },
+            { nameof(TypeFunctions.Today), () => TypeFunctions.Today(_timeAbstraction) },
+            { nameof(TypeFunctions.Tomorrow), () => TypeFunctions.Tomorrow(_timeAbstraction) },
+            { nameof(TypeFunctions.Yesterday), () => TypeFunctions.Yesterday(_timeAbstraction) }
+        };
         _rewriteFunctions = new Dictionary<string, int>(StringComparer.InvariantCultureIgnoreCase)
         {
             { "ctg", 1 },
@@ -91,7 +102,8 @@ internal sealed class FunctionFactory : IEnumerable<string>
 
     public bool IsFunction(string name)
     {
-        return _rewriteFunctions.ContainsKey(name)
+        return _parameterlessFunctions.ContainsKey(name)
+            || _rewriteFunctions.ContainsKey(name)
             || _oneParamFunctions.ContainsKey(name)
             || _twoParamFunctions.ContainsKey(name)
             || _multiParamFunctions.ContainsKey(name);
@@ -151,6 +163,13 @@ internal sealed class FunctionFactory : IEnumerable<string>
                 : (IExpression)new GenericOneParamFunction(oneParamFunction, name, parameters);
         }
 
+        if (_parameterlessFunctions.TryGetValue(name, out Func<Result>? parameterlessFunction))
+        {
+            return parameters.Length != 0
+                ? throw new InvalidOperationException($"Function {name} requires no parameters")
+                : (IExpression)new GenericParameterlessFunction(parameterlessFunction, name);
+        }
+
         throw new InvalidOperationException($"Unknown function: {name}");
     }
 
@@ -162,6 +181,7 @@ internal sealed class FunctionFactory : IEnumerable<string>
         }
         if ((_oneParamFunctions.ContainsKey(name) && count == 1)
             || (_twoParamFunctions.ContainsKey(name) && count == 2)
+            || (_parameterlessFunctions.ContainsKey(name) && count == 0)
             || _multiParamFunctions.ContainsKey(name))
         {
             return true;
@@ -172,7 +192,9 @@ internal sealed class FunctionFactory : IEnumerable<string>
 
     public IEnumerator<string> GetEnumerator()
     {
-        return _oneParamFunctions.Keys
+        return
+            _parameterlessFunctions.Keys
+            .Concat(_oneParamFunctions.Keys)
             .Concat(_rewriteFunctions.Keys)
             .Concat(_twoParamFunctions.Keys)
             .Concat(_multiParamFunctions.Keys)

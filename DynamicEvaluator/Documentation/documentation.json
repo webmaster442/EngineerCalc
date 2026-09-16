@@ -879,6 +879,46 @@
         "arctanh(0)",
         "arctanh(0.5)"
       ]
+    },
+    {
+      "name": "now",
+      "summary": "Returns the current date and time in local time as a Unix timestamp.",
+      "parameters": [],
+      "examples": [
+        "now()"
+      ]
+    },
+    {
+      "name": "utcnow",
+      "summary": "Returns the current date and time in UTC as a Unix timestamp.",
+      "parameters": [],
+      "examples": [
+        "utcnow()"
+      ]
+    },
+    {
+      "name": "yesterday",
+      "summary": "Returns the date and time of the previous day in local time as a Unix timestamp.",
+      "parameters": [],
+      "examples": [
+        "yesterday()"
+      ]
+    },
+    {
+      "name": "tomorrow",
+      "summary": "Returns the date and time of the next day in local time as a Unix timestamp.",
+      "parameters": [],
+      "examples": [
+        "tomorrow()"
+      ]
+    },
+    {
+      "name": "today",
+      "summary": "Returns the date and time of the current day in local time as a Unix timestamp.",
+      "parameters": [],
+      "examples": [
+        "today()"
+      ]
     }
   ]
 }

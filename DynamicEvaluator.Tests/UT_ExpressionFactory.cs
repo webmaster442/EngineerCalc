@@ -15,11 +15,13 @@ namespace DynamicEvaluator.Tests;
 public class UT_ExpressionFactory
 {
     private ExpressionFactory _sut;
+    private TestTimeAbstraction _timeAbstraction;
 
     [SetUp]
     public void Setup()
     {
-        _sut = new ExpressionFactory();
+        _timeAbstraction = new TestTimeAbstraction();
+        _sut = new ExpressionFactory(_timeAbstraction);
     }
 
     //Constants

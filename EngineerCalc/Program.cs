@@ -4,6 +4,7 @@
 //-----------------------------------------------------------------------------
 
 using DynamicEvaluator;
+using DynamicEvaluator.TypeSystem;
 
 using EngineerCalc;
 using EngineerCalc.Domain;
@@ -21,7 +22,8 @@ using Spectre.Console;
 using Webmaster442.WindowsTerminal;
 
 var appState = new State();
-var expressionFactory = new ExpressionFactory();
+var timeAbstraction = new TimeAbstraction(TimeProvider.System, 3000);
+var expressionFactory = new ExpressionFactory(timeAbstraction);
 var evaluatorApi = new EvaluatorApi(new VariablesAndConstantsCollection(), expressionFactory, appState);
 var commandRunnerApi = new CommandRunnerApi();
 var fileSystem = new FileSystem();

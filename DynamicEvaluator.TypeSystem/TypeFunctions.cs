@@ -552,33 +552,33 @@ public static class TypeFunctions
         return offset.ToUnixTimeSeconds();
     }
 
-    public static Result Today(TimeProvider timeProvider)
+    public static Result Today(ITimeAbstraction timeAbstraction)
     {
-        long timeStamp = UnixTime(timeProvider.GetLocalNow().Date);
+        long timeStamp = UnixTime(timeAbstraction.GetNow().Date);
         return Result.FromBigInteger(timeStamp);
     }
 
-    public static Result Tomorrow(TimeProvider timeProvider)
+    public static Result Tomorrow(ITimeAbstraction timeAbstraction)
     {
-        long timeStamp = UnixTime(timeProvider.GetLocalNow().Date.AddDays(1));
+        long timeStamp = UnixTime(timeAbstraction.GetNow().Date.AddDays(1));
         return Result.FromBigInteger(timeStamp);
     }
 
-    public static Result Yesterday(TimeProvider timeProvider)
+    public static Result Yesterday(ITimeAbstraction timeAbstraction)
     {
-        long timeStamp = UnixTime(timeProvider.GetLocalNow().Date.AddDays(-1));
+        long timeStamp = UnixTime(timeAbstraction.GetNow().Date.AddDays(-1));
         return Result.FromBigInteger(timeStamp);
     }
 
-    public static Result UtcNow(TimeProvider timeProvider)
+    public static Result UtcNow(ITimeAbstraction timeAbstraction)
     {
-        long timeStamp = timeProvider.GetUtcNow().ToUnixTimeSeconds();
+        long timeStamp = timeAbstraction.GetUtcNow().ToUnixTimeSeconds();
         return Result.FromBigInteger(timeStamp);
     }
 
-    public static Result Now(TimeProvider timeProvider)
+    public static Result Now(ITimeAbstraction timeAbstraction)
     {
-        long timeStamp = timeProvider.GetLocalNow().ToUnixTimeSeconds();
+        long timeStamp = timeAbstraction.GetNow().ToUnixTimeSeconds();
         return Result.FromBigInteger(timeStamp);
     }
 

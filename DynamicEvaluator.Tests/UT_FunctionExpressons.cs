@@ -12,11 +12,13 @@ public class UT_FunctionExpressons
 {
     private ExpressionFactory _factory;
     private VariablesAndConstantsCollection _variables;
+    private TestTimeAbstraction _timeAbstraction;
 
     [SetUp]
     public void Setup()
     {
-        _factory = new ExpressionFactory();
+        _timeAbstraction = new TestTimeAbstraction();
+        _factory = new ExpressionFactory(_timeAbstraction);
         _variables = new VariablesAndConstantsCollection();
     }
 
@@ -94,6 +96,11 @@ public class UT_FunctionExpressons
     [TestCase("average(array(1, 2, 3))", "2", TypeState.Integer)]
     [TestCase("sum(array(1, 2, 3))", "6", TypeState.Integer)]
     [TestCase("count(array(1, 2, 3))", "3", TypeState.Integer)]
+    [TestCase("now()", "1758024000", TypeState.Integer)]
+    [TestCase("tomorrow()", "1758060000", TypeState.Integer)]
+    [TestCase("today()", "1757973600", TypeState.Integer)]
+    [TestCase("yesterday()", "1757887200", TypeState.Integer)]
+    [TestCase("utcnow()", "1758024000", TypeState.Integer)]
     public void EnsureThat_Function_Evaluated_ReturnsExpectedValue(string expression,
                                                                    string expected,
                                                                    TypeState expectedState)
