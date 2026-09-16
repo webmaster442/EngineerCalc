@@ -101,6 +101,10 @@ public class UT_FunctionExpressons
     [TestCase("today()", "1757973600", TypeState.Integer)]
     [TestCase("yesterday()", "1757887200", TypeState.Integer)]
     [TestCase("utcnow()", "1758024000", TypeState.Integer)]
+    [TestCase("date(2020, 01, 01)", "1577836800", TypeState.Integer)]
+    [TestCase("date(2020, 01, 01, 12)", "1577880000", TypeState.Integer)]
+    [TestCase("date(2020, 01, 01, 12, 30)", "1577881800", TypeState.Integer)]
+    [TestCase("date(2020, 01, 01, 12, 30, 45)", "1577881845", TypeState.Integer)]
     public void EnsureThat_Function_Evaluated_ReturnsExpectedValue(string expression,
                                                                    string expected,
                                                                    TypeState expectedState)

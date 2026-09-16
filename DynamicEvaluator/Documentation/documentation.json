@@ -919,6 +919,48 @@
       "examples": [
         "today()"
       ]
+    },
+    {
+      "name": "date",
+      "summary": "Returns the Unix timestamp for a specific date and time in local time.",
+      "parameters": [
+        {
+          "name": "year",
+          "description": "The year of the date.",
+          "supportedTypes": "int"
+        },
+        {
+          "name": "month",
+          "description": "The month of the date (1-12).",
+          "supportedTypes": "int"
+        },
+        {
+          "name": "day",
+          "description": "The day of the month (1-31).",
+          "supportedTypes": "int"
+        },
+        {
+          "name": "hour",
+          "description": "The hour of the day (0-23).",
+          "supportedTypes": "int"
+        },
+        {
+          "name": "minute",
+          "description": "The minute of the hour (0-59).",
+          "supportedTypes": "int"
+        },
+        {
+          "name": "second",
+          "description": "The second of the minute (0-59).",
+          "supportedTypes": "int"
+        }
+      ],
+      "examples": [
+        "date(2025, 9, 15)",
+        "date(2025, 9, 15, 12)",
+        "date(2025, 9, 15, 12, 30)",
+        "date(2025, 9, 15, 12, 30, 45)"
+      ]
     }
   ]
 }

@@ -582,5 +582,28 @@ public static class TypeFunctions
         return Result.FromBigInteger(timeStamp);
     }
 
+    public static Result Date(params Result[] values)
+    {
+        if (values.Length < 3)
+            throw new ArgumentException("At least three values are required for year, month and day.", nameof(values));
+
+        int year = values[0].CastToInt();
+        int month = values[1].CastToInt();
+        int day = values[2].CastToInt();
+
+        DateTimeOffset dtf = new DateTimeOffset(year, month, day, 0, 0, 0, TimeSpan.Zero);
+        
+        if (values.Length > 3)
+        {
+            int hour = values[3].CastToInt();
+            int minute = values.Length > 4 ? values[4].CastToInt() : 0;
+            int second = values.Length > 5 ? values[5].CastToInt() : 0;
+            dtf = new DateTimeOffset(year, month, day, hour, minute, second, TimeSpan.Zero);
+        }
+
+        return Result.FromBigInteger(dtf.ToUnixTimeSeconds());
+    }
+
     #endregion
 }
+

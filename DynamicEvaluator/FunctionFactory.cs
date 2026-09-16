@@ -97,6 +97,7 @@ internal sealed class FunctionFactory : IEnumerable<string>
             { nameof(TypeFunctions.Random), TypeFunctions.Random },
             { nameof(TypeFunctions.Array), TypeFunctions.Array },
             { nameof(TypeFunctions.Count), TypeFunctions.Count },
+            { nameof(TypeFunctions.Date), TypeFunctions.Date }
         };
     }
 
