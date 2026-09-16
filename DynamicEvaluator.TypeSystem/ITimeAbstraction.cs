@@ -7,11 +7,20 @@ public interface ITimeAbstraction
     ValueTask<DateTimeOffset> GetNetworkUtcNow();
 
     DateTimeOffset GetNow()
-        => GetUtcNow().ToLocalTime();
+    {
+        TimeSpan offset = GetLocalTimeZone().GetUtcOffset(GetUtcNow());
+        long localTicks = GetUtcNow().Ticks + offset.Ticks;
+        return new DateTimeOffset(localTicks, offset);
+    }
 
     async ValueTask<DateTimeOffset> GetNetworkNow()
     {
         DateTimeOffset utcValue = await GetNetworkUtcNow();
-        return utcValue.ToLocalTime();
+        TimeSpan offset = GetLocalTimeZone().GetUtcOffset(utcValue);
+        long localTicks = utcValue.Ticks + offset.Ticks;
+        return new DateTimeOffset(localTicks, offset);
     }
+
+    TimeZoneInfo GetLocalTimeZone()
+        => TimeZoneInfo.Local;
 }

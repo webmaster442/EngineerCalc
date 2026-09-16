@@ -18,4 +18,7 @@ internal sealed class TestTimeAbstraction : ITimeAbstraction
 
     public DateTimeOffset GetNow()
         => _testDate;
+
+    public TimeZoneInfo GetLocalTimeZone()
+        => TimeZoneInfo.Utc;
 }
