@@ -889,14 +889,6 @@
       ]
     },
     {
-      "name": "utcnow",
-      "summary": "Returns the current date and time in UTC as a Unix timestamp.",
-      "parameters": [],
-      "examples": [
-        "utcnow()"
-      ]
-    },
-    {
       "name": "yesterday",
       "summary": "Returns the date and time of the previous day in local time as a Unix timestamp.",
       "parameters": [],

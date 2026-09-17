@@ -546,43 +546,28 @@ public static class TypeFunctions
 
     #region Date & Time Functions
 
-    private static long UnixTime(DateTime dateTime, TimeSpan offset)
+    public static Result Today(ITimePointProvider timePointProvider)
     {
-        DateTimeOffset dateTimeOffset = new DateTimeOffset(dateTime, offset);
-        return dateTimeOffset.ToUnixTimeSeconds();
+        var date = timePointProvider.UtcNow().Date;
+        return Result.FromBigInteger(new DateTimeOffset(date, TimeSpan.Zero).ToUnixTimeSeconds());
     }
 
-    public static Result Today(ITimeAbstraction timeAbstraction)
+    public static Result Tomorrow(ITimePointProvider timePointProvider)
     {
-        TimeSpan offset = timeAbstraction.GetLocalTimeZone().BaseUtcOffset;
-        long timeStamp = UnixTime(timeAbstraction.GetNow().Date, offset);
-        return Result.FromBigInteger(timeStamp);
+        var date = timePointProvider.UtcNow().Date.AddDays(1);
+        return Result.FromBigInteger(new DateTimeOffset(date, TimeSpan.Zero).ToUnixTimeSeconds());
     }
 
-    public static Result Tomorrow(ITimeAbstraction timeAbstraction)
+    public static Result Yesterday(ITimePointProvider timePointProvider)
     {
-        TimeSpan offset = timeAbstraction.GetLocalTimeZone().BaseUtcOffset;
-        long timeStamp = UnixTime(timeAbstraction.GetNow().Date.AddDays(1), offset);
-        return Result.FromBigInteger(timeStamp);
+        var date = timePointProvider.UtcNow().Date.AddDays(-1);
+        return Result.FromBigInteger(new DateTimeOffset(date, TimeSpan.Zero).ToUnixTimeSeconds());
     }
 
-    public static Result Yesterday(ITimeAbstraction timeAbstraction)
+    public static Result Now(ITimePointProvider timePointProvider)
     {
-        TimeSpan offset = timeAbstraction.GetLocalTimeZone().BaseUtcOffset;
-        long timeStamp = UnixTime(timeAbstraction.GetNow().Date.AddDays(-1), offset);
-        return Result.FromBigInteger(timeStamp);
-    }
-
-    public static Result UtcNow(ITimeAbstraction timeAbstraction)
-    {
-        long timeStamp = timeAbstraction.GetUtcNow().ToUnixTimeSeconds();
-        return Result.FromBigInteger(timeStamp);
-    }
-
-    public static Result Now(ITimeAbstraction timeAbstraction)
-    {
-        long timeStamp = timeAbstraction.GetNow().ToUnixTimeSeconds();
-        return Result.FromBigInteger(timeStamp);
+        var date = timePointProvider.UtcNow();
+        return Result.FromBigInteger(new DateTimeOffset(date, TimeSpan.Zero).ToUnixTimeSeconds());
     }
 
     public static Result Date(params Result[] values)

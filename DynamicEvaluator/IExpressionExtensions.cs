@@ -4,7 +4,6 @@
 //-----------------------------------------------------------------------------
 
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 
 using DynamicEvaluator.Expressions;
 using DynamicEvaluator.Expressions.Specific;
@@ -139,7 +138,7 @@ public static class IExpressionExtensions
                 VariableNamesToUse = names,
             });
 
-            ExpressionFactory factory = new ExpressionFactory(new DummyTimeAbstraction());
+            ExpressionFactory factory = new ExpressionFactory(new DummyTimePointProvider());
             simplified = factory.Create(expressionString);
             return true;
         }

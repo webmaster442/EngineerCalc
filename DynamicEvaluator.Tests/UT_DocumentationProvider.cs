@@ -18,7 +18,7 @@ public class UT_DocumentationProvider
     [OneTimeSetUp]
     public void Setup()
     {
-        _functionFactory = new FunctionFactory(new DummyTimeAbstraction());
+        _functionFactory = new FunctionFactory(new DummyTimePointProvider());
         _documentationProvider = new DocumentationProvider();
         _skip =
         [
@@ -27,7 +27,7 @@ public class UT_DocumentationProvider
     }
 
     public static IEnumerable<string> FunctionNames
-        => new FunctionFactory(new DummyTimeAbstraction());
+        => new FunctionFactory(new DummyTimePointProvider());
 
     [TestCaseSource(nameof(FunctionNames))]
     public void EnsureThat_Function_IsDocumented(string function)

@@ -21,9 +21,9 @@ public sealed class ExpressionFactory
     private readonly TokenSet _firstFactor;
     private readonly FunctionFactory _functionFactory;
 
-    public ExpressionFactory(ITimeAbstraction timeAbstraction)
+    public ExpressionFactory(ITimePointProvider timePointProvider)
     {
-        _functionFactory = new FunctionFactory(timeAbstraction);
+        _functionFactory = new FunctionFactory(timePointProvider);
         var firstFunction = new TokenSet(TokenType.Function);
         _firstFactor = firstFunction + new TokenSet(TokenType.Variable, TokenType.OpenParen);
         _firstFactorPrefix = _firstFactor + TokenType.Constant;

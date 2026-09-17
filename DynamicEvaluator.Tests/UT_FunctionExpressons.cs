@@ -12,12 +12,12 @@ public class UT_FunctionExpressons
 {
     private ExpressionFactory _factory;
     private VariablesAndConstantsCollection _variables;
-    private TestTimeAbstraction _timeAbstraction;
+    private TestTimePointProvider _timeAbstraction;
 
     [SetUp]
     public void Setup()
     {
-        _timeAbstraction = new TestTimeAbstraction();
+        _timeAbstraction = new TestTimePointProvider();
         _factory = new ExpressionFactory(_timeAbstraction);
         _variables = new VariablesAndConstantsCollection();
     }
@@ -96,15 +96,14 @@ public class UT_FunctionExpressons
     [TestCase("average(array(1, 2, 3))", "2", TypeState.Integer)]
     [TestCase("sum(array(1, 2, 3))", "6", TypeState.Integer)]
     [TestCase("count(array(1, 2, 3))", "3", TypeState.Integer)]
-    [TestCase("now()", "1758024000", TypeState.Integer)]
-    [TestCase("tomorrow()", "1757980800", TypeState.Integer)]
-    [TestCase("today()", "1757894400", TypeState.Integer)] 
-    [TestCase("yesterday()", "1757808000", TypeState.Integer)]
-    [TestCase("utcnow()", "1758024000", TypeState.Integer)]
     [TestCase("date(2020, 01, 01)", "1577836800", TypeState.Integer)]
     [TestCase("date(2020, 01, 01, 12)", "1577880000", TypeState.Integer)]
     [TestCase("date(2020, 01, 01, 12, 30)", "1577881800", TypeState.Integer)]
     [TestCase("date(2020, 01, 01, 12, 30, 45)", "1577881845", TypeState.Integer)]
+    [TestCase("now()", "1789671600", TypeState.Integer)]
+    [TestCase("today()", "1789603200", TypeState.Integer)]
+    [TestCase("tomorrow()", "1789689600", TypeState.Integer)]
+    [TestCase("yesterday()", "1789516800", TypeState.Integer)]
     public void EnsureThat_Function_Evaluated_ReturnsExpectedValue(string expression,
                                                                    string expected,
                                                                    TypeState expectedState)

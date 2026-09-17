@@ -16,7 +16,7 @@ internal class UT_FunctionFactory
     [OneTimeSetUp]
     public void Setup()
     {
-        _functionFactoryNames = new FunctionFactory(new DummyTimeAbstraction()).ToArray();
+        _functionFactoryNames = new FunctionFactory(new DummyTimePointProvider()).ToArray();
     }
 
     public static IEnumerable<string> TypeFunctionNames

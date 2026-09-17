@@ -19,18 +19,17 @@ internal sealed class FunctionFactory : IEnumerable<string>
     private readonly Dictionary<string, Func<Result, Result, Result>> _twoParamFunctions;
     private readonly Dictionary<string, Func<Result[], Result>> _multiParamFunctions;
     private readonly Dictionary<string, int> _rewriteFunctions;
-    private readonly ITimeAbstraction _timeAbstraction;
+    private readonly ITimePointProvider _timePointProvider;
 
-    public FunctionFactory(ITimeAbstraction timeAbstraction)
+    public FunctionFactory(ITimePointProvider timePointProvider)
     {
-        _timeAbstraction = timeAbstraction;
+        _timePointProvider = timePointProvider;
         _parameterlessFunctions = new Dictionary<string, Func<Result>>(StringComparer.InvariantCultureIgnoreCase)
         {
-            { nameof(TypeFunctions.Now), () => TypeFunctions.Now(_timeAbstraction) },
-            { nameof(TypeFunctions.UtcNow), () => TypeFunctions.UtcNow(_timeAbstraction) },
-            { nameof(TypeFunctions.Today), () => TypeFunctions.Today(_timeAbstraction) },
-            { nameof(TypeFunctions.Tomorrow), () => TypeFunctions.Tomorrow(_timeAbstraction) },
-            { nameof(TypeFunctions.Yesterday), () => TypeFunctions.Yesterday(_timeAbstraction) }
+            { nameof(TypeFunctions.Now), () => TypeFunctions.Now(_timePointProvider) },
+            { nameof(TypeFunctions.Today), () => TypeFunctions.Today(_timePointProvider) },
+            { nameof(TypeFunctions.Tomorrow), () => TypeFunctions.Tomorrow(_timePointProvider) },
+            { nameof(TypeFunctions.Yesterday), () => TypeFunctions.Yesterday(_timePointProvider) }
         };
         _rewriteFunctions = new Dictionary<string, int>(StringComparer.InvariantCultureIgnoreCase)
         {
