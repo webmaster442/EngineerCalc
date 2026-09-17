@@ -1,4 +1,9 @@
-﻿using EngineerCalc.Domain;
+﻿//-----------------------------------------------------------------------------
+// (c) 2024-2026 Ruzsinszki Gábor
+// This code is licensed under MIT license (see LICENSE for details)
+//-----------------------------------------------------------------------------
+
+using EngineerCalc.Domain;
 
 using Microsoft.Extensions.Logging;
 

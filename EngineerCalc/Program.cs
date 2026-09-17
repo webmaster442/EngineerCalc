@@ -22,14 +22,7 @@ using Spectre.Console;
 using Webmaster442.WindowsTerminal;
 
 var appState = new State();
-var timeProvider = new NtpBasedTimeProvider(TimeProvider.System);
 
-await timeProvider.Update();
-
-var expressionFactory = new ExpressionFactory(timeProvider);
-var evaluatorApi = new EvaluatorApi(new VariablesAndConstantsCollection(), expressionFactory, appState);
-var commandRunnerApi = new CommandRunnerApi();
-var fileSystem = new FileSystem();
 using var loggerprovider = new LoggerProvider(100, TimeProvider.System);
 var loggerFactory = LoggerFactory.Create(builder =>
 {
@@ -37,6 +30,15 @@ var loggerFactory = LoggerFactory.Create(builder =>
     builder.AddProvider(loggerprovider);
     builder.SetMinimumLevel(LogLevel.Debug);
 });
+
+var timeProvider = new NtpBasedTimeProvider(TimeProvider.System, loggerFactory);
+
+await timeProvider.Update();
+
+var expressionFactory = new ExpressionFactory(timeProvider);
+var evaluatorApi = new EvaluatorApi(new VariablesAndConstantsCollection(), expressionFactory, appState);
+var commandRunnerApi = new CommandRunnerApi();
+var fileSystem = new FileSystem();
 
 var services = new ServiceCollection();
 services.AddSingleton(appState);

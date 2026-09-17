@@ -1,13 +1,31 @@
-﻿using System.Net;
+﻿//-----------------------------------------------------------------------------
+// (c) 2024-2026 Ruzsinszki Gábor
+// This code is licensed under MIT license (see LICENSE for details)
+//-----------------------------------------------------------------------------
+
+using System.Net;
 using System.Net.Sockets;
 
-namespace DynamicEvaluator.TypeSystem;
+using DynamicEvaluator.TypeSystem;
+
+using Microsoft.Extensions.Logging;
+
+namespace EngineerCalc.Infrastructure;
 
 public sealed class NtpBasedTimeProvider : ITimePointProvider
 {
     private readonly Lock _lock;
     private TimeSpan _drift;
     private readonly TimeProvider _timeProvider;
+    private readonly ILogger<NtpBasedTimeProvider> _logger;
+
+    public NtpBasedTimeProvider(TimeProvider timeProvider, ILoggerFactory loggerFactory)
+    {
+        _lock = new Lock();
+        _drift = TimeSpan.Zero;
+        _timeProvider = timeProvider;
+        _logger = loggerFactory.CreateLogger<NtpBasedTimeProvider>();
+    }
 
     public int ClockDriftInSeconds
     {
@@ -18,13 +36,6 @@ public sealed class NtpBasedTimeProvider : ITimePointProvider
                 return (int)_drift.TotalSeconds;
             }
         }
-    }
-
-    public NtpBasedTimeProvider(TimeProvider timeProvider)
-    {
-        _lock = new Lock();
-        _drift = TimeSpan.Zero;
-        _timeProvider = timeProvider;
     }
 
     public DateTime UtcNow()
@@ -45,12 +56,13 @@ public sealed class NtpBasedTimeProvider : ITimePointProvider
             {
                 var localTime = _timeProvider.GetUtcNow().UtcDateTime;
                 var calculatedDrift = ntpTime.Value - localTime;
+                _logger.LogInformation("NTP time fetched. Calculated drift: {CalculatedDrift}", calculatedDrift.TotalSeconds);
                 _drift = calculatedDrift.TotalSeconds > 0 ? calculatedDrift : TimeSpan.Zero;
             }
         }
     }
 
-    private async static ValueTask<DateTime?> TryFetchNtpTime(string ntpServer, int ntpPort, int timeout)
+    private async ValueTask<DateTime?> TryFetchNtpTime(string ntpServer, int ntpPort, int timeout)
     {
         using var cancellationTokenSource = new CancellationTokenSource(timeout);
         try
@@ -87,6 +99,7 @@ public sealed class NtpBasedTimeProvider : ITimePointProvider
         }
         catch (OperationCanceledException)
         {
+            _logger.LogWarning("NTP request to {NtpServer}:{NtpPort} timed out.", ntpServer, ntpPort);
             return null;
         }
     }
