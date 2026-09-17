@@ -546,27 +546,30 @@ public static class TypeFunctions
 
     #region Date & Time Functions
 
-    private static long UnixTime(DateTime dateTime)
+    private static long UnixTime(DateTime dateTime, TimeSpan offset)
     {
-        DateTimeOffset offset = new DateTimeOffset(dateTime);
-        return offset.ToUnixTimeSeconds();
+        DateTimeOffset dateTimeOffset = new DateTimeOffset(dateTime, offset);
+        return dateTimeOffset.ToUnixTimeSeconds();
     }
 
     public static Result Today(ITimeAbstraction timeAbstraction)
     {
-        long timeStamp = UnixTime(timeAbstraction.GetNow().Date);
+        TimeSpan offset = timeAbstraction.GetLocalTimeZone().BaseUtcOffset;
+        long timeStamp = UnixTime(timeAbstraction.GetNow().Date, offset);
         return Result.FromBigInteger(timeStamp);
     }
 
     public static Result Tomorrow(ITimeAbstraction timeAbstraction)
     {
-        long timeStamp = UnixTime(timeAbstraction.GetNow().Date.AddDays(1));
+        TimeSpan offset = timeAbstraction.GetLocalTimeZone().BaseUtcOffset;
+        long timeStamp = UnixTime(timeAbstraction.GetNow().Date.AddDays(1), offset);
         return Result.FromBigInteger(timeStamp);
     }
 
     public static Result Yesterday(ITimeAbstraction timeAbstraction)
     {
-        long timeStamp = UnixTime(timeAbstraction.GetNow().Date.AddDays(-1));
+        TimeSpan offset = timeAbstraction.GetLocalTimeZone().BaseUtcOffset;
+        long timeStamp = UnixTime(timeAbstraction.GetNow().Date.AddDays(-1), offset);
         return Result.FromBigInteger(timeStamp);
     }
 
