@@ -570,6 +570,19 @@ public static class TypeFunctions
         return Result.FromBigInteger(new DateTimeOffset(date, TimeSpan.Zero).ToUnixTimeSeconds());
     }
 
+    public static Result DateStr(Result result)
+    {
+        if (result.TypeState != TypeState.Integer)
+            throw TypeException.IncompatibleFunction(nameof(DateStr), result.TypeState);
+
+        long unixTime = (long)result.CastToBigInteger();
+        DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(unixTime);
+
+        return dateTimeOffset.Hour == 0 && dateTimeOffset.Minute == 0 && dateTimeOffset.Second == 0
+            ? Result.FromString(dateTimeOffset.ToString("yyyy-MM-dd"))
+            : Result.FromString(dateTimeOffset.ToString("yyyy-MM-dd HH:mm:ss"));
+    }
+
     public static Result Date(params Result[] values)
     {
         if (values.Length < 3)
@@ -580,7 +593,7 @@ public static class TypeFunctions
         int day = values[2].CastToInt();
 
         DateTimeOffset dtf = new DateTimeOffset(year, month, day, 0, 0, 0, TimeSpan.Zero);
-        
+
         if (values.Length > 3)
         {
             int hour = values[3].CastToInt();

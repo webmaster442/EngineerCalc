@@ -70,6 +70,7 @@ internal sealed class FunctionFactory : IEnumerable<string>
             { nameof(TypeFunctions.Not), TypeFunctions.Not  },
             { nameof(TypeFunctions.Floor), TypeFunctions.Floor },
             { nameof(TypeFunctions.Ceiling), TypeFunctions.Ceiling },
+            { nameof(TypeFunctions.DateStr), TypeFunctions.DateStr }
         };
         _twoParamFunctions = new(StringComparer.InvariantCultureIgnoreCase)
         {

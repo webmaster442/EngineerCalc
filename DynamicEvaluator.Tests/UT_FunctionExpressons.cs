@@ -104,6 +104,8 @@ public class UT_FunctionExpressons
     [TestCase("today()", "1789603200", TypeState.Integer)]
     [TestCase("tomorrow()", "1789689600", TypeState.Integer)]
     [TestCase("yesterday()", "1789516800", TypeState.Integer)]
+    [TestCase("dateStr(1789603200)", "2026-09-17", TypeState.String)]
+    [TestCase("dateStr(now())", "2026-09-17 19:00:00", TypeState.String)]
     public void EnsureThat_Function_Evaluated_ReturnsExpectedValue(string expression,
                                                                    string expected,
                                                                    TypeState expectedState)

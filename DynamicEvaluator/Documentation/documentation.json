@@ -953,6 +953,20 @@
         "date(2025, 9, 15, 12, 30)",
         "date(2025, 9, 15, 12, 30, 45)"
       ]
+    },
+    {
+      "name": "dateStr",
+      "summary": "Returns the date and time as a formatted string as yyyy-MM-dd or yyyy-MM-dd HH:mm:ss depending on the time components.",
+      "parameters": [
+        {
+          "name": "unixTime",
+          "description": "The Unix timestamp to format.",
+          "supportedTypes": "int"
+        }
+      ],
+      "examples": [
+        "dateStr(1734567890)"
+      ]
     }
   ]
 }
