@@ -21,6 +21,7 @@ public sealed class OpenExchangeRatesResponse
     }
 
     [JsonPropertyName("result")]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public required ResultType Result { get; set; }
 
     [JsonPropertyName("time_last_update_unix")]

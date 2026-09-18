@@ -3,12 +3,11 @@
 // This code is licensed under MIT license (see LICENSE for details)
 //-----------------------------------------------------------------------------
 
+using EngineerCalc.Domain.Dto;
+
 namespace EngineerCalc.Domain;
 
-internal interface IRemoteApiCache
+internal interface IRemoteApiClient
 {
-    void Store(string key, string value, DateTime expiryDate);
-    void Store(string key, string value, TimeSpan timeToLive);
-    bool TryGet(string key, out string value);
-    void ClearExpired();
+    ValueTask<OpenExchangeRatesResponse> GetOpenExchangeRatesAsync(CancellationToken cancellationToken);
 }

@@ -4,7 +4,6 @@
 //-----------------------------------------------------------------------------
 
 using DynamicEvaluator;
-using DynamicEvaluator.TypeSystem;
 
 using EngineerCalc;
 using EngineerCalc.Domain;
@@ -14,6 +13,7 @@ using EngineerCalc.Infrastructure;
 using EngineerCalc.Tui;
 using EngineerCalc.Tui.Readline;
 
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -40,14 +40,23 @@ var evaluatorApi = new EvaluatorApi(new VariablesAndConstantsCollection(), expre
 var commandRunnerApi = new CommandRunnerApi();
 var fileSystem = new FileSystem();
 
+IConfiguration config = 
+    new ConfigurationBuilder()
+        .AddJsonFile("appsettings.json")
+        .Build();
+
 var services = new ServiceCollection();
 services.AddSingleton(appState);
 services.AddSingleton(loggerprovider);
+services.AddSingleton<TimeProvider>(TimeProvider.System);
+services.AddSingleton<IConfiguration>(config);
 services.AddSingleton<ILoggerFactory>(loggerFactory);
 services.AddSingleton<IApplicationApi, ApplicationApi>();
 services.AddSingleton<IEvaluatorApi>(evaluatorApi);
 services.AddSingleton<ICommandRunnerApi>(commandRunnerApi);
 services.AddSingleton<IFileSystem>(fileSystem);
+services.AddSingleton<IRemoteApiCache, ZipCache>();
+services.AddSingleton<IRemoteApiClient, RemoteApiClient>();
 services.AddSingleton<ScriptFileRunner>();
 services.AddSingleton(expressionFactory);
 

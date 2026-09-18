@@ -124,6 +124,10 @@ internal sealed class CommandRunner
                 .WithDescription("Converts a value from one unit to another");
 
             config
+                .AddCommand<Commands.CurrencyCommand>(".currency")
+                .WithDescription("Converts a value from one currency to another");
+
+            config
                 .AddCommand<Commands.DifferentiateCommand>(".differentiate")
                 .WithDescription("Differentiates an expression with respect to a variable");
         });
