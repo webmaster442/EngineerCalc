@@ -42,6 +42,9 @@ internal sealed class FunctionFactory : IEnumerable<string>
             { "sec", 1 },
             { "cosec", 1 },
             { "parallel", 2 },
+            { "nand", 2 },
+            { "nor", 2 },
+            { "xor", 2  }
         };
         _oneParamFunctions = new(StringComparer.InvariantCultureIgnoreCase)
         {
@@ -67,7 +70,6 @@ internal sealed class FunctionFactory : IEnumerable<string>
             { nameof(TypeFunctions.ToBin), TypeFunctions.ToBin },
             { nameof(TypeFunctions.Sqrt), TypeFunctions.Sqrt },
             { nameof(TypeFunctions.Factorial), TypeFunctions.Factorial },
-            { nameof(TypeFunctions.Not), TypeFunctions.Not  },
             { nameof(TypeFunctions.Floor), TypeFunctions.Floor },
             { nameof(TypeFunctions.Ceiling), TypeFunctions.Ceiling },
             { nameof(TypeFunctions.DateStr), TypeFunctions.DateStr }
@@ -81,9 +83,6 @@ internal sealed class FunctionFactory : IEnumerable<string>
             { nameof(TypeFunctions.Root), TypeFunctions.Root },
             { nameof(TypeFunctions.Gcd), TypeFunctions.Gcd },
             { nameof(TypeFunctions.Lcm), TypeFunctions.Lcm },
-            { nameof(TypeFunctions.And), TypeFunctions.And  },
-            { nameof(TypeFunctions.Or), TypeFunctions.Or },
-            { nameof(TypeFunctions.Xor), TypeFunctions.Xor },
             { nameof(TypeFunctions.ShiftLeft), TypeFunctions.ShiftLeft },
             { nameof(TypeFunctions.ShiftRight), TypeFunctions.ShiftRight },
             { nameof(TypeFunctions.Binomial), TypeFunctions.Binomial }
@@ -139,6 +138,9 @@ internal sealed class FunctionFactory : IEnumerable<string>
             "sec" => new SecExpression(parameters[0]),
             "cosec" => new CosecExpression(parameters[0]),
             "parallel" => new ParallelExpression(parameters[0], parameters[1]),
+            "nand" => new NandExpression(parameters[0], parameters[1]),
+            "nor" => new NorExpression(parameters[0], parameters[1]),
+            "xor" => new XorExpression(parameters[0], parameters[1]),
             _ => CreateGeneric(name, parameters),
         };
     }

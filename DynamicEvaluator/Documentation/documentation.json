@@ -608,78 +608,69 @@
       ]
     },
     {
-      "name": "not",
-      "summary": "Returns the logical negation of the provided value.",
-      "parameters": [
-        {
-          "name": "value",
-          "supportedTypes": "int",
-          "description": "The value to negate."
-        }
-      ],
-      "examples": [
-        "not(1)",
-        "not(0)"
-      ]
-    },
-    {
-      "name": "and",
-      "summary": "Returns the logical AND of the provided values.",
-      "parameters": [
-        {
-          "name": "value1",
-          "supportedTypes": "int",
-          "description": "The first value."
-        },
-        {
-          "name": "value2",
-          "supportedTypes": "int",
-          "description": "The second value."
-        }
-      ],
-      "examples": [
-        "and(1, 1)",
-        "and(1, 0)"
-      ]
-    },
-    {
-      "name": "or",
-      "summary": "Returns the logical OR of the provided values.",
-      "parameters": [
-        {
-          "name": "value1",
-          "supportedTypes": "int",
-          "description": "The first value."
-        },
-        {
-          "name": "value2",
-          "supportedTypes": "int",
-          "description": "The second value."
-        }
-      ],
-      "examples": [
-        "or(1, 0)",
-        "or(0, 0)"
-      ]
-    },
-    {
       "name": "xor",
       "summary": "Returns the logical XOR (exclusive OR) of the provided values.",
       "parameters": [
         {
           "name": "value1",
-          "supportedTypes": "int",
+          "supportedTypes": "int | bool",
           "description": "The first value."
         },
         {
           "name": "value2",
-          "supportedTypes": "int",
+          "supportedTypes": "int | bool",
           "description": "The second value."
         }
       ],
       "examples": [
         "xor(1, 0)",
-        "xor(1, 1)"
+        "xor(1, 1)",
+        "xor(true, false)",
+        "xor(false, false)"
+      ]
+    },
+    {
+      "name": "nand",
+      "summary": "Returns the logical NAND (NOT AND) of the provided values.",
+      "parameters": [
+        {
+          "name": "value1",
+          "supportedTypes": "int | bool",
+          "description": "The first value."
+        },
+        {
+          "name": "value2",
+          "supportedTypes": "int | bool",
+          "description": "The second value."
+        }
+      ],
+      "examples": [
+        "nand(1, 0)",
+        "nand(1, 1)",
+        "nand(true, false)",
+        "nand(false, false)"
+      ]
+    },
+    {
+      "name": "nor",
+      "summary": "Returns the logical NOR (NOT OR) of the provided values.",
+      "parameters": [
+        {
+          "name": "value1",
+          "supportedTypes": "int | bool",
+          "description": "The first value."
+        },
+        {
+          "name": "value2",
+          "supportedTypes": "int | bool",
+          "description": "The second value."
+        }
+      ],
+      "examples": [
+        "nor(1, 0)",
+        "nor(1, 1)",
+        "nor(true, false)",
+        "nor(false, false)"
       ]
     },
     {

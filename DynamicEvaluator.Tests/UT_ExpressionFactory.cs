@@ -125,8 +125,8 @@ public class UT_ExpressionFactory
     [TestCase("!(!x)", "x")]
     [TestCase("!(!true)", "True")]
     [TestCase("!(!false)", "False")]
-    [TestCase("!(x & y)", "(x | y)")]
-    [TestCase("!(x | y)", "(x & y)")]
+    [TestCase("!(x & y)", "((!x) | (!y))")]
+    [TestCase("!(x | y)", "((!x) & (!y))")]
     //Multiply
     [TestCase("0*y", "0")]
     [TestCase("y*0", "0")]
@@ -284,6 +284,9 @@ public class UT_ExpressionFactory
     [TestCase("!a&!b | !a&b | a&!b | a&b", "True")]
     [TestCase("d&(c&b|b&d)|!(d&a)", "((b | (!d)) | (!a))")]
     [TestCase("!a&!b&!c&!d|!a&!b&!c&d|!a&b&!c&!d|!a&b&!c&d|a&b&!c&!d|a&b&!c&d", "(((!c) & b) | ((!c) & (!a)))")]
+    [TestCase("xor(a, b)", "((b & (!a)) | ((!b) & a))")]
+    [TestCase("nand(a, b)", "((!a) | (!b))")]
+    [TestCase("nor(a, b)", "((!b) & (!a))")]
     public void EnsureThat_LogicSimplify_Works(string expression, string expected)
     {
         IExpression parsed = _sut.Create(expression);
@@ -527,6 +530,18 @@ public class UT_ExpressionFactory
     [TestCase("!false&!false", true)]
     [TestCase("false", false)]
     [TestCase("true", true)]
+    [TestCase("xor(false, false)", false)]
+    [TestCase("xor(false, true)", true)]
+    [TestCase("xor(true, false)", true)]
+    [TestCase("xor(true, true)", false)]
+    [TestCase("nand(false, false)", true)]
+    [TestCase("nand(false, true)", true)]
+    [TestCase("nand(true, false)", true)]
+    [TestCase("nand(true, true)", false)]
+    [TestCase("nor(false, false)", true)]
+    [TestCase("nor(false, true)", false)]
+    [TestCase("nor(true, false)", false)]
+    [TestCase("nor(true, true)", false)]
     public void EnsureThat_Evaluate_Works_Logics(string expression, bool expected)
     {
         IExpression parsed = _sut.Create(expression);

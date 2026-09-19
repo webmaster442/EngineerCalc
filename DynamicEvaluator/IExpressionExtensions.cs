@@ -40,6 +40,13 @@ public static class IExpressionExtensions
         {
             var n = expressions.Pop();
 
+            if (n is RewritableExpression rewritable)
+            {
+                if (rewritable.Rewritten != null)
+                    expressions.Push(rewritable.Rewritten);
+                continue;
+            }
+
             if (n != null)
             {
                 yield return n;
@@ -108,7 +115,8 @@ public static class IExpressionExtensions
 
     public static bool IsLogicExpression(this IExpression expression)
     {
-        return expression.Flatten().All(IsLogicExpressionNode);
+        var flat = expression.Flatten();
+        return flat.All(IsLogicExpressionNode);
     }
 
     public static bool TryGetConstantValue(this IExpression expression, out dynamic value)

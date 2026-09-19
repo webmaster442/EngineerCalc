@@ -54,7 +54,14 @@ internal sealed class AndExpression : BinaryExpression
     }
 
     protected override Result Evaluate(Result value1, Result value2)
-        => Result.FromBoolean(value1.CastToBoolean() && value2.CastToBoolean());
+    {
+        return (value1.TypeState, value2.TypeState) switch
+        {
+            (TypeState.Boolean, TypeState.Boolean) => Result.FromBoolean(value1.CastToBoolean() && value2.CastToBoolean()),
+            (TypeState.Integer, TypeState.Integer) => Result.FromBigInteger(value1.CastToBigInteger() & value2.CastToBigInteger()),
+            _ => throw new InvalidOperationException($"Invalid types for & operator: {value1.TypeState} and {value2.TypeState}"),
+        };
+    }
 
     protected override string Render(bool emitLatex)
     {

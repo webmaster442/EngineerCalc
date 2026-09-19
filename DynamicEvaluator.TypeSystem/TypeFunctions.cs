@@ -122,38 +122,6 @@ public static class TypeFunctions
         return Result.FromBigInteger(IntegerMath.Factorial(value.CastToBigInteger()));
     }
 
-    public static Result Not(Result value)
-    {
-        if (value.TypeState != TypeState.Integer)
-            throw TypeException.IncompatibleFunction(nameof(Not), value.TypeState);
-
-        return Result.FromBigInteger(~value.CastToBigInteger());
-    }
-
-    public static Result And(Result a, Result b)
-    {
-        if (a.TypeState != TypeState.Integer || b.TypeState != TypeState.Integer)
-            throw TypeException.IncompatibleFunction(nameof(And), a.TypeState, b.TypeState);
-
-        return Result.FromBigInteger(a.CastToBigInteger() & b.CastToBigInteger());
-    }
-
-    public static Result Or(Result a, Result b)
-    {
-        if (a.TypeState != TypeState.Integer || b.TypeState != TypeState.Integer)
-            throw TypeException.IncompatibleFunction(nameof(Or), a.TypeState, b.TypeState);
-
-        return Result.FromBigInteger(a.CastToBigInteger() | b.CastToBigInteger());
-    }
-
-    public static Result Xor(Result a, Result b)
-    {
-        if (a.TypeState != TypeState.Integer || b.TypeState != TypeState.Integer)
-            throw TypeException.IncompatibleFunction(nameof(Xor), a.TypeState, b.TypeState);
-
-        return Result.FromBigInteger(a.CastToBigInteger() ^ b.CastToBigInteger());
-    }
-
     public static Result ShiftLeft(Result a, Result b)
     {
         if (a.TypeState != TypeState.Integer || b.TypeState != TypeState.Integer)

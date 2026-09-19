@@ -30,23 +30,30 @@ internal sealed class LogicNegateExpression : UnaryExpression
             return negated.Child;
         }
 
-        // !(x & y) -> x | y
+        // !(x & y) -> !x | !y
         if (newChild is AndExpression and)
         {
-            return new OrExpression(and.Left, and.Right);
+            return new OrExpression(new LogicNegateExpression(and.Left), new LogicNegateExpression(and.Right));
         }
 
-        // !(x | y) -> x & y
+        // !(x | y) -> !x & !y
         if (newChild is OrExpression or)
         {
-            return new AndExpression(or.Left, or.Right);
+            return new AndExpression(new LogicNegateExpression(or.Left), new LogicNegateExpression(or.Right));
         }
 
         return new LogicNegateExpression(newChild);
     }
 
     protected override Result Evaluate(Result value)
-        => Result.FromBoolean(!value.CastToBoolean());
+    {
+        return value.TypeState switch
+        {
+            TypeState.Boolean => Result.FromBoolean(!value.CastToBoolean()),
+            TypeState.Integer => Result.FromBigInteger(~value.CastToBigInteger()),
+            _ => throw new InvalidOperationException($"Can't apply the ! operator to a value of type {value.TypeState}"),
+        };
+    }
 
     protected override string Render(bool emitLatex)
     {

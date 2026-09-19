@@ -11,6 +11,9 @@ internal abstract class RewritableExpression : IExpression
 {
     protected IExpression _rewritten = null!;
 
+    internal IExpression Rewritten
+        => _rewritten;
+
     public IExpression Differentiate(string byVariable)
         => _rewritten.Differentiate(byVariable);
 
