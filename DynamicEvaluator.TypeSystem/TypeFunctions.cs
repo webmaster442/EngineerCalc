@@ -177,6 +177,23 @@ public static class TypeFunctions
     public static Result Ceiling(Result value)
         => Result.FromDouble(Math.Ceiling(value.CastToDouble()));
 
+    public static Result Round(Result value, Result digits)
+        => Result.FromDouble(Math.Round(value.CastToDouble(), digits.CastToInt()));
+
+    public static Result ToRoman(Result value)
+    {
+        if (value.TypeState != TypeState.Integer)
+            throw TypeException.IncompatibleFunction(nameof(ToRoman), value.TypeState);
+        return Result.FromString(IntegerMath.ToRoman(value.CastToBigInteger()));
+    }
+
+    public static Result FromRoman(Result value)
+    {
+        if (value.TypeState != TypeState.String)
+            throw TypeException.IncompatibleFunction(nameof(FromRoman), value.TypeState);
+
+        return Result.FromBigInteger(IntegerMath.FromRoman(value.CastToString()));
+    }
     #endregion
 
     #region Trigonometric Functions

@@ -958,6 +958,55 @@
       "examples": [
         "dateStr(1734567890)"
       ]
+    },
+    {
+      "name": "round",
+      "summary": "Rounds a number to a specified number of decimal places.",
+      "parameters": [
+        {
+          "name": "number",
+          "description": "The number to round.",
+          "supportedTypes": "double | int | fraction"
+        },
+        {
+          "name": "decimals",
+          "description": "The number of decimal places to round to.",
+          "supportedTypes": "int"
+        }
+      ],
+      "examples": [
+        "round(4.36, 1)",
+        "round(4.35, 1)",
+        "round(4.34, 1)"
+      ]
+    },
+    {
+      "name": "fromRoman",
+      "summary": "Converts a Roman numeral string to an integer.",
+      "parameters": [
+        {
+          "name": "roman",
+          "description": "The Roman numeral string to convert.",
+          "supportedTypes": "string"
+        }
+      ],
+      "examples": [
+        "fromRoman('MCMLXXXVI')"
+      ]
+    },
+    {
+      "name": "toRoman",
+      "summary": "Converts an integer to a Roman numeral string.",
+      "parameters": [
+        {
+          "name": "number",
+          "description": "The integer to convert to a Roman numeral.",
+          "supportedTypes": "int"
+        }
+      ],
+      "examples": [
+        "toRoman(1986)"
+      ]
     }
   ]
 }

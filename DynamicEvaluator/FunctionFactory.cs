@@ -72,7 +72,9 @@ internal sealed class FunctionFactory : IEnumerable<string>
             { nameof(TypeFunctions.Factorial), TypeFunctions.Factorial },
             { nameof(TypeFunctions.Floor), TypeFunctions.Floor },
             { nameof(TypeFunctions.Ceiling), TypeFunctions.Ceiling },
-            { nameof(TypeFunctions.DateStr), TypeFunctions.DateStr }
+            { nameof(TypeFunctions.DateStr), TypeFunctions.DateStr },
+            { nameof(TypeFunctions.ToRoman), TypeFunctions.ToRoman },
+            { nameof(TypeFunctions.FromRoman), TypeFunctions.FromRoman }
         };
         _twoParamFunctions = new(StringComparer.InvariantCultureIgnoreCase)
         {
@@ -85,7 +87,8 @@ internal sealed class FunctionFactory : IEnumerable<string>
             { nameof(TypeFunctions.Lcm), TypeFunctions.Lcm },
             { nameof(TypeFunctions.ShiftLeft), TypeFunctions.ShiftLeft },
             { nameof(TypeFunctions.ShiftRight), TypeFunctions.ShiftRight },
-            { nameof(TypeFunctions.Binomial), TypeFunctions.Binomial }
+            { nameof(TypeFunctions.Binomial), TypeFunctions.Binomial },
+            { nameof(TypeFunctions.Round), TypeFunctions.Round }
         };
         _multiParamFunctions = new(StringComparer.InvariantCultureIgnoreCase)
         {

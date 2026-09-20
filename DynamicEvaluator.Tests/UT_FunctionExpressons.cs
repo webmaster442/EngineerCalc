@@ -106,6 +106,16 @@ public class UT_FunctionExpressons
     [TestCase("yesterday()", "1789516800", TypeState.Integer)]
     [TestCase("dateStr(1789603200)", "2026-09-17", TypeState.String)]
     [TestCase("dateStr(now())", "2026-09-17 19:00:00", TypeState.String)]
+    [TestCase("round(3.44, 1)", "3.4", TypeState.Double)]
+    [TestCase("round(3.45, 1)", "3.4", TypeState.Double)]
+    [TestCase("round(3.46, 1)", "3.5", TypeState.Double)]
+    [TestCase("round(4.34, 1)", "4.3", TypeState.Double)]
+    [TestCase("round(4.35, 1)", "4.4", TypeState.Double)]
+    [TestCase("round(4.36, 1)", "4.4", TypeState.Double)]
+    [TestCase("toroman(2015)", "MMXV", TypeState.String)]
+    [TestCase("toroman(1986)", "MCMLXXXVI", TypeState.String)]
+    [TestCase("fromroman('MMXV')", "2015", TypeState.Integer)]
+    [TestCase("fromroman('MCMLXXXVI')", "1986", TypeState.Integer)]
     public void EnsureThat_Function_Evaluated_ReturnsExpectedValue(string expression,
                                                                    string expected,
                                                                    TypeState expectedState)
