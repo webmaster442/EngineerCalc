@@ -44,7 +44,9 @@ internal sealed class FunctionFactory : IEnumerable<string>
             { "parallel", 2 },
             { "nand", 2 },
             { "nor", 2 },
-            { "xor", 2  }
+            { "xor", 2  },
+            { "eqiv", 2 },
+            { "implicate", 2 }
         };
         _oneParamFunctions = new(StringComparer.InvariantCultureIgnoreCase)
         {
@@ -144,6 +146,8 @@ internal sealed class FunctionFactory : IEnumerable<string>
             "nand" => new NandExpression(parameters[0], parameters[1]),
             "nor" => new NorExpression(parameters[0], parameters[1]),
             "xor" => new XorExpression(parameters[0], parameters[1]),
+            "eqiv" => new EquivalenceExpression(parameters[0], parameters[1]),
+            "implicate" => new ImplicationExpression(parameters[0], parameters[1]),
             _ => CreateGeneric(name, parameters),
         };
     }

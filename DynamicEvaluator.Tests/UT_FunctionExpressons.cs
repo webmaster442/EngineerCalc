@@ -53,6 +53,8 @@ public class UT_FunctionExpressons
     [TestCase("127 & 255", "127", TypeState.Integer)]
     [TestCase("127 | 255", "255", TypeState.Integer)]
     [TestCase("xor(127, 127)", "0", TypeState.Integer)]
+    [TestCase("eqiv(127, 127)", "-1", TypeState.Integer)]
+    [TestCase("implicate(127, 127)", "-1", TypeState.Integer)]
     [TestCase("shiftleft(1, 2)", "4", TypeState.Integer)]
     [TestCase("shiftright(4, 2)", "1", TypeState.Integer)]
     [TestCase("binomial(5, 2)", "10", TypeState.Integer)]

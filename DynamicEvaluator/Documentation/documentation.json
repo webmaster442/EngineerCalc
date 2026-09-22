@@ -1007,6 +1007,46 @@
       "examples": [
         "toRoman(1986)"
       ]
+    },
+    {
+      "name": "eqiv",
+      "summary": "Checks if two boolean values are equivalent.",
+      "parameters": [
+        {
+          "name": "a",
+          "description": "The first boolean value.",
+          "supportedTypes": "bool | int"
+        },
+        {
+          "name": "b",
+          "description": "The second boolean value.",
+          "supportedTypes": "bool | int"
+        }
+      ],
+      "examples": [
+        "eqiv(true, true)",
+        "eqiv(true, false)"
+      ]
+    },
+    {
+      "name": "implicate",
+      "summary": "Checks if the first boolean value implies the second boolean value.",
+      "parameters": [
+        {
+          "name": "a",
+          "description": "The first boolean value.",
+          "supportedTypes": "bool | int"
+        },
+        {
+          "name": "b",
+          "description": "The second boolean value.",
+          "supportedTypes": "bool | int"
+        }
+      ],
+      "examples": [
+        "implicate(true, true)",
+        "implicate(true, false)"
+      ]
     }
   ]
 }

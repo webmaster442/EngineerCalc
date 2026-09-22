@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DynamicEvaluator.Expressions.Specific.Rewritables;
+﻿namespace DynamicEvaluator.Expressions.Specific.Rewritables;
 
 internal sealed class XorExpression : RewritableExpression
 {
